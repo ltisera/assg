@@ -13,6 +13,6 @@ Caracteristicas:
 	-La tecla "ALT_IZQ" activa el "Cohete Phytonico".
 
 Enemigos:
-
+	-Elegir algun boss copado PENSAR ALGO!
 
 2) Objetos estaticos
