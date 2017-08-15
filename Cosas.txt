@@ -1,4 +1,9 @@
+
+
+1) Objetos con movimiento
+
 Jugador
+
 Caracteristicas: 
 	-El jugador se mueve con las letras "W" y "S" o "Flecha_IZQ" y 
 	"Flecha_DER", estas controlan la ROTACION del cohete.
@@ -6,3 +11,8 @@ Caracteristicas:
 	-La tecla "Barra_Espaciadora" activa el "Propulsor InterEspacial".
 	-La tecla "CTRL_IZQ" activa el "Laser nombre chulo".
 	-La tecla "ALT_IZQ" activa el "Cohete Phytonico".
+
+Enemigos:
+
+
+2) Objetos estaticos
