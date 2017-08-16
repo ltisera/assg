@@ -9,7 +9,7 @@ Caracteristicas:
 	"Flecha_DER", estas controlan la ROTACION del cohete.
 	-La tecla "E" activa el "Escudo intergalactico".
 	-La tecla "Barra_Espaciadora" activa el "Propulsor InterEspacial".
-	-La tecla "CTRL_IZQ" activa el "Laser nombre chulo".  ESTO NO ME GUSTA
+	-La tecla "CTRL_IZQ" activa el "Rescatar a la princesa".  ESTO NO ME GUSTA
 	-La tecla "ALT_IZQ" activa el "Cohete Phytonico".
 
 Enemigos:
