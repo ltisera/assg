@@ -21,3 +21,6 @@ Enemigos:
 AHORA QUIERO METER OTRO CAMBIO Y QUE VOS LO VEAS
 
 HOLA
+
+
+(CM) - ¿No es mejor que se mueva con A y D para izquierda y derecha respectivamente, y tambien que el propulsor sea con la letra W o la Flecha_ARR? Tambien los demas poderes estan lindos y todo pero medio complicado mover con alguna de las teclas W,A,S,D y usar CTRL_IZQ, ALT_IZQ para hacer otra cosa al mismo tiempo.
