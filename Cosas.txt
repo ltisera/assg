@@ -1,4 +1,4 @@
-
+﻿
 
 1) Objetos con movimiento
 
@@ -14,7 +14,7 @@ Caracteristicas:
 	-La tecla "R" destruye a los Estados Unidos de America.
 
 Enemigos:
-	-Elegir algun mario bross copado PENSAR ALGO!
+	-Elegir algun mario bross copado PENSAR ALGO! MENTIRA, NO PIENSEN NADA
 
 2) Objetos estaticos
 
