@@ -1,0 +1,11 @@
+Buenas!
+
+Aca guardariamos todos los "Recursos" que vamos a usar en el jueguin.
+
+Falta agregar:
+
+- BOSS
+- Planetas
+- Agujero Negro
+- Asteroide
+- Fondo
