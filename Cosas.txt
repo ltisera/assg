@@ -15,6 +15,7 @@ Caracteristicas:
 
 Enemigos:
 	-Elegir algun mario bross copado PENSAR ALGO! MENTIRA, NO PIENSEN NADA
+	-Extraterrestres jefes y sus secuaces
 
 2) Objetos estaticos
 
@@ -23,5 +24,11 @@ AHORA QUIERO METER OTRO CAMBIO Y QUE VOS LO VEAS
 
 HOLA
 
+3)Objetivos:
+	-Conquistar planetas matando extraterrestres (http://cdn4.dibujos.net/dibujos/pintar/extraterrestre-en-nave-espacial_163.png)
+	-Salvar a la Tierra de meteoritos
+
 
 (CM) - ¿No es mejor que se mueva con A y D para izquierda y derecha respectivamente, y tambien que el propulsor sea con la letra W o la Flecha_ARR? Tambien los demas poderes estan lindos y todo pero medio complicado mover con alguna de las teclas W,A,S,D y usar CTRL_IZQ, ALT_IZQ para hacer otra cosa al mismo tiempo.
+
+
