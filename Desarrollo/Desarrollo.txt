@@ -1,0 +1,14 @@
+Aca pondriamos:
+
+-Diagramas de contexto
+-Diagramas de clases
+
+-La cosa rara de las reuniones que pedia (eso lo tendriamos que hacer desde ya 
+por que despues nos vamos a olvidar). Tampoco es que estoy entendiendo mucho lo que pide,
+supongo que es algo como, "un diario de desarrollo".
+
+15/08/2017
+-Una nube de ideas atormentaba nuestros pensamientos, tal que no esperamos a la segunda clase
+y decidimos poner manos a la obra. Nos embarcamos en la tarea de crear un repositorio sin conocimiento previo,
+archivos por aqui... ramas por alla, los commit!!! y asi poco a poco fue tomando forma, nuestro repositorio
+ASSG dio inicio. La primer reunion se dio en el, coordinando a travez de whatsapp, fuimos subiendo contenido... BLAH BLAH BLAH
