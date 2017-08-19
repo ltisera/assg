@@ -1,0 +1,39 @@
+
+1) //////////////////////////////////////////////////////////////////////////////////////////////////
+
+http://librosweb.es/libro/python/capitulo_3/creando_modulos_empaquetados.html
+
+es un tutorial que explica como usar los modulos de python, Se me informan!!!
+
+el jueves en DB hacemos una minuta de como organizar el codigo fuente, vallan pensandolo!
+
+//////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+
+2) //////////////////////////////////////////////////////////////////////////////////////////////////
+
+PARA EL CODIGO:
+
+supongo que usaremos una estructura parecida a lo siguiente
+
+dentro de la carpeta CODIGO
+
+
+RECURSOS <--- Lo puse en mayuscula para NOTAR que es un directorio o 
+		carpeta y aca vamos a meter todos los PNG Que usemos
+
+
+main.py
+menu.py
+jugador.py
+planeta.py
+boss.py
+//////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+
+
+LT!
