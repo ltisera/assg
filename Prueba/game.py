@@ -72,6 +72,9 @@ while intro:
 			velocidad = 0.1
 		else:
 			velocidad -= 0.5
+		if velocidad <= 0:
+			velocidad = 0.1
+		
 		moverY = math.sin(math.radians(angulo))*velocidad
 		moverX = math.cos(math.radians(angulo))*velocidad
 
