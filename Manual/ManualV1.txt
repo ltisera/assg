@@ -1,2 +1,0 @@
-Este deberia ser el manual del juego, Me gustaria hacerlo en PDF igual, pero no manejo muy bien
-lo que es LaTeX, si alguien lo sabe usar piola me chifla!
