@@ -8,6 +8,8 @@ pygame.display.set_caption("ASSG")
 nave = pygame.image.load("Recursos/Chico.png")
 nave = pygame.transform.rotate(nave, 270)
 
+enemigo = pygame.image.load("Recursos/Enemigo.png")
+
 planeta1 = pygame.image.load("Recursos/Planeta.png")
 planeta12 = pygame.image.load("Recursos/Planeta2.png")
 
@@ -25,6 +27,10 @@ angulo = 0
 clock = pygame.time.Clock()
 tiempo = 0
 
+# Origen y velocidad del enemigo
+XE = 200
+YE = 100
+velocidadE = 2
 
 moverY = math.sin(math.radians(angulo))*velocidad
 moverX = math.cos(math.radians(angulo))*velocidad
@@ -81,10 +87,25 @@ while intro:
 	X += moverX
 	Y += moverY
 	
+	#Movimiento del enemigo
+	XE -= moverX
+	YE += moverY
+	
+	if XE < 225:
+		XE += velocidadE
+	elif XE > 225:
+		XE -= velocidadE
+		
+	if YE	< 300:
+		YE += velocidadE
+	elif YE > 300:
+		YE -= velocidadE
+	
 	pantalla.blit(planeta1, (-X+10,Y+10))
 	pantalla.blit(planeta12, (-X+300,Y+350))
 	pantalla.blit(planeta12, (-X-500,Y+100))
 	pantalla.blit(pygame.transform.rotate(nave, angulo), (225,300))
+	pantalla.blit(enemigo, (XE,YE))
 	pantalla.blit(fondo1, (700,0))
 	pantalla.blit(fondo1, (650,0))
 	pantalla.blit(fondo2, (0,475))
