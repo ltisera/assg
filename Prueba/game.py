@@ -20,11 +20,15 @@ X = 0
 Y = 0
 intro = True
 aceleracion = 1
-velocidad = 2
+velocidad = 0.1
 angulo = 0
 clock = pygame.time.Clock()
 tiempo = 0
 
+
+moverY = math.sin(math.radians(angulo))*velocidad
+moverX = math.cos(math.radians(angulo))*velocidad
+		
 while intro:
 
 	pantalla.fill((255,255,255))
@@ -39,7 +43,7 @@ while intro:
 	#Lectura de TECLAS
 	keys = pygame.key.get_pressed()
 	if keys[K_w]:
-		angulo +=2
+		angulo +=2 
 		if angulo >= 360:
 			angulo -= 360
 		elif angulo < 0:
@@ -57,11 +61,17 @@ while intro:
 		moverX = math.cos(math.radians(angulo))*velocidad
 	
 	if keys[K_m]:
-		velocidad += 1
+		if velocidad >= 20:
+			velocidad = 20
+		else:
+			velocidad += 0.1
 		moverY = math.sin(math.radians(angulo))*velocidad
 		moverX = math.cos(math.radians(angulo))*velocidad
 	if keys[K_n]:
-		velocidad -= 1
+		if velocidad <= 0:
+			velocidad = 0.1
+		else:
+			velocidad -= 0.5
 		moverY = math.sin(math.radians(angulo))*velocidad
 		moverX = math.cos(math.radians(angulo))*velocidad
 
