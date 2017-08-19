@@ -68,7 +68,7 @@ while intro:
 		moverY = math.sin(math.radians(angulo))*velocidad
 		moverX = math.cos(math.radians(angulo))*velocidad
 	if keys[K_n]:
-		if velocidad <= 0.6:
+		if velocidad <= 0:
 			velocidad = 0.1
 		else:
 			velocidad -= 0.5
