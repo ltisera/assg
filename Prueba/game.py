@@ -37,7 +37,7 @@ moverX = math.cos(math.radians(angulo))*velocidad
 		
 while intro:
 
-	pantalla.fill((255,255,255))
+	pantalla.fill((229,221,213))
 	
 	for event in pygame.event.get():
 		if event.type == pygame.KEYDOWN:
@@ -106,7 +106,7 @@ while intro:
 	pantalla.blit(planeta12, (-X-500,Y+100))
 	pantalla.blit(pygame.transform.rotate(nave, angulo), (225,300))
 	pantalla.blit(enemigo, (XE,YE))
-	pantalla.blit(fondo1, (700,0))
+#	pantalla.blit(fondo1, (700,0))
 	pantalla.blit(fondo1, (650,0))
 	pantalla.blit(fondo2, (0,475))
 	pygame.display.update()
