@@ -1,7 +1,23 @@
 import pygame, sys, math
+import random
 from pygame.locals import *    # Intento de clases
-pygame.init()
 
+
+
+class Estrella:
+	def __init__(self):
+		self.posX = random.randint(0,800)
+		self.posY = random.randint(0,800)
+		self.colorE = pygame.Color(255,255,255,255)
+		self.rectPos = pygame.Rect(self.posX, self.posY,5,5)
+		print("Estrella generada en x= ", self.posX, "y:", self.posY)
+	def imprimir(self):
+		
+		self.rectPos.x = -pantalla.X
+		self.rectPos.y = pantalla.Y
+		pygame.draw.rect(pantalla.display,self.colorE,self.rectPos,0)
+
+		
 class Nave:
 	def sumarAngulo(self, sumarAngulo):
 		self.angulo += sumarAngulo
@@ -35,7 +51,6 @@ class Nave:
 
 class Pantalla:
 	def imprimir(self):
-		#pantalla.display.blit(self.fondo1, (700,0))
 		pantalla.display.blit(self.fondo1, (650,0))
 		pantalla.display.blit(self.fondo2, (0,475))
 	def mover(self, X, Y):
@@ -74,22 +89,33 @@ class Enemigo:
 
 class Planeta:
 	def imprimir(self, X, Y):
+		#Esto estaria mal, deberiamos pasarle por argumento
+		#La superficie en donde queremos que haga el blit
 		pantalla.display.blit(self.imagen, (-X+self.origenX,Y+self.origenY))
 	def __init__(self, directorio, origenX, origenY):
 		self.imagen = pygame.image.load(directorio)
 		self.origenX = origenX
 		self.origenY = origenY
 
-pantalla = Pantalla()		
+
+pygame.init()
 		
+pantalla = Pantalla()
 nave = Nave("Recursos/Chico.png", 270, 0.1, 0.1, 20)
 
-enemigo = Enemigo("Recursos/Enemigo.png", 200, 100, 2)
+enemigo = Enemigo("Recursos/Enemigo.png", 200, 100, 1)
 
 planeta1 = Planeta("Recursos/Planeta.png", 10,10)
 planeta2 = Planeta("Recursos/Planeta2.png", 300,350)
 planeta3 = Planeta("Recursos/Planeta2.png", -500,100)
 
+estrellaA = Estrella()
+estrellaA.colorE = pygame.Color(128,128,128,255)
+estrellaA.rectPos.x = 0
+estrellaA.rectPos.y = 0
+lestrella = []
+for i in range(100):
+	lestrella.append(Estrella())
 intro = True
 
 clock = pygame.time.Clock()
@@ -101,9 +127,9 @@ while intro:
 	for event in pygame.event.get():
 		if event.type == pygame.KEYDOWN:
 			if event.key == K_ESCAPE:
-				pygame.quit()
+				intro = False
 		if event.type == pygame.QUIT:
-			pygame.quit()
+			intro = False
 	
 	#Lectura de TECLAS
 	keys = pygame.key.get_pressed()
@@ -119,7 +145,16 @@ while intro:
 	if keys[K_n]:
 		nave.sumarVelocidad(-0.5)
 	
+	
 	#Impresion
+	#pygame.draw.rect(pantalla.display,colorin,rectangulin,0)
+	
+	estrellaA.imprimir()
+	print("Dibujo estrellaA X:", estrellaA.posX, " Y: ", estrellaA.posY)
+	
+	for i in lestrella:
+		#print("D en X: " , i.posX, " Y: ", i.posY)
+		i.imprimir()
 	pantalla.mover(nave.X, nave.Y)
 	planeta1.imprimir(pantalla.X, pantalla.Y)
 	planeta2.imprimir(pantalla.X, pantalla.Y)
@@ -130,6 +165,7 @@ while intro:
 	pygame.display.update()
 	
 	
-	clock.tick(30)
+	clock.tick(120)
 	#print(clock)
 
+pygame.quit()
