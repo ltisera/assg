@@ -2,14 +2,20 @@ import pygame, sys, math
 import random
 from pygame.locals import *    # Intento de clases
 
-
+def rot_center(image, angle):
+		orig_rect = image.get_rect()
+		rot_image = pygame.transform.rotate(image, angle)
+		rot_rect = orig_rect.copy()
+		rot_rect.center = rot_image.get_rect().center
+		rot_image = rot_image.subsurface(rot_rect).copy()
+		return rot_image
 
 class Estrella:
 	def __init__(self):
 		self.posX = random.randint(-1000,1000)
 		self.posY = random.randint(-1000,1000)
 		self.colorE = pygame.Color(255,255,255,255)
-		self.rectPos = pygame.Rect(self.posX, self.posY,5,5)
+		self.rectPos = pygame.Rect(self.posX, self.posY,2,2)
 		#print("Estrella generada en x= ", self.posX, "y:", self.posY)
 	def imprimir(self):
 		self.rectPos.x = -pantalla.X+self.posX
@@ -38,7 +44,7 @@ class Nave:
 	def imprimir(self, centroX, centroY):
 		pantalla.display.blit(pygame.transform.rotate(self.imagen, self.angulo), (centroX-38,centroY-27))
 	def __init__(self, directorio, anguloOrigen, velocidad, minVelocidad, maxVelocidad):
-		self.imagen = pygame.image.load(directorio)
+		self.imagen = pygame.image.load(directorio).convert_alpha()
 		self.imagen = pygame.transform.rotate(self.imagen, anguloOrigen)
 		self.X = 0
 		self.Y = 0
@@ -60,8 +66,8 @@ class Pantalla:
 		pygame.display.set_caption("ASSG")
 		self.X = 0
 		self.Y = 0
-		self.fondo1 = pygame.image.load("Recursos/1.png")
-		self.fondo2 = pygame.image.load("Recursos/2.png")
+		self.fondo1 = pygame.image.load("Recursos/1.png").convert_alpha()
+		self.fondo2 = pygame.image.load("Recursos/2.png").convert_alpha()
 		self.centroX = 325
 		self.centroY = 237.5
 
@@ -81,7 +87,7 @@ class Enemigo:
 		self.mover(X, Y, centroX, centroY)
 		pantalla.display.blit(self.imagen, (self.X,self.Y))
 	def __init__(self, directorio, X, Y, velocidad):
-		self.imagen = pygame.image.load(directorio)
+		self.imagen = pygame.image.load(directorio).convert_alpha()
 		self.X = X
 		self.Y = Y
 		self.velocidad = velocidad
@@ -90,11 +96,26 @@ class Planeta:
 	def imprimir(self, X, Y):
 		#Esto estaria mal, deberiamos pasarle por argumento
 		#La superficie en donde queremos que haga el blit
-		pantalla.display.blit(self.imagen, (-X+self.origenX,Y+self.origenY))
-	def __init__(self, directorio, origenX, origenY):
-		self.imagen = pygame.image.load(directorio)
+		pantalla.display.blit(self.imagen, (-X+self.origenX,Y-self.origenY))	
+	def __init__(self, directorio):
+		self.imagen = pygame.image.load(directorio).convert_alpha()
+		self.origenX = random.randint(-1000,1000)
+		self.origenY = random.randint(-1000,1000)
+
+class Agujero:
+	def sumarAngulo(self, sumarAngulo):
+		self.angulo += sumarAngulo
+		if self.angulo >= 360:
+			self.angulo -= 360
+	def imprimir(self, X, Y):
+		pantalla.display.blit(rot_center(self.imagen, self.angulo), (-X+self.origenX,Y-self.origenY))
+		self.sumarAngulo(self.velocidad)
+	def __init__(self, directorio, origenX, origenY, velocidad):
+		self.imagen = pygame.image.load(directorio).convert_alpha()
 		self.origenX = origenX
 		self.origenY = origenY
+		self.angulo = 0
+		self.velocidad = velocidad
 
 
 pygame.init()
@@ -104,24 +125,24 @@ nave = Nave("Recursos/Chico.png", 270, 0.1, 0.1, 20)
 
 enemigo = Enemigo("Recursos/Enemigo.png", 200, 100, 1)
 
-planeta1 = Planeta("Recursos/Planeta.png", 10,10)
-planeta2 = Planeta("Recursos/Planeta2.png", 300,350)
-planeta3 = Planeta("Recursos/Planeta2.png", -500,100)
+lplaneta = []
+for i in range(5):
+	lplaneta.append(Planeta("Recursos/Planeta.png"))
+	lplaneta.append(Planeta("Recursos/Planeta2.png"))
 
-#estrellaA = Estrella()
-#estrellaA.colorE = pygame.Color(128,128,128,255)
-#estrellaA.rectPos.x = 0
-#estrellaA.rectPos.y = 0
+agujero = Agujero("Recursos/AgujeroNegro.png", -400, -600, 2)
+
 lestrella = []
 for i in range(500):
 	lestrella.append(Estrella())
+	
 intro = True
 
 clock = pygame.time.Clock()
 		
 while intro:
 
-	pantalla.display.fill((229,221,213))
+	pantalla.display.fill((29,21,13))
 	
 	for event in pygame.event.get():
 		if event.type == pygame.KEYDOWN:
@@ -144,21 +165,16 @@ while intro:
 	if keys[K_n]:
 		nave.sumarVelocidad(-0.5)
 	
-	
 	#Impresion
 	pantalla.mover(nave.X, nave.Y)
-	#pygame.draw.rect(pantalla.display,colorin,rectangulin,0)
-	
-	#estrellaA.imprimir()
-	#print("Dibujo estrellaA X:", estrellaA.posX, " Y: ", estrellaA.posY)
 	
 	for i in lestrella:
-		#print("D en X: " , i.posX, " Y: ", i.posY)
 		i.imprimir()
 	
-	planeta1.imprimir(pantalla.X, pantalla.Y)
-	planeta2.imprimir(pantalla.X, pantalla.Y)
-	planeta3.imprimir(pantalla.X, pantalla.Y)
+	for i in lplaneta:
+		i.imprimir(pantalla.X, pantalla.Y)
+		
+	agujero.imprimir(pantalla.X, pantalla.Y)
 	nave.imprimir(pantalla.centroX, pantalla.centroY)
 	enemigo.imprimir(nave.X, nave.Y, pantalla.centroX, pantalla.centroY)
 	pantalla.imprimir()
