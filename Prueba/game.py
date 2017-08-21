@@ -6,15 +6,14 @@ from pygame.locals import *    # Intento de clases
 
 class Estrella:
 	def __init__(self):
-		self.posX = random.randint(0,800)
-		self.posY = random.randint(0,800)
+		self.posX = random.randint(-1000,1000)
+		self.posY = random.randint(-1000,1000)
 		self.colorE = pygame.Color(255,255,255,255)
 		self.rectPos = pygame.Rect(self.posX, self.posY,5,5)
-		print("Estrella generada en x= ", self.posX, "y:", self.posY)
+		#print("Estrella generada en x= ", self.posX, "y:", self.posY)
 	def imprimir(self):
-		
-		self.rectPos.x = -pantalla.X
-		self.rectPos.y = pantalla.Y
+		self.rectPos.x = -pantalla.X+self.posX
+		self.rectPos.y = pantalla.Y+self.posY
 		pygame.draw.rect(pantalla.display,self.colorE,self.rectPos,0)
 
 		
@@ -109,12 +108,12 @@ planeta1 = Planeta("Recursos/Planeta.png", 10,10)
 planeta2 = Planeta("Recursos/Planeta2.png", 300,350)
 planeta3 = Planeta("Recursos/Planeta2.png", -500,100)
 
-estrellaA = Estrella()
-estrellaA.colorE = pygame.Color(128,128,128,255)
-estrellaA.rectPos.x = 0
-estrellaA.rectPos.y = 0
+#estrellaA = Estrella()
+#estrellaA.colorE = pygame.Color(128,128,128,255)
+#estrellaA.rectPos.x = 0
+#estrellaA.rectPos.y = 0
 lestrella = []
-for i in range(100):
+for i in range(500):
 	lestrella.append(Estrella())
 intro = True
 
@@ -147,15 +146,16 @@ while intro:
 	
 	
 	#Impresion
+	pantalla.mover(nave.X, nave.Y)
 	#pygame.draw.rect(pantalla.display,colorin,rectangulin,0)
 	
-	estrellaA.imprimir()
-	print("Dibujo estrellaA X:", estrellaA.posX, " Y: ", estrellaA.posY)
+	#estrellaA.imprimir()
+	#print("Dibujo estrellaA X:", estrellaA.posX, " Y: ", estrellaA.posY)
 	
 	for i in lestrella:
 		#print("D en X: " , i.posX, " Y: ", i.posY)
 		i.imprimir()
-	pantalla.mover(nave.X, nave.Y)
+	
 	planeta1.imprimir(pantalla.X, pantalla.Y)
 	planeta2.imprimir(pantalla.X, pantalla.Y)
 	planeta3.imprimir(pantalla.X, pantalla.Y)
