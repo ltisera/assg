@@ -1,7 +1,51 @@
+"""
+TO-DO:
+
+22/08/2017
+Estado: pendiente
+	-Completar los encabezados de clases
+
+
+22/08/2017
+Estado: pendiente
+	-Coherencia entre los nombres de funciones
+	por ejemplo, hay una funcion llamada rot_center y otra sumarAngulo
+	o la llamamos rotCenter (a mi me gusta esta notacion) 
+	o la llamamos sumar_angulo (mmm notacion FEA)
+
+22/08/2017
+Estado: pendiente
+	-Pasar por parametro la superficie donde se va a imprimir EN TODAS LAS CLASES
+
+
+22/08/2017
+Estado: pendiente
+	-Revisar la generacion de planetas, poner condiciones para que no se superpongan
+"""
+
 import pygame, sys, math
 import random
-from pygame.locals import *    # Intento de clases
+from pygame.locals import * 
 
+
+
+"""
+Constantes de configuracion
+"""
+
+VELOCIDAD_MINIMA = 0.1
+VELOCIDAD_MAXIMA = 7
+
+PLANETA_MAXIMO = 20
+ESTRELLA_MAXIMO = 500
+
+"""
+Funciones
+"""
+def generarPlanetas():
+	return 0
+
+	
 def rot_center(image, angle):
 		orig_rect = image.get_rect()
 		rot_image = pygame.transform.rotate(image, angle)
@@ -10,13 +54,20 @@ def rot_center(image, angle):
 		rot_image = rot_image.subsurface(rot_rect).copy()
 		return rot_image
 
+		
+
+"""
+Clases
+"""
+
+
 class Estrella:
 	def __init__(self):
 		self.posX = random.randint(-1000,1000)
 		self.posY = random.randint(-1000,1000)
 		self.colorE = pygame.Color(255,255,255,255)
-		self.rectPos = pygame.Rect(self.posX, self.posY,2,2)
-		#print("Estrella generada en x= ", self.posX, "y:", self.posY)
+		self.rectPos = pygame.Rect(self.posX, self.posY,1,1)
+
 	def imprimir(self):
 		self.rectPos.x = -pantalla.X+self.posX
 		self.rectPos.y = pantalla.Y+self.posY
@@ -92,6 +143,15 @@ class Enemigo:
 		self.Y = Y
 		self.velocidad = velocidad
 
+"""
+Planeta:
+	-imagen
+	-origenX
+	-origenY
+	-centro
+	----------
+	+imprimir (x, y, surface) 
+"""
 class Planeta:
 	def imprimir(self, X, Y):
 		#Esto estaria mal, deberiamos pasarle por argumento
@@ -101,6 +161,18 @@ class Planeta:
 		self.imagen = pygame.image.load(directorio).convert_alpha()
 		self.origenX = random.randint(-1000,1000)
 		self.origenY = random.randint(-1000,1000)
+		#defino el centro de la imagen
+		self.centro = (0,0)
+		
+"""
+Planeta:
+	-imagen
+	-origenX
+	-origenY
+	-centro
+	----------
+	+imprimir (x, y, surface) 
+"""
 
 class Agujero:
 	def sumarAngulo(self, sumarAngulo):
@@ -117,29 +189,37 @@ class Agujero:
 		self.angulo = 0
 		self.velocidad = velocidad
 
-
+"""
+Inicializacion de variables
+"""
 pygame.init()
 		
 pantalla = Pantalla()
-nave = Nave("Recursos/Chico.png", 270, 0.1, 0.1, 20)
+
+nave = Nave("Recursos/Chico.png", 270, 0.1, VELOCIDAD_MINIMA, VELOCIDAD_MAXIMA)
 
 enemigo = Enemigo("Recursos/Enemigo.png", 200, 100, 1)
 
 lplaneta = []
-for i in range(5):
+for i in range(PLANETA_MAXIMO):
 	lplaneta.append(Planeta("Recursos/Planeta.png"))
 	lplaneta.append(Planeta("Recursos/Planeta2.png"))
 
 agujero = Agujero("Recursos/AgujeroNegro.png", -400, -600, 2)
 
 lestrella = []
-for i in range(500):
+for i in range(ESTRELLA_MAXIMO):
 	lestrella.append(Estrella())
 	
 intro = True
 
 clock = pygame.time.Clock()
 		
+
+		
+"""
+Bucle Principal 
+"""
 while intro:
 
 	pantalla.display.fill((29,21,13))
@@ -160,10 +240,10 @@ while intro:
 		nave.sumarAngulo(-2)
 		
 	if keys[K_m]:
-		nave.sumarVelocidad(0.1)
+		nave.sumarVelocidad(0.01)
 
 	if keys[K_n]:
-		nave.sumarVelocidad(-0.5)
+		nave.sumarVelocidad(-0.02)
 	
 	#Impresion
 	pantalla.mover(nave.X, nave.Y)
@@ -182,6 +262,9 @@ while intro:
 	
 	
 	clock.tick(120)
-	#print(clock)
+
+"""
+Finalizacion
+"""
 
 pygame.quit()
