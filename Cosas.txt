@@ -31,4 +31,5 @@ HOLA
 
 (CM) - ¿No es mejor que se mueva con A y D para izquierda y derecha respectivamente, y tambien que el propulsor sea con la letra W o la Flecha_ARR? Tambien los demas poderes estan lindos y todo pero medio complicado mover con alguna de las teclas W,A,S,D y usar CTRL_IZQ, ALT_IZQ para hacer otra cosa al mismo tiempo.
 
-
+(CV) - Deberiamos ver el tema de los limites del "espacio" en el que el cohete está. Que haya como paredes, que si chocas ahi perdes.
+	Otra cosa, se podrá tratar de que los planetas no se superpongan? 
