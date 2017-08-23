@@ -39,7 +39,7 @@ Constantes de configuracion
 """
 
 VELOCIDAD_MINIMA = 0.1
-VELOCIDAD_MAXIMA = 200
+VELOCIDAD_MAXIMA = 7
 
 PLANETA_MAXIMO = 20
 ESTRELLA_MAXIMO = 500
@@ -81,7 +81,8 @@ class Estrella:
 	def imprimir(self):
 		self.rectPos.x = -pantalla.X+self.posX
 		self.rectPos.y = pantalla.Y+self.posY
-		pygame.draw.rect(pantalla.display,self.colorE,self.rectPos,0)
+		if (self.rectPos.x >= -100 and self.rectPos.x <= 900) and (self.rectPos.y >= -100 and self.rectPos.y <= 700):
+			pygame.draw.rect(pantalla.display,self.colorE,self.rectPos,0)
 
 		
 class Nave:
@@ -179,8 +180,8 @@ class Planeta:
 		#La superficie en donde queremos que haga el blit
 		#Tambien se puede ver si esta o no EN CAMARA
 		#ahora como esta IMPRIME TODO por mas que no lo veamos
-		
-		pantalla.display.blit(self.imagen, (-X+self.origenX,Y-self.origenY))	
+		if (-X+self.getCentroX() >= -400 and -X+self.getCentroX() <= 1400) and (-Y+self.getCentroY() >= -400 and -Y+self.getCentroY() <= 1400):
+			pantalla.display.blit(self.imagen, (-X+self.origenX,Y-self.origenY))	
 	def __init__(self, directorio):
 		self.imagen = pygame.image.load(directorio).convert_alpha()
 		self.origenX = random.randint(-1000,1000)
@@ -290,8 +291,8 @@ while intro:
 	for i in lplaneta:
 		i.imprimir(pantalla.X, pantalla.Y)
 	
-	pygame.display.set_caption("Coord X:" + str(pantalla.X))
-	pygame.draw.line(pantalla.display,pygame.Color(255,255,255,255),[0-pantalla.X,0+pantalla.Y],[1000000-pantalla.X,0+pantalla.Y],5)
+	#pygame.display.set_caption("Coord X:" + str(pantalla.X))
+	#pygame.draw.line(pantalla.display,pygame.Color(255,255,255,255),[0-pantalla.X,0+pantalla.Y],[1000000-pantalla.X,0+pantalla.Y],5)
 	agujero.imprimir(pantalla.X, pantalla.Y)
 	nave.imprimir(pantalla.centroX, pantalla.centroY)
 	enemigo.imprimir(nave.X, nave.Y, pantalla.centroX, pantalla.centroY)
