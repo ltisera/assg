@@ -334,6 +334,7 @@ while intro:
 	agujero.imprimir(pantalla.X, pantalla.Y)
 	nave.imprimir(pantalla.centroX, pantalla.centroY)
 	if disparo:
+		laser.mover()
 		laser.imprimir(pantalla.centroX,pantalla.centroY)
 		if(laser.X==enemigo.X and laser.Y==enemigo.Y) or (laser.X>pantalla.X and laser.Y>pantalla.Y):
 			#aca se borraria la impresion del laser
