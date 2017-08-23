@@ -273,16 +273,16 @@ while intro:
 	
 	#Lectura de TECLAS
 	keys = pygame.key.get_pressed()
-	if keys[K_w]:
+	if keys[K_a]:
 		nave.sumarAngulo(2)
 		
-	if keys[K_s]:
+	if keys[K_d]:
 		nave.sumarAngulo(-2)
 		
-	if keys[K_m]:
+	if keys[K_w]:
 		nave.sumarVelocidad(0.02)
 
-	if keys[K_n]:
+	if keys[K_s]:
 		nave.sumarVelocidad(-0.1)
 	
 	#Impresion
@@ -301,8 +301,8 @@ while intro:
 	enemigo.imprimir(nave.X, nave.Y, pantalla.centroX, pantalla.centroY)
 	pantalla.imprimir()
 	
-	texto1 = fuente.render("X: " + str(int(pantalla.X)), 0, (0, 0, 255))
-	texto2 = fuente.render("Y: " + str(int(pantalla.Y)), 0, (0, 0, 255))
+	texto1 = fuente.render("X: " + str(int(pantalla.X)), 1, (0, 0, 255))
+	texto2 = fuente.render("Y: " + str(int(pantalla.Y)), 10, (0, 0, 255))
 	
 	pantalla.display.blit(texto1, (665,40))
 	pantalla.display.blit(texto2, (665,60))
