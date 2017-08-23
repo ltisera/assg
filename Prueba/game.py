@@ -255,7 +255,8 @@ clock = pygame.time.Clock()
 """
 Texto 
 """
-fuente = pygame.font.Font("Recursos/arial.ttf", 18)
+fsize = 12
+fuente = pygame.font.Font("Recursos/arial.ttf", fsize)
 
 """
 Bucle Principal 
@@ -268,6 +269,14 @@ while intro:
 		if event.type == pygame.KEYDOWN:
 			if event.key == K_ESCAPE:
 				intro = False
+			
+			if event.key == K_m:
+				fsize += 1
+				fuente = pygame.font.Font("Recursos/arial.ttf", fsize)
+			if event.key == K_n:
+				fsize -= 1
+				fuente = pygame.font.Font("Recursos/arial.ttf", fsize)
+
 		if event.type == pygame.QUIT:
 			intro = False
 	
@@ -284,7 +293,6 @@ while intro:
 
 	if keys[K_s]:
 		nave.sumarVelocidad(-0.1)
-	
 	#Impresion
 	pantalla.mover(nave.X, nave.Y)
 	
@@ -301,11 +309,17 @@ while intro:
 	enemigo.imprimir(nave.X, nave.Y, pantalla.centroX, pantalla.centroY)
 	pantalla.imprimir()
 	
-	texto1 = fuente.render("X: " + str(int(pantalla.X)), 1, (0, 0, 255))
-	texto2 = fuente.render("Y: " + str(int(pantalla.Y)), 10, (0, 0, 255))
 	
-	pantalla.display.blit(texto1, (665,40))
+	texto1 = fuente.render("X: " + str(int(pantalla.X)), True, (0, 0, 255))
+	texto2 = fuente.render("Y: " + str(int(pantalla.Y)), True, (0, 0, 255))
+	texto3 = fuente.render("Tamaño: " + str(fsize), True, (0, 0, 255))
+	texto4 = fuente.render("FPS: " + str(clock.get_fps()), True, (0, 0, 255))
+	
+	pantalla.display.blit(texto1, (665,45))
 	pantalla.display.blit(texto2, (665,60))
+	pantalla.display.blit(texto3, (665,75))
+	pantalla.display.blit(texto4, (665,90))
+	
 	pygame.display.update()
 	
 	
