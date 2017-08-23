@@ -21,6 +21,11 @@ Estado: pendiente
 22/08/2017
 Estado: pendiente
 	-Revisar la generacion de planetas, poner condiciones para que no se superpongan
+
+MINUTAS Fuckkk
+hay que hablar seriamente sobre coordenadas absolutas y relativas
+por que ya voy mareado con este tema de lo que se mueve y lo que no
+
 """
 
 import pygame, sys, math
@@ -34,7 +39,7 @@ Constantes de configuracion
 """
 
 VELOCIDAD_MINIMA = 0.1
-VELOCIDAD_MAXIMA = 7
+VELOCIDAD_MAXIMA = 200
 
 PLANETA_MAXIMO = 20
 ESTRELLA_MAXIMO = 500
@@ -43,16 +48,21 @@ ESTRELLA_MAXIMO = 500
 Funciones
 """
 def generarPlanetas():
+	listaPlaneta = []
+	for i in range(PLANETA_MAXIMO):
+		listaPlaneta.append(Planeta("Recursos/Planeta.png"))
+		listaPlaneta.append(Planeta("Recursos/Planeta2.png"))
+
 	return 0
 
 	
 def rot_center(image, angle):
-		orig_rect = image.get_rect()
-		rot_image = pygame.transform.rotate(image, angle)
-		rot_rect = orig_rect.copy()
-		rot_rect.center = rot_image.get_rect().center
-		rot_image = rot_image.subsurface(rot_rect).copy()
-		return rot_image
+	orig_rect = image.get_rect()
+	rot_image = pygame.transform.rotate(image, angle)
+	rot_rect = orig_rect.copy()
+	rot_rect.center = rot_image.get_rect().center
+	rot_image = rot_image.subsurface(rot_rect).copy()
+	return rot_image
 
 		
 
@@ -153,16 +163,31 @@ Planeta:
 	+imprimir (x, y, surface) 
 """
 class Planeta:
+	def getCentro(self):
+		return self.centro
+	def getCentroX(self):
+		return self.centro[0]
+	def getCentroY(self):
+		return self.centro[1]
+	def setX(self, x):
+		self.origenX = x
+	def setY(self, y):
+		self.origenX = x
+	
 	def imprimir(self, X, Y):
 		#Esto estaria mal, deberiamos pasarle por argumento
 		#La superficie en donde queremos que haga el blit
+		#Tambien se puede ver si esta o no EN CAMARA
+		#ahora como esta IMPRIME TODO por mas que no lo veamos
+		
 		pantalla.display.blit(self.imagen, (-X+self.origenX,Y-self.origenY))	
 	def __init__(self, directorio):
 		self.imagen = pygame.image.load(directorio).convert_alpha()
 		self.origenX = random.randint(-1000,1000)
 		self.origenY = random.randint(-1000,1000)
 		#defino el centro de la imagen
-		self.centro = (0,0)
+		self.centro = ((self.imagen.get_width()/2) + self.origenX, (self.imagen.get_height()/2) + self.origenY)
+		
 		
 """
 Planeta:
@@ -202,8 +227,19 @@ enemigo = Enemigo("Recursos/Enemigo.png", 200, 100, 1)
 
 lplaneta = []
 for i in range(PLANETA_MAXIMO):
-	lplaneta.append(Planeta("Recursos/Planeta.png"))
-	lplaneta.append(Planeta("Recursos/Planeta2.png"))
+	if random.choice([1,2]) == 1:
+		lplaneta.append(Planeta("Recursos/Planeta.png"))
+	else:
+		lplaneta.append(Planeta("Recursos/Planeta2.png"))
+
+	
+#Imprimo la lista de planetas para ver los centros
+print("Lista creada con: ", len(lplaneta))
+n = 1
+for i in lplaneta:
+	print("planeta: " , n , " Centro en: ", i.getCentro())
+	
+	n += 1
 
 agujero = Agujero("Recursos/AgujeroNegro.png", -400, -600, 2)
 
@@ -240,10 +276,10 @@ while intro:
 		nave.sumarAngulo(-2)
 		
 	if keys[K_m]:
-		nave.sumarVelocidad(0.01)
+		nave.sumarVelocidad(0.02)
 
 	if keys[K_n]:
-		nave.sumarVelocidad(-0.02)
+		nave.sumarVelocidad(-0.1)
 	
 	#Impresion
 	pantalla.mover(nave.X, nave.Y)
@@ -253,7 +289,9 @@ while intro:
 	
 	for i in lplaneta:
 		i.imprimir(pantalla.X, pantalla.Y)
-		
+	
+	pygame.display.set_caption("Coord X:" + str(pantalla.X))
+	pygame.draw.line(pantalla.display,pygame.Color(255,255,255,255),[0-pantalla.X,0+pantalla.Y],[1000000-pantalla.X,0+pantalla.Y],5)
 	agujero.imprimir(pantalla.X, pantalla.Y)
 	nave.imprimir(pantalla.centroX, pantalla.centroY)
 	enemigo.imprimir(nave.X, nave.Y, pantalla.centroX, pantalla.centroY)
