@@ -1,0 +1,36 @@
+﻿
+
+1) Objetos con movimiento
+
+Jugador
+
+Caracteristicas: 
+	-El jugador se mueve con las letras "W" y "S" o "Flecha_IZQ" y 
+	"Flecha_DER", estas controlan la ROTACION del cohete.
+	-La tecla "E" activa el "Escudo intergalactico".
+	-La tecla "Barra_Espaciadora" activa el "Propulsor InterEspacial".
+	-La tecla "CTRL_IZQ" activa el "Rescatar a la princesa".  ESTO NO ME GUSTA
+	-La tecla "ALT_IZQ" activa el "Cohete Phytonico".
+	-La tecla "R" destruye a los Estados Unidos de America.
+
+Enemigos:
+	-Elegir algun mario bross copado PENSAR ALGO! MENTIRA, NO PIENSEN NADA
+	-Extraterrestres jefes y sus secuaces
+
+2) Objetos estaticos
+
+
+AHORA QUIERO METER OTRO CAMBIO Y QUE VOS LO VEAS
+
+HOLA
+
+3)Objetivos:
+	-Conquistar planetas matando extraterrestres (http://cdn4.dibujos.net/dibujos/pintar/extraterrestre-en-nave-espacial_163.png)
+	-Salvar a la Tierra de meteoritos
+
+
+(CM) - ¿No es mejor que se mueva con A y D para izquierda y derecha respectivamente, y tambien que el propulsor sea con la letra W o la Flecha_ARR? Tambien los demas poderes estan lindos y todo pero medio complicado mover con alguna de las teclas W,A,S,D y usar CTRL_IZQ, ALT_IZQ para hacer otra cosa al mismo tiempo.
+
+(CV) - Deberiamos ver el tema de los limites del "espacio" en el que el cohete está. Que haya como paredes, que si chocas ahi perdes.
+	Otra cosa, se podrá tratar de que los planetas no se superpongan? 
+	Ah, y por favor CAMBIEMOS LAS TECLAS, NO USEMOS M Y N!!!!!!!!!!!!!!!
