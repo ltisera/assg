@@ -255,7 +255,7 @@ clock = pygame.time.Clock()
 """
 Texto 
 """
-fuente = pygame.font.Font(None, 30)
+fuente = pygame.font.Font("Recursos/arial.ttf", 18)
 
 """
 Bucle Principal 
