@@ -41,8 +41,8 @@ Constantes de configuracion
 VELOCIDAD_MINIMA = 0.1
 VELOCIDAD_MAXIMA = 7
 
-PLANETA_MAXIMO = 20
-ESTRELLA_MAXIMO = 500
+PLANETA_MAXIMO = 30
+ESTRELLA_MAXIMO = 2000
 
 """
 Funciones
@@ -50,9 +50,8 @@ Funciones
 def generarPlanetas():
 	listaPlaneta = []
 	for i in range(PLANETA_MAXIMO):
-		listaPlaneta.append(Planeta("Recursos/Planeta.png"))
-		listaPlaneta.append(Planeta("Recursos/Planeta2.png"))
-
+		listaPlaneta.append(Planeta("Recursos/Planeta.png", listaPlaneta))
+		listaPlaneta.append(Planeta("Recursos/Planeta2.png", listaPlaneta))
 	return 0
 
 	
@@ -64,7 +63,8 @@ def rot_center(image, angle):
 	rot_image = rot_image.subsurface(rot_rect).copy()
 	return rot_image
 
-		
+def distancia(X1, X2, Y1, Y2):
+	return math.sqrt(math.pow((X1-X2),2)+math.pow((Y1-Y2),2))	
 
 """
 Clases
@@ -73,8 +73,8 @@ Clases
 
 class Estrella:
 	def __init__(self):
-		self.posX = random.randint(-1000,1000)
-		self.posY = random.randint(-1000,1000)
+		self.posX = random.randint(-2000,2000)
+		self.posY = random.randint(-2000,2000)
 		self.colorE = pygame.Color(255,255,255,255)
 		self.rectPos = pygame.Rect(self.posX, self.posY,1,1)
 
@@ -174,7 +174,12 @@ class Planeta:
 		self.origenX = x
 	def setY(self, y):
 		self.origenX = x
-	
+	def libre(self, lplaneta):
+		libre = True
+		for i in lplaneta:
+			if (distancia(self.getCentroX(), i.getCentroX(), self.getCentroY(), i.getCentroY()) <= 600):
+				libre = False
+		return libre
 	def imprimir(self, X, Y):
 		#Esto estaria mal, deberiamos pasarle por argumento
 		#La superficie en donde queremos que haga el blit
@@ -182,12 +187,15 @@ class Planeta:
 		#ahora como esta IMPRIME TODO por mas que no lo veamos
 		if (-X+self.getCentroX() >= -400 and -X+self.getCentroX() <= 1400) and (-Y+self.getCentroY() >= -400 and -Y+self.getCentroY() <= 1400):
 			pantalla.display.blit(self.imagen, (-X+self.origenX,Y-self.origenY))	
-	def __init__(self, directorio):
+	def __init__(self, directorio, lplaneta):
 		self.imagen = pygame.image.load(directorio).convert_alpha()
-		self.origenX = random.randint(-1000,1000)
-		self.origenY = random.randint(-1000,1000)
-		#defino el centro de la imagen
-		self.centro = ((self.imagen.get_width()/2) + self.origenX, (self.imagen.get_height()/2) + self.origenY)
+		asignado = False
+		while not asignado:
+			self.origenX = random.randint(-2000,2000)
+			self.origenY = random.randint(-2000,2000)
+			#defino el centro de la imagen
+			self.centro = ((self.imagen.get_width()/2) + self.origenX, (self.imagen.get_height()/2) + self.origenY)
+			asignado = self.libre(lplaneta)
 		
 		
 """
@@ -229,9 +237,9 @@ enemigo = Enemigo("Recursos/Enemigo.png", 200, 100, 1)
 lplaneta = []
 for i in range(PLANETA_MAXIMO):
 	if random.choice([1,2]) == 1:
-		lplaneta.append(Planeta("Recursos/Planeta.png"))
+		lplaneta.append(Planeta("Recursos/Planeta.png", lplaneta))
 	else:
-		lplaneta.append(Planeta("Recursos/Planeta2.png"))
+		lplaneta.append(Planeta("Recursos/Planeta2.png", lplaneta))
 
 	
 #Imprimo la lista de planetas para ver los centros
