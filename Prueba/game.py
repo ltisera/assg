@@ -314,7 +314,7 @@ while intro:
 	texto2 = fuente.render("Y: " + str(int(pantalla.Y)), True, (0, 0, 255))
 	texto3 = fuente.render("Tamaño: " + str(fsize), True, (0, 0, 255))
 	texto4 = fuente.render("FPS: " + str(clock.get_fps()), True, (0, 0, 255))
-	
+	#lock 125
 	pantalla.display.blit(texto1, (665,45))
 	pantalla.display.blit(texto2, (665,60))
 	pantalla.display.blit(texto3, (665,75))
