@@ -252,8 +252,11 @@ intro = True
 
 clock = pygame.time.Clock()
 		
+"""
+Texto 
+"""
+fuente = pygame.font.Font(None, 30)
 
-		
 """
 Bucle Principal 
 """
@@ -297,6 +300,12 @@ while intro:
 	nave.imprimir(pantalla.centroX, pantalla.centroY)
 	enemigo.imprimir(nave.X, nave.Y, pantalla.centroX, pantalla.centroY)
 	pantalla.imprimir()
+	
+	texto1 = fuente.render("X: " + str(int(pantalla.X)), 0, (0, 0, 255))
+	texto2 = fuente.render("Y: " + str(int(pantalla.Y)), 0, (0, 0, 255))
+	
+	pantalla.display.blit(texto1, (665,40))
+	pantalla.display.blit(texto2, (665,60))
 	pygame.display.update()
 	
 	
