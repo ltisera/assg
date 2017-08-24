@@ -1,12 +1,10 @@
 import pygame, math
+from Funciones import rotarCentro, sumarAngulo
+from Pantalla import Pantalla
 
 class Nave:
-	def sumarAngulo(self, sumarAngulo):
-		self.angulo += sumarAngulo
-		if self.angulo >= 360:
-			self.angulo -= 360
-		elif self.angulo < 0:
-			self.angulo += 360
+	def sumarAngulo(self, sumAngulo):
+		self.angulo = sumarAngulo(self.angulo, sumAngulo)
 		self.mover()
 	def sumarVelocidad(self, sumar):
 		self.velocidad = self.velocidad + sumar
@@ -18,8 +16,8 @@ class Nave:
 	def mover(self):
 		self.X = math.cos(math.radians(self.angulo))*self.velocidad
 		self.Y = math.sin(math.radians(self.angulo))*self.velocidad
-	def imprimir(self, centroX, centroY, pantalla):
-		pantalla.display.blit(pygame.transform.rotate(self.imagen, self.angulo), (centroX-38,centroY-27))
+	def imprimir(self, camara):
+		camara.display.blit(rotarCentro(self.imagen, self.angulo), (camara.getCentroX()-57, camara.getCentroY()-57))
 	def __init__(self, directorio, anguloOrigen, velocidad, minVelocidad, maxVelocidad):
 		self.imagen = pygame.image.load(directorio).convert_alpha()
 		self.imagen = pygame.transform.rotate(self.imagen, anguloOrigen)

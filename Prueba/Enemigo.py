@@ -1,20 +1,21 @@
 import pygame
+from Pantalla import Pantalla
 
 class Enemigo:
-	def mover(self, X, Y, centroX, centroY):
+	def mover(self, X, Y, camara):
 		self.X -= X
 		self.Y += Y
-		if self.X < centroX-50:
+		if self.X < camara.getCentroX()-50:
 			self.X += self.velocidad
-		elif self.X > centroX-50:
+		elif self.X > camara.getCentroX()-50:
 			self.X -= self.velocidad
-		if self.Y < centroY-28:
+		if self.Y < camara.getCentroY()-28:
 			self.Y += self.velocidad
-		elif self.Y > centroY-28:
+		elif self.Y > camara.getCentroY()-28:
 			self.Y -= self.velocidad
-	def imprimir(self, X, Y, pantalla):
-		self.mover(X, Y, pantalla.centroX, pantalla.centroY)
-		pantalla.display.blit(self.imagen, (self.X,self.Y))
+	def imprimir(self, X, Y, camara):
+		self.mover(X, Y, camara)
+		camara.display.blit(self.imagen, (self.X,self.Y))
 	def __init__(self, directorio, X, Y, velocidad):
 		self.imagen = pygame.image.load(directorio).convert_alpha()
 		self.X = X
