@@ -127,6 +127,7 @@ while intro:
 	if keys[K_s]:
 		nave.sumarVelocidad(-0.1)
 		
+	if keys[K_k] and not disparo:
 		laser = Laser("Recursos/laser2.png", pantalla, 2, nave.angulo)
 		disparo = True	
 		
