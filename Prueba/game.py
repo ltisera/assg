@@ -1,4 +1,4 @@
-"""
+﻿"""
 TO-DO:
 
 22/08/2017
@@ -29,6 +29,11 @@ por que ya voy mareado con este tema de lo que se mueve y lo que no
 """
 
 import pygame, sys, math
+from Estrella import Estrella
+from Nave import Nave
+from Enemigo import Enemigo
+from Planeta import Planeta
+
 import random
 from pygame.locals import * 
 
@@ -62,15 +67,15 @@ def rot_center(image, angle):
 	rot_rect.center = rot_image.get_rect().center
 	rot_image = rot_image.subsurface(rot_rect).copy()
 	return rot_image
-
+"""
 def distancia(X1, X2, Y1, Y2):
 	return math.sqrt(math.pow((X1-X2),2)+math.pow((Y1-Y2),2))	
-
+"""
 """
 Clases
 """
 
-
+"""
 class Estrella:
 	def __init__(self):
 		self.posX = random.randint(-2000,2000)
@@ -83,8 +88,8 @@ class Estrella:
 		self.rectPos.y = pantalla.Y+self.posY
 		if (self.rectPos.x >= -100 and self.rectPos.x <= 900) and (self.rectPos.y >= -100 and self.rectPos.y <= 700):
 			pygame.draw.rect(pantalla.display,self.colorE,self.rectPos,0)
-
-		
+"""
+"""
 class Nave:
 	def sumarAngulo(self, sumarAngulo):
 		self.angulo += sumarAngulo
@@ -115,6 +120,7 @@ class Nave:
 		self.angulo = 0
 		self.velocidad = 0
 		self.sumarVelocidad(velocidad)
+"""
 
 class Pantalla:
 	def imprimir(self):
@@ -132,7 +138,7 @@ class Pantalla:
 		self.fondo2 = pygame.image.load("Recursos/2.png").convert_alpha()
 		self.centroX = 325
 		self.centroY = 237.5
-
+"""
 class Enemigo:
 	def mover(self, X, Y, centroX, centroY):
 		self.X -= X
@@ -153,7 +159,7 @@ class Enemigo:
 		self.X = X
 		self.Y = Y
 		self.velocidad = velocidad
-
+"""
 """
 Planeta:
 	-imagen
@@ -162,6 +168,8 @@ Planeta:
 	-centro
 	----------
 	+imprimir (x, y, surface) 
+"""
+
 """
 class Planeta:
 	def getCentro(self):
@@ -196,6 +204,7 @@ class Planeta:
 			#defino el centro de la imagen
 			self.centro = ((self.imagen.get_width()/2) + self.origenX, (self.imagen.get_height()/2) + self.origenY)
 			asignado = self.libre(lplaneta)
+"""
 		
 		
 """
@@ -305,16 +314,16 @@ while intro:
 	pantalla.mover(nave.X, nave.Y)
 	
 	for i in lestrella:
-		i.imprimir()
+		i.imprimir(pantalla)
 	
 	for i in lplaneta:
-		i.imprimir(pantalla.X, pantalla.Y)
+		i.imprimir(pantalla)
 	
 	#pygame.display.set_caption("Coord X:" + str(pantalla.X))
 	#pygame.draw.line(pantalla.display,pygame.Color(255,255,255,255),[0-pantalla.X,0+pantalla.Y],[1000000-pantalla.X,0+pantalla.Y],5)
 	agujero.imprimir(pantalla.X, pantalla.Y)
-	nave.imprimir(pantalla.centroX, pantalla.centroY)
-	enemigo.imprimir(nave.X, nave.Y, pantalla.centroX, pantalla.centroY)
+	nave.imprimir(pantalla.centroX, pantalla.centroY, pantalla)
+	enemigo.imprimir(nave.X, nave.Y, pantalla)
 	pantalla.imprimir()
 	
 	
