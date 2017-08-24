@@ -42,7 +42,7 @@ from pygame.locals import *
 """
 Constantes de configuracion
 """
-
+AREA_MAXIMA = 20000
 VELOCIDAD_MINIMA = 0.1
 VELOCIDAD_MAXIMA = 20
 
@@ -188,10 +188,10 @@ while intro:
 		i.imprimir(pantalla)
 	
 	#pygame.display.set_caption("Coord X:" + str(pantalla.X))
-	pygame.draw.line(pantalla.display,pygame.Color(255,255,255,255),[0-pantalla.X,0+pantalla.Y],[60000-pantalla.X,0+pantalla.Y],5)
-	pygame.draw.line(pantalla.display,pygame.Color(255,255,255,255),[0-pantalla.X,0+pantalla.Y],[0-pantalla.X,60000+pantalla.Y],5)
-	pygame.draw.line(pantalla.display,pygame.Color(255,255,255,255),[60000-pantalla.X,0+pantalla.Y],[60000-pantalla.X,60000+pantalla.Y],5)
-	pygame.draw.line(pantalla.display,pygame.Color(255,255,255,255),[0-pantalla.X,60000+pantalla.Y],[60000-pantalla.X,60000+pantalla.Y],5)
+	pygame.draw.line(pantalla.display,pygame.Color(255,255,255,255),[0-pantalla.X,-0+pantalla.Y],[AREA_MAXIMA-pantalla.X,0+pantalla.Y],5)
+	pygame.draw.line(pantalla.display,pygame.Color(255,255,255,255),[0-pantalla.X,-0+pantalla.Y],[0-pantalla.X,-AREA_MAXIMA+pantalla.Y],5)
+	pygame.draw.line(pantalla.display,pygame.Color(255,255,255,255),[AREA_MAXIMA-pantalla.X,-0+pantalla.Y],[AREA_MAXIMA-pantalla.X,-AREA_MAXIMA+pantalla.Y],5)
+	pygame.draw.line(pantalla.display,pygame.Color(255,255,255,255),[0-pantalla.X,-AREA_MAXIMA+pantalla.Y],[AREA_MAXIMA-pantalla.X,-AREA_MAXIMA+pantalla.Y],5)
 	agujero.imprimir(pantalla.X, pantalla.Y)
 	nave.imprimir(pantalla.centroX, pantalla.centroY, pantalla)
 	enemigo.imprimir(nave.X, nave.Y, pantalla)
