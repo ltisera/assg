@@ -5,14 +5,6 @@ TO-DO:
 Estado: pendiente
     -Completar los encabezados de clases
 
-
-22/08/2017
-Estado: pendiente
-    -Coherencia entre los nombres de funciones
-    por ejemplo, hay una funcion llamada rot_center y otra sumarAngulo
-    o la llamamos rotCenter (a mi me gusta esta notacion) 
-    o la llamamos sumar_angulo (mmm notacion FEA)
-
 22/08/2017
 Estado: pendiente
     -Pasar por parametro la superficie donde se va a imprimir EN TODAS LAS CLASES
@@ -42,7 +34,7 @@ VELOCIDAD_MINIMA = 0.2
 VELOCIDAD_MAXIMA = 7.5
 
 PLANETA_MAXIMO = 35
-ESTRELLA_MAXIMO = 2500
+ESTRELLA_MAXIMO = 5000
 
 """
 Funciones
@@ -55,7 +47,7 @@ def generarPlanetas():
     return 0
 
     
-def rot_center(image, angle):
+def rotCenter(image, angle):
     orig_rect = image.get_rect()
     rot_image = pygame.transform.rotate(image, angle)
     rot_rect = orig_rect.copy()
@@ -73,8 +65,8 @@ Clases
 
 class Estrella:
     def __init__(self):
-        self.posX = random.randint(-2000,2000)
-        self.posY = random.randint(-2000,2000)
+        self.posX = random.randint(-5000,5000)
+        self.posY = random.randint(-5000,5000)
         self.colorE = pygame.Color(255,255,255,255)
         self.rectPos = pygame.Rect(self.posX, self.posY,2,2)
 
@@ -125,7 +117,7 @@ class Pantalla:
         self.Y += Y
     def __init__(self):
         self.display = pygame.display.set_mode((800,600))
-        pygame.display.set_caption("ASSG")
+        pygame.display.set_caption("NAVE")
         self.X = 0
         self.Y = 0
         self.fondo1 = pygame.image.load("Recursos/1.png").convert_alpha()
@@ -191,8 +183,8 @@ class Planeta:
         self.imagen = pygame.image.load(directorio).convert_alpha()
         asignado = False
         while not asignado:
-            self.origenX = random.randint(-2000,2000)
-            self.origenY = random.randint(-2000,2000)
+            self.origenX = random.randint(-5000,5000)
+            self.origenY = random.randint(-5000,5000)
             #defino el centro de la imagen
             self.centro = ((self.imagen.get_width()/2) + self.origenX, (self.imagen.get_height()/2) + self.origenY)
             asignado = self.libre(lplaneta)
@@ -214,7 +206,7 @@ class Agujero:
         if self.angulo >= 360:
             self.angulo -= 360
     def imprimir(self, X, Y):
-        pantalla.display.blit(rot_center(self.imagen, self.angulo), (-X+self.origenX,Y-self.origenY))
+        pantalla.display.blit(rotCenter(self.imagen, self.angulo), (-X+self.origenX,Y-self.origenY))
         self.sumarAngulo(self.velocidad)
     def __init__(self, directorio, origenX, origenY, velocidad):
         self.imagen = pygame.image.load(directorio).convert_alpha()
@@ -320,8 +312,8 @@ while intro:
     
     texto1 = fuente.render("X: " + str(int(pantalla.X)), True, (0, 0, 255))
     texto2 = fuente.render("Y: " + str(int(pantalla.Y)), True, (0, 0, 255))
-    texto3 = fuente.render("Tamanio: " + str(fsize), True, (0, 0, 255))
-    texto4 = fuente.render("Velocidad: " + str(nave.velocidad) + " Km/s", True, (0, 0, 255))
+    texto3 = fuente.render("Tamano: " + str(fsize), True, (0, 0, 255))
+    texto4 = fuente.render("Velocidad: " + str(int(nave.velocidad)) + " Km/s", True, (0, 0, 255))
     #lock 125
     pantalla.display.blit(texto1, (665,45))
     pantalla.display.blit(texto2, (665,60))
