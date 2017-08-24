@@ -215,7 +215,7 @@ while intro:
 	
 	clock.tick(120)
 """
-Prueba merge 1
+Prueba merge 1... Finalizado el test
 """
 """
 Finalizacion
