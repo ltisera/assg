@@ -36,6 +36,7 @@ from Planeta import Planeta
 from Pantalla import Pantalla
 from Agujero import Agujero
 from Laser import Laser
+from Texto import Texto
 import random
 from pygame.locals import * 
 
@@ -90,7 +91,8 @@ Texto
 """
 fsize = 12
 fuente = pygame.font.Font("Recursos/arial.ttf", fsize)
-
+text21 = Texto("Recursos/arial.ttf",18)
+text21.setTexto("PUTOOO")
 """
 Bucle Principal 
 """
@@ -165,7 +167,7 @@ while intro:
 	pantalla.display.blit(texto3, (665,75))
 	pantalla.display.blit(texto4, (665,90))
 	pantalla.display.blit(texto5, (665,105))
-	
+	text21.imprimir(pantalla,665,130)
 	pygame.display.update()
 	
 	
