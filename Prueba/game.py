@@ -36,6 +36,7 @@ from Planeta import Planeta
 from Pantalla import Pantalla
 from Agujero import Agujero
 from Laser import Laser
+from Texto import Texto
 import random
 from pygame.locals import * 
 
@@ -45,9 +46,11 @@ Constantes de configuracion
 AREA_MAXIMA = 20000
 VELOCIDAD_MINIMA = 0.1
 VELOCIDAD_MAXIMA = 20
+VELOCIDAD_LASER = 10
 
 PLANETA_MAXIMO = 30
-ESTRELLA_MAXIMO = 2000
+ESTRELLA_MAXIMO = 75
+LASER_MAXIMO = 10
 
 """
 Funciones
@@ -61,6 +64,12 @@ def generarPlanetas(PLANETA_MAXIMO):
 		else:
 			listaPlaneta.append(Planeta("Recursos/Planeta2.png", listaPlaneta))	
 	return listaPlaneta
+	
+def generarLaser(LASER_MAXIMO):
+	listaLaser = []
+	for i in range(LASER_MAXIMO):			
+		listaLaser.append(Laser("Recursos/laser2.png", pantalla, 0, 0, True))
+	return listaLaser
 
 """
 Inicializacion de variables
@@ -81,16 +90,24 @@ lestrella = []
 for i in range(ESTRELLA_MAXIMO):
 	lestrella.append(Estrella())
 	
+llaser = generarLaser(LASER_MAXIMO)	
+
 intro = True
-disparo = False
+
+recargaLaser = 200
+
+pasolaser = 12
+
 clock = pygame.time.Clock()
+clockLaser = pygame.time.Clock()
 		
 """
 Texto 
 """
 fsize = 12
 fuente = pygame.font.Font("Recursos/arial.ttf", fsize)
-
+text21 = Texto("Recursos/arial.ttf",18)
+text21.setTexto("PUTOOO")
 """
 Bucle Principal 
 """
@@ -106,10 +123,19 @@ while intro:
 			if event.key == K_m:
 				fsize += 1
 				fuente = pygame.font.Font("Recursos/arial.ttf", fsize)
+				pasolaser += 1
 			if event.key == K_n:
 				fsize -= 1
 				fuente = pygame.font.Font("Recursos/arial.ttf", fsize)
-
+				pasolaser -= 1
+			"""
+			if event.key == K_k:
+				for i in llaser:
+					if i.laserLibre == True:
+						i.setLaser(pantalla, VELOCIDAD_LASER, nave.angulo, False)
+						break
+			"""
+						
 		if event.type == pygame.QUIT:
 			intro = False
 	
@@ -126,10 +152,16 @@ while intro:
 
 	if keys[K_s]:
 		nave.sumarVelocidad(-0.1)
-		
-	if keys[K_k] and not disparo:
-		laser = Laser("Recursos/laser2.png", pantalla, 2, nave.angulo)
-		disparo = True	
+	
+	if keys[K_k]:
+		if recargaLaser >= pasolaser:
+			recargaLaser = 0
+			for i in llaser:
+				if i.laserLibre == True:
+					i.setLaser(pantalla, VELOCIDAD_LASER, nave.angulo, False)
+					break
+		else:
+			recargaLaser += 1
 		
 	#Impresion
 	pantalla.mover(nave.X, nave.Y)
@@ -147,8 +179,9 @@ while intro:
 	pygame.draw.line(pantalla.display,pygame.Color(255,255,255,255),[0-pantalla.X,-AREA_MAXIMA+pantalla.Y],[AREA_MAXIMA-pantalla.X,-AREA_MAXIMA+pantalla.Y],5)
 	
 	agujero.imprimir(pantalla)
-	if disparo:
-		disparo = laser.imprimir(pantalla)
+	for i in llaser:
+		if i.laserLibre == False:
+			i.imprimir(pantalla)
 	nave.imprimir(pantalla)
 	enemigo.imprimir(nave.X, nave.Y, pantalla)
 	
@@ -165,10 +198,10 @@ while intro:
 	pantalla.display.blit(texto3, (665,75))
 	pantalla.display.blit(texto4, (665,90))
 	pantalla.display.blit(texto5, (665,105))
-	
+	text21.setTexto("C Laser: ", )
+	text21.imprimir(pantalla,665,130)
 	pygame.display.update()
-	
-	
+
 	clock.tick(120)
 """
 Prueba merge 1... Finalizado el test
