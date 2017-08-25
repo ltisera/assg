@@ -5,13 +5,13 @@ class Enemigo:
 	def mover(self, X, Y, camara):
 		self.X -= X
 		self.Y += Y
-		if self.X < camara.getCentroX()-50:
+		if self.X < camara.getCentroX()-20:
 			self.X += self.velocidad
-		elif self.X > camara.getCentroX()-50:
+		elif self.X > camara.getCentroX()-20:
 			self.X -= self.velocidad
-		if self.Y < camara.getCentroY()-28:
+		if self.Y < camara.getCentroY()-20:
 			self.Y += self.velocidad
-		elif self.Y > camara.getCentroY()-28:
+		elif self.Y > camara.getCentroY()-20:
 			self.Y -= self.velocidad
 	def imprimir(self, X, Y, camara):
 		self.mover(X, Y, camara)
