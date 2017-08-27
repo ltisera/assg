@@ -1,4 +1,4 @@
-"""
+﻿"""
 TO-DO:
 
 22/08/2017
@@ -29,212 +29,47 @@ por que ya voy mareado con este tema de lo que se mueve y lo que no
 """
 
 import pygame, sys, math
+from Estrella import Estrella
+from Nave import Nave
+from Enemigo import Enemigo
+from Planeta import Planeta
+from Pantalla import Pantalla
+from Agujero import Agujero
+from Laser import Laser
+from Texto import Texto
 import random
 from pygame.locals import * 
-
-
 
 """
 Constantes de configuracion
 """
-
+AREA_MAXIMA = 20000
 VELOCIDAD_MINIMA = 0.1
-VELOCIDAD_MAXIMA = 7
+VELOCIDAD_MAXIMA = 20
+VELOCIDAD_LASER = 10
 
-PLANETA_MAXIMO = 20
-ESTRELLA_MAXIMO = 500
+PLANETA_MAXIMO = 30
+ESTRELLA_MAXIMO = 75
+LASER_MAXIMO = 10
 
 """
 Funciones
 """
-def generarPlanetas():
+
+def generarPlanetas(PLANETA_MAXIMO):
 	listaPlaneta = []
 	for i in range(PLANETA_MAXIMO):
-		listaPlaneta.append(Planeta("Recursos/Planeta.png"))
-		listaPlaneta.append(Planeta("Recursos/Planeta2.png"))
-
-	return 0
-
+		if random.choice([1,2]) == 1:
+			listaPlaneta.append(Planeta("Recursos/Planeta.png", listaPlaneta))
+		else:
+			listaPlaneta.append(Planeta("Recursos/Planeta2.png", listaPlaneta))	
+	return listaPlaneta
 	
-def rot_center(image, angle):
-	orig_rect = image.get_rect()
-	rot_image = pygame.transform.rotate(image, angle)
-	rot_rect = orig_rect.copy()
-	rot_rect.center = rot_image.get_rect().center
-	rot_image = rot_image.subsurface(rot_rect).copy()
-	return rot_image
-
-		
-
-"""
-Clases
-"""
-
-class Laser:
-	def __init__(self, directorio, anguloOrigen, velocidad, posX, posY):
-		self.imagen = pygame.image.load(directorio).convert_alpha()
-		self.imagen = pygame.transform.rotate(self.imagen, anguloOrigen)
-		self.X = posX
-		self.Y = posY
-		self.angulo = anguloOrigen
-		self.velocidad = velocidad
-		self.mover()
-	def sumarVelocidad(self, sumar):
-		self.velocidad = self.velocidad + sumar
-		if self.velocidad <= (self.minVelocidad):
-			self.velocidad = self.minVelocidad
-		elif self.velocidad >= (self.maxVelocidad):
-			self.velocidad = self.maxVelocidad
-		self.mover()
-	def mover(self):
-		self.X = math.cos(math.radians(self.angulo))*self.velocidad
-		self.Y = math.sin(math.radians(self.angulo))*self.velocidad
-	def imprimir(self, centroX, centroY):
-		pantalla.display.blit(pygame.transform.rotate(self.imagen, self.angulo), (centroX-38,centroY-27))
-
-class Estrella:
-	def __init__(self):
-		self.posX = random.randint(-1000,1000)
-		self.posY = random.randint(-1000,1000)
-		self.colorE = pygame.Color(255,255,255,255)
-		self.rectPos = pygame.Rect(self.posX, self.posY,1,1)
-
-	def imprimir(self):
-		self.rectPos.x = -pantalla.X+self.posX
-		self.rectPos.y = pantalla.Y+self.posY
-		if (self.rectPos.x >= -100 and self.rectPos.x <= 900) and (self.rectPos.y >= -100 and self.rectPos.y <= 700):
-			pygame.draw.rect(pantalla.display,self.colorE,self.rectPos,0)
-
-		
-class Nave:
-	def sumarAngulo(self, sumarAngulo):
-		self.angulo += sumarAngulo
-		if self.angulo >= 360:
-			self.angulo -= 360
-		elif self.angulo < 0:
-			self.angulo += 360
-		self.mover()
-	def sumarVelocidad(self, sumar):
-		self.velocidad = self.velocidad + sumar
-		if self.velocidad <= (self.minVelocidad):
-			self.velocidad = self.minVelocidad
-		elif self.velocidad >= (self.maxVelocidad):
-			self.velocidad = self.maxVelocidad
-		self.mover()
-	def mover(self):
-		self.X = math.cos(math.radians(self.angulo))*self.velocidad
-		self.Y = math.sin(math.radians(self.angulo))*self.velocidad
-	def imprimir(self, centroX, centroY):
-		pantalla.display.blit(pygame.transform.rotate(self.imagen, self.angulo), (centroX-38,centroY-27))
-	def __init__(self, directorio, anguloOrigen, velocidad, minVelocidad, maxVelocidad):
-		self.imagen = pygame.image.load(directorio).convert_alpha()
-		self.imagen = pygame.transform.rotate(self.imagen, anguloOrigen)
-		self.X = 0
-		self.Y = 0
-		self.maxVelocidad = maxVelocidad
-		self.minVelocidad = minVelocidad
-		self.angulo = 0
-		self.velocidad = 0
-		self.sumarVelocidad(velocidad)
-
-class Pantalla:
-	def imprimir(self):
-		pantalla.display.blit(self.fondo1, (650,0))
-		pantalla.display.blit(self.fondo2, (0,475))
-	def mover(self, X, Y):
-		self.X += X
-		self.Y += Y
-	def __init__(self):
-		self.display = pygame.display.set_mode((800,600))
-		pygame.display.set_caption("ASSG")
-		self.X = 0
-		self.Y = 0
-		self.fondo1 = pygame.image.load("Recursos/1.png").convert_alpha()
-		self.fondo2 = pygame.image.load("Recursos/2.png").convert_alpha()
-		self.centroX = 325
-		self.centroY = 237.5
-
-class Enemigo:
-	def mover(self, X, Y, centroX, centroY):
-		self.X -= X
-		self.Y += Y
-		if self.X < centroX-50:
-			self.X += self.velocidad
-		elif self.X > centroX-50:
-			self.X -= self.velocidad
-		if self.Y < centroY-28:
-			self.Y += self.velocidad
-		elif self.Y > centroY-28:
-			self.Y -= self.velocidad
-	def imprimir(self, X, Y, centroX, centroY):
-		self.mover(X, Y, centroX, centroY)
-		pantalla.display.blit(self.imagen, (self.X,self.Y))
-	def __init__(self, directorio, X, Y, velocidad):
-		self.imagen = pygame.image.load(directorio).convert_alpha()
-		self.X = X
-		self.Y = Y
-		self.velocidad = velocidad
-
-"""
-Planeta:
-	-imagen
-	-origenX
-	-origenY
-	-centro
-	----------
-	+imprimir (x, y, surface) 
-"""
-class Planeta:
-	def getCentro(self):
-		return self.centro
-	def getCentroX(self):
-		return self.centro[0]
-	def getCentroY(self):
-		return self.centro[1]
-	def setX(self, x):
-		self.origenX = x
-	def setY(self, y):
-		self.origenX = x
-	
-	def imprimir(self, X, Y):
-		#Esto estaria mal, deberiamos pasarle por argumento
-		#La superficie en donde queremos que haga el blit
-		#Tambien se puede ver si esta o no EN CAMARA
-		#ahora como esta IMPRIME TODO por mas que no lo veamos
-		if (-X+self.getCentroX() >= -400 and -X+self.getCentroX() <= 1400) and (-Y+self.getCentroY() >= -400 and -Y+self.getCentroY() <= 1400):
-			pantalla.display.blit(self.imagen, (-X+self.origenX,Y-self.origenY))	
-	def __init__(self, directorio):
-		self.imagen = pygame.image.load(directorio).convert_alpha()
-		self.origenX = random.randint(-1000,1000)
-		self.origenY = random.randint(-1000,1000)
-		#defino el centro de la imagen
-		self.centro = ((self.imagen.get_width()/2) + self.origenX, (self.imagen.get_height()/2) + self.origenY)
-		
-		
-"""
-Planeta:
-	-imagen
-	-origenX
-	-origenY
-	-centro
-	----------
-	+imprimir (x, y, surface) 
-"""
-
-class Agujero:
-	def sumarAngulo(self, sumarAngulo):
-		self.angulo += sumarAngulo
-		if self.angulo >= 360:
-			self.angulo -= 360
-	def imprimir(self, X, Y):
-		pantalla.display.blit(rot_center(self.imagen, self.angulo), (-X+self.origenX,Y-self.origenY))
-		self.sumarAngulo(self.velocidad)
-	def __init__(self, directorio, origenX, origenY, velocidad):
-		self.imagen = pygame.image.load(directorio).convert_alpha()
-		self.origenX = origenX
-		self.origenY = origenY
-		self.angulo = 0
-		self.velocidad = velocidad
+def generarLaser(LASER_MAXIMO):
+	listaLaser = []
+	for i in range(LASER_MAXIMO):			
+		listaLaser.append(Laser("Recursos/laser2.png", pantalla, 0, 0, True))
+	return listaLaser
 
 """
 Inicializacion de variables
@@ -243,25 +78,11 @@ pygame.init()
 		
 pantalla = Pantalla()
 
-nave = Nave("Recursos/Chico.png", 270, 0.1, VELOCIDAD_MINIMA, VELOCIDAD_MAXIMA)
+nave = Nave("Recursos/Chico.png", 0, 0.1, VELOCIDAD_MINIMA, VELOCIDAD_MAXIMA)
 
 enemigo = Enemigo("Recursos/Enemigo.png", 200, 100, 1)
 
-lplaneta = []
-for i in range(PLANETA_MAXIMO):
-	if random.choice([1,2]) == 1:
-		lplaneta.append(Planeta("Recursos/Planeta.png"))
-	else:
-		lplaneta.append(Planeta("Recursos/Planeta2.png"))
-
-	
-#Imprimo la lista de planetas para ver los centros
-print("Lista creada con: ", len(lplaneta))
-n = 1
-for i in lplaneta:
-	print("planeta: " , n , " Centro en: ", i.getCentro())
-	
-	n += 1
+lplaneta = generarPlanetas(PLANETA_MAXIMO)
 
 agujero = Agujero("Recursos/AgujeroNegro.png", -400, -600, 2)
 
@@ -269,18 +90,25 @@ lestrella = []
 for i in range(ESTRELLA_MAXIMO):
 	lestrella.append(Estrella())
 	
+llaser = generarLaser(LASER_MAXIMO)
+
+laserEnemigo = Laser("Recursos/laser1.png",pantalla,VELOCIDAD_LASER+enemigo.velocidad,nave.angulo,False)
 intro = True
 
-clock = pygame.time.Clock()
+recargaLaser = 200
 
-disparo = False
+pasolaser = 12
+
+clock = pygame.time.Clock()
+clockLaser = pygame.time.Clock()
 		
 """
 Texto 
 """
 fsize = 12
 fuente = pygame.font.Font("Recursos/arial.ttf", fsize)
-
+text21 = Texto("Recursos/arial.ttf",18)
+text21.setTexto("PUTOOO")
 """
 Bucle Principal 
 """
@@ -296,10 +124,19 @@ while intro:
 			if event.key == K_m:
 				fsize += 1
 				fuente = pygame.font.Font("Recursos/arial.ttf", fsize)
+				pasolaser += 1
 			if event.key == K_n:
 				fsize -= 1
 				fuente = pygame.font.Font("Recursos/arial.ttf", fsize)
-
+				pasolaser -= 1
+			"""
+			if event.key == K_k:
+				for i in llaser:
+					if i.laserLibre == True:
+						i.setLaser(pantalla, VELOCIDAD_LASER, nave.angulo, False)
+						break
+			"""
+						
 		if event.type == pygame.QUIT:
 			intro = False
 	
@@ -316,48 +153,66 @@ while intro:
 
 	if keys[K_s]:
 		nave.sumarVelocidad(-0.1)
+	
+	if keys[K_k]:
+		if recargaLaser >= pasolaser:
+			recargaLaser = 0
+			for i in llaser:
+				if i.laserLibre == True:
+					i.setLaser(pantalla.getCentroX(),pantalla.getCentroY(), VELOCIDAD_LASER, nave.angulo, False)
+					break
+		else:
+			recargaLaser += 1
 		
-	if keys[K_k] and not disparo:
-		laser = Laser("Recursos/laser.png", nave.angulo, nave.velocidad, nave.X, nave.Y)
-		disparo = True
 	#Impresion
 	pantalla.mover(nave.X, nave.Y)
 	
 	for i in lestrella:
-		i.imprimir()
+		i.imprimir(pantalla)
 	
 	for i in lplaneta:
-		i.imprimir(pantalla.X, pantalla.Y)
+		i.imprimir(pantalla)
 	
 	#pygame.display.set_caption("Coord X:" + str(pantalla.X))
-	#pygame.draw.line(pantalla.display,pygame.Color(255,255,255,255),[0-pantalla.X,0+pantalla.Y],[1000000-pantalla.X,0+pantalla.Y],5)
-	agujero.imprimir(pantalla.X, pantalla.Y)
-	nave.imprimir(pantalla.centroX, pantalla.centroY)
-	if disparo:
-		laser.mover()
-		laser.imprimir(pantalla.centroX,pantalla.centroY)
-		if(laser.X==enemigo.X and laser.Y==enemigo.Y) or (laser.X>pantalla.X and laser.Y>pantalla.Y):
-			#aca se borraria la impresion del laser
-			disparo = False
-	enemigo.imprimir(nave.X, nave.Y, pantalla.centroX, pantalla.centroY)
-	pantalla.imprimir()
+	pygame.draw.line(pantalla.display,pygame.Color(255,255,255,255),[0-pantalla.X,-0+pantalla.Y],[AREA_MAXIMA-pantalla.X,0+pantalla.Y],5)
+	pygame.draw.line(pantalla.display,pygame.Color(255,255,255,255),[0-pantalla.X,-0+pantalla.Y],[0-pantalla.X,-AREA_MAXIMA+pantalla.Y],5)
+	pygame.draw.line(pantalla.display,pygame.Color(255,255,255,255),[AREA_MAXIMA-pantalla.X,-0+pantalla.Y],[AREA_MAXIMA-pantalla.X,-AREA_MAXIMA+pantalla.Y],5)
+	pygame.draw.line(pantalla.display,pygame.Color(255,255,255,255),[0-pantalla.X,-AREA_MAXIMA+pantalla.Y],[AREA_MAXIMA-pantalla.X,-AREA_MAXIMA+pantalla.Y],5)
 	
+	agujero.imprimir(pantalla)
+	for i in llaser:
+		if i.laserLibre == False:
+			i.imprimir(pantalla)
+	nave.imprimir(pantalla)
+	if laserEnemigo.laserLibre == False:
+		laserEnemigo.imprimir(pantalla)
+	else:
+		laserEnemigo.setLaser(enemigo.X, enemigo.Y, VELOCIDAD_LASER+enemigo.velocidad, laserEnemigo.traerAnguloLaserEnemigo(enemigo,pantalla), False)
+	enemigo.imprimir(nave.X, nave.Y, pantalla)
+	
+	pantalla.imprimir()
 	
 	texto1 = fuente.render("X: " + str(int(pantalla.X)), True, (0, 0, 255))
 	texto2 = fuente.render("Y: " + str(int(pantalla.Y)), True, (0, 0, 255))
-	texto3 = fuente.render("Tamanio: " + str(fsize), True, (0, 0, 255))
+	texto3 = fuente.render("Tamaño: " + str(fsize), True, (0, 0, 255))
 	texto4 = fuente.render("FPS: " + str(clock.get_fps()), True, (0, 0, 255))
-	
+	texto5 = fuente.render("Velocidad: " + str(nave.velocidad), True, (0, 0, 255))
+	texto6 = fuente.render("angulo: " + str(nave.angulo),True, (0,0,255))
+	#lock 125
 	pantalla.display.blit(texto1, (665,45))
 	pantalla.display.blit(texto2, (665,60))
 	pantalla.display.blit(texto3, (665,75))
 	pantalla.display.blit(texto4, (665,90))
-	
+	pantalla.display.blit(texto5, (665,105))
+	pantalla.display.blit(texto6, (665,120))
+	text21.setTexto("C Laser: ", )
+	text21.imprimir(pantalla,665,130)
 	pygame.display.update()
-	
-	
-	clock.tick(120)
 
+	clock.tick(120)
+"""
+Prueba merge 1... Finalizado el test
+"""
 """
 Finalizacion
 """
