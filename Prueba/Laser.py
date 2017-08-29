@@ -2,11 +2,11 @@ import math, pygame
 from Pantalla import Pantalla
 
 class Laser:		
-	def mover(self):
-		self.X += math.cos(math.radians(self.angulo))*self.velocidad
-		self.Y -= math.sin(math.radians(self.angulo))*self.velocidad
-	def imprimir(self, camara):
-		self.mover()
+	def mover(self, X, Y):
+		self.X += math.cos(math.radians(self.angulo))*self.velocidad - X
+		self.Y -= math.sin(math.radians(self.angulo))*self.velocidad + Y
+	def imprimir(self, X, Y, camara):
+		self.mover(X, Y)
 		if (self.X >= 0 and self.X <= 650) and (self.Y >= 0 and self.Y <= 475):
 			camara.display.blit(pygame.transform.rotate(self.imagen, self.angulo), (self.X,self.Y))
 		else:

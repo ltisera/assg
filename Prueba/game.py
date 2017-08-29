@@ -44,11 +44,14 @@ from pygame.locals import *
 Constantes de configuracion
 """
 AREA_MAXIMA = 20000
+DIVIDIR_AREA = 5
+AREA = AREA_MAXIMA/DIVIDIR_AREA
 VELOCIDAD_MINIMA = 0.1
 VELOCIDAD_MAXIMA = 20
 VELOCIDAD_LASER = 10
 
-PLANETA_MAXIMO = 30
+OBJETOS_MAXIMOS = 600
+DISTANCIA_MINIMA = 550
 ESTRELLA_MAXIMO = 75
 LASER_MAXIMO = 10
 
@@ -56,14 +59,17 @@ LASER_MAXIMO = 10
 Funciones
 """
 
-def generarPlanetas(PLANETA_MAXIMO):
-	listaPlaneta = []
-	for i in range(PLANETA_MAXIMO):
-		if random.choice([1,2]) == 1:
-			listaPlaneta.append(Planeta("Recursos/Planeta.png", listaPlaneta))
+def generarObjetos(OBJETOS_MAXIMOS, AREA_MAXIMA, DISTANCIA_MINIMA):
+	listaObjetos = []
+	for i in range(OBJETOS_MAXIMOS):
+		opc = random.randint(0,10)
+		if opc == 10:
+			listaObjetos.append(Agujero("Recursos/AgujeroNegro.png", 2, listaObjetos, AREA_MAXIMA, DISTANCIA_MINIMA))
+		elif opc <= 5:
+			listaObjetos.append(Planeta("Recursos/Planeta2.png", listaObjetos, AREA_MAXIMA, DISTANCIA_MINIMA))	
 		else:
-			listaPlaneta.append(Planeta("Recursos/Planeta2.png", listaPlaneta))	
-	return listaPlaneta
+			listaObjetos.append(Planeta("Recursos/Planeta.png", listaObjetos, AREA_MAXIMA, DISTANCIA_MINIMA))		
+	return listaObjetos
 	
 def generarLaser(LASER_MAXIMO):
 	listaLaser = []
@@ -78,13 +84,11 @@ pygame.init()
 		
 pantalla = Pantalla()
 
-nave = Nave("Recursos/Chico.png", 0, 0.1, VELOCIDAD_MINIMA, VELOCIDAD_MAXIMA)
+nave = Nave("Recursos/Chico.png", 0, 0.1, VELOCIDAD_MINIMA, VELOCIDAD_MAXIMA, (0,0))
 
 enemigo = Enemigo("Recursos/Enemigo.png", 200, 100, 1)
 
-lplaneta = generarPlanetas(PLANETA_MAXIMO)
-
-agujero = Agujero("Recursos/AgujeroNegro.png", -400, -600, 2)
+lobjetos = generarObjetos(OBJETOS_MAXIMOS, AREA_MAXIMA, DISTANCIA_MINIMA)
 
 lestrella = []
 for i in range(ESTRELLA_MAXIMO):
@@ -169,26 +173,25 @@ while intro:
 	for i in lestrella:
 		i.imprimir(pantalla)
 	
-	for i in lplaneta:
+	for i in lobjetos:
 		i.imprimir(pantalla)
 	
 	#pygame.display.set_caption("Coord X:" + str(pantalla.X))
-	pygame.draw.line(pantalla.display,pygame.Color(255,255,255,255),[0-pantalla.X,-0+pantalla.Y],[AREA_MAXIMA-pantalla.X,0+pantalla.Y],5)
-	pygame.draw.line(pantalla.display,pygame.Color(255,255,255,255),[0-pantalla.X,-0+pantalla.Y],[0-pantalla.X,-AREA_MAXIMA+pantalla.Y],5)
-	pygame.draw.line(pantalla.display,pygame.Color(255,255,255,255),[AREA_MAXIMA-pantalla.X,-0+pantalla.Y],[AREA_MAXIMA-pantalla.X,-AREA_MAXIMA+pantalla.Y],5)
-	pygame.draw.line(pantalla.display,pygame.Color(255,255,255,255),[0-pantalla.X,-AREA_MAXIMA+pantalla.Y],[AREA_MAXIMA-pantalla.X,-AREA_MAXIMA+pantalla.Y],5)
+	pygame.draw.line(pantalla.display,pygame.Color(255,255,255,255),[0-pantalla.X,0-pantalla.Y],[AREA_MAXIMA-pantalla.X,0-pantalla.Y],5)
+	pygame.draw.line(pantalla.display,pygame.Color(255,255,255,255),[0-pantalla.X,0-pantalla.Y],[0-pantalla.X,AREA_MAXIMA-pantalla.Y],5)
+	pygame.draw.line(pantalla.display,pygame.Color(255,255,255,255),[AREA_MAXIMA-pantalla.X,0-pantalla.Y],[AREA_MAXIMA-pantalla.X,AREA_MAXIMA-pantalla.Y],5)
+	pygame.draw.line(pantalla.display,pygame.Color(255,255,255,255),[0-pantalla.X,AREA_MAXIMA-pantalla.Y],[AREA_MAXIMA-pantalla.X,AREA_MAXIMA-pantalla.Y],5)
 	
-	agujero.imprimir(pantalla)
 	for i in llaser:
 		if i.laserLibre == False:
-			i.imprimir(pantalla)
+			i.imprimir(nave.X, nave.Y, pantalla)
 	nave.imprimir(pantalla)
 	enemigo.imprimir(nave.X, nave.Y, pantalla)
 	
 	pantalla.imprimir()
 	
-	texto1 = fuente.render("X: " + str(int(pantalla.X)), True, (0, 0, 255))
-	texto2 = fuente.render("Y: " + str(int(pantalla.Y)), True, (0, 0, 255))
+	texto1 = fuente.render("X: " + str(int(pantalla.X+pantalla.getCentroX())), True, (0, 0, 255))
+	texto2 = fuente.render("Y: " + str(int(pantalla.Y+pantalla.getCentroY())), True, (0, 0, 255))
 	texto3 = fuente.render("Tamaño: " + str(fsize), True, (0, 0, 255))
 	texto4 = fuente.render("FPS: " + str(clock.get_fps()), True, (0, 0, 255))
 	texto5 = fuente.render("Velocidad: " + str(nave.velocidad), True, (0, 0, 255))

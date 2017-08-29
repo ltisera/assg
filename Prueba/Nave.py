@@ -15,14 +15,14 @@ class Nave:
 		self.mover()
 	def mover(self):
 		self.X = math.cos(math.radians(self.angulo))*self.velocidad
-		self.Y = math.sin(math.radians(self.angulo))*self.velocidad
+		self.Y = -math.sin(math.radians(self.angulo))*self.velocidad
 	def imprimir(self, camara):
 		camara.display.blit(rotarCentro(self.imagen, self.angulo), (camara.getCentroX()-57, camara.getCentroY()-57))
-	def __init__(self, directorio, anguloOrigen, velocidad, minVelocidad, maxVelocidad):
+	def __init__(self, directorio, anguloOrigen, velocidad, minVelocidad, maxVelocidad, origen):
 		self.imagen = pygame.image.load(directorio).convert_alpha()
 		self.imagen = pygame.transform.rotate(self.imagen, anguloOrigen)
-		self.X = 0
-		self.Y = 0
+		self.X = origen[0]
+		self.Y = origen[1]
 		self.maxVelocidad = maxVelocidad
 		self.minVelocidad = minVelocidad
 		self.angulo = 0

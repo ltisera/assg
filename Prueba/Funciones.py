@@ -20,3 +20,10 @@ def sumarAngulo(angulo, anguloSumar):
 	elif angulo < 0:
 		angulo += 360
 	return angulo
+	
+def lugarLibre(objeto, lobjeto, DISTANCIA_MINIMA):
+		libre = True
+		for i in lobjeto:
+			if (distancia(objeto.getCentroX(), i.getCentroX(), objeto.getCentroY(), i.getCentroY()) <= DISTANCIA_MINIMA):
+				libre = False
+		return libre

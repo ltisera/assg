@@ -4,7 +4,7 @@ from Pantalla import Pantalla
 class Enemigo:
 	def mover(self, X, Y, camara):
 		self.X -= X
-		self.Y += Y
+		self.Y -= Y
 		if self.X < camara.getCentroX()-20:
 			self.X += self.velocidad
 		elif self.X > camara.getCentroX()-20:
