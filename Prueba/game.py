@@ -77,19 +77,33 @@ def generarLaser(LASER_MAXIMO):
 		listaLaser.append(Laser("Recursos/laser2.png", pantalla, 0, 0, True))
 	return listaLaser
 
+def generarSectores(DIVIDIR_AREA):
+	return [[] for i in range(math.trunc(math.pow(DIVIDIR_AREA, 2)))]
+		
+def agregarObjetoASector(listaSector, objeto, X, Y, AREA, DIVIDIR_AREA):
+	listaSector[getIndiceSector(X, Y, AREA, DIVIDIR_AREA)].append(objeto)
+
+def getIndiceSector(X, Y, AREA, DIVIDIR_AREA):
+	return math.trunc(((X//AREA)*DIVIDIR_AREA ) + (Y//AREA))
+	
 """
 Inicializacion de variables
 """
 pygame.init()
 		
-pantalla = Pantalla()
+pantalla = Pantalla(AREA_MAXIMA/2,AREA_MAXIMA/2)
 
-nave = Nave("Recursos/Chico.png", 0, 0.1, VELOCIDAD_MINIMA, VELOCIDAD_MAXIMA, (0,0))
+nave = Nave("Recursos/Chico.png", 0, 0.1, VELOCIDAD_MINIMA, VELOCIDAD_MAXIMA, (AREA_MAXIMA/2,AREA_MAXIMA/2))
 
-enemigo = Enemigo("Recursos/Enemigo.png", 200, 100, 1)
+enemigo = Enemigo("Recursos/Enemigo.png", (AREA_MAXIMA/2), (AREA_MAXIMA/2), 2)
 
 lobjetos = generarObjetos(OBJETOS_MAXIMOS, AREA_MAXIMA, DISTANCIA_MINIMA)
 
+lsector = generarSectores(DIVIDIR_AREA)
+
+for i in lobjetos:
+	agregarObjetoASector(lsector, i, i.getCentroX(), i.getCentroY(), AREA, DIVIDIR_AREA)	
+	
 lestrella = []
 for i in range(ESTRELLA_MAXIMO):
 	lestrella.append(Estrella())
@@ -173,9 +187,25 @@ while intro:
 	for i in lestrella:
 		i.imprimir(pantalla)
 	
-	for i in lobjetos:
-		i.imprimir(pantalla)
+	# No se en que clase ponerlos, sirven para saber en que sector esta la nave
+	supIZQ = getIndiceSector(pantalla.X-800,pantalla.Y-600, AREA, DIVIDIR_AREA)
+	supDER = getIndiceSector(pantalla.X+800,pantalla.Y-600, AREA, DIVIDIR_AREA)
+	infIZQ = getIndiceSector(pantalla.X-800,pantalla.Y+600, AREA, DIVIDIR_AREA)
+	infDER = getIndiceSector(pantalla.X+800,pantalla.Y+600, AREA, DIVIDIR_AREA)
 	
+	# Si a alguien se le ocurre una mejor manera de comprobar que sector imprimir bienvenido sea
+	for i in lsector[supIZQ]:
+		i.imprimir(pantalla)
+	if supIZQ != supDER:
+		for i in lsector[supDER]:
+			i.imprimir(pantalla)
+	if supIZQ != infIZQ:
+		for i in lsector[infIZQ]:
+			i.imprimir(pantalla)
+		if infIZQ != infDER:
+			for i in lsector[infDER]:
+				i.imprimir(pantalla)
+				
 	#pygame.display.set_caption("Coord X:" + str(pantalla.X))
 	pygame.draw.line(pantalla.display,pygame.Color(255,255,255,255),[0-pantalla.X,0-pantalla.Y],[AREA_MAXIMA-pantalla.X,0-pantalla.Y],5)
 	pygame.draw.line(pantalla.display,pygame.Color(255,255,255,255),[0-pantalla.X,0-pantalla.Y],[0-pantalla.X,AREA_MAXIMA-pantalla.Y],5)
@@ -205,7 +235,7 @@ while intro:
 	text21.imprimir(pantalla,665,130)
 	pygame.display.update()
 
-	clock.tick(120)
+	clock.tick(60)
 """
 Prueba merge 1... Finalizado el test
 """
