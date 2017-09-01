@@ -1,6 +1,7 @@
 import math
 import pygame
 import random
+import Planeta
 
 def distancia(X1, X2, Y1, Y2):
 	return math.sqrt(math.pow((X1-X2),2)+math.pow((Y1-Y2),2))
@@ -22,8 +23,15 @@ def sumarAngulo(angulo, anguloSumar):
 	return angulo
 	
 def lugarLibre(objeto, lobjeto, DISTANCIA_MINIMA):
-		libre = True
-		for i in lobjeto:
-			if (distancia(objeto.getCentroX(), i.getCentroX(), objeto.getCentroY(), i.getCentroY()) <= DISTANCIA_MINIMA):
-				libre = False
-		return libre
+	libre = True
+	for i in lobjeto:
+		if (distancia(objeto.getCentroX(), i.getCentroX(), objeto.getCentroY(), i.getCentroY()) <= DISTANCIA_MINIMA):
+			libre = False
+	return libre
+		
+			
+def colision(objeto, camara, nave):
+	if (type(objeto) is Planeta.Planeta):
+		if (distancia(objeto.getCentroX(), camara.X+camara.getCentroX(), objeto.getCentroY(), camara.Y+camara.getCentroY()) <= (objeto.imagen.get_width()/2)+10):
+			print("Aterrizaje forzoso")
+			nave.boom()

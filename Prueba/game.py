@@ -93,7 +93,7 @@ pygame.init()
 		
 pantalla = Pantalla(AREA_MAXIMA/2,AREA_MAXIMA/2)
 
-nave = Nave("Recursos/Chico.png", 0, 0.1, VELOCIDAD_MINIMA, VELOCIDAD_MAXIMA, (AREA_MAXIMA/2,AREA_MAXIMA/2))
+nave = Nave("Recursos/Chico.png", "Recursos/kaboom.png", 0, 0.1, VELOCIDAD_MINIMA, VELOCIDAD_MAXIMA, (AREA_MAXIMA/2,AREA_MAXIMA/2))
 
 enemigo = Enemigo("Recursos/Enemigo.png", (AREA_MAXIMA/2), (AREA_MAXIMA/2), 2)
 
@@ -195,16 +195,16 @@ while intro:
 	
 	# Si a alguien se le ocurre una mejor manera de comprobar que sector imprimir bienvenido sea
 	for i in lsector[supIZQ]:
-		i.imprimir(pantalla)
+		i.imprimir(pantalla, nave)
 	if supIZQ != supDER:
 		for i in lsector[supDER]:
-			i.imprimir(pantalla)
+			i.imprimir(pantalla, nave)
 	if supIZQ != infIZQ:
 		for i in lsector[infIZQ]:
-			i.imprimir(pantalla)
+			i.imprimir(pantalla, nave)
 		if infIZQ != infDER:
 			for i in lsector[infDER]:
-				i.imprimir(pantalla)
+				i.imprimir(pantalla, nave)
 				
 	#pygame.display.set_caption("Coord X:" + str(pantalla.X))
 	pygame.draw.line(pantalla.display,pygame.Color(255,255,255,255),[0-pantalla.X,0-pantalla.Y],[AREA_MAXIMA-pantalla.X,0-pantalla.Y],5)
