@@ -91,11 +91,11 @@ Inicializacion de variables
 """
 pygame.init()
 		
-pantalla = Pantalla(AREA_MAXIMA/2,AREA_MAXIMA/2)
+pantalla = Pantalla(0,0)
 
-nave = Nave("Recursos/Chico.png", "Recursos/kaboom.png", 0, 0.1, VELOCIDAD_MINIMA, VELOCIDAD_MAXIMA, (AREA_MAXIMA/2,AREA_MAXIMA/2))
+nave = Nave("Recursos/Chico.png", "Recursos/kaboom.png", 0, 0.1, VELOCIDAD_MINIMA, VELOCIDAD_MAXIMA, (0,0))
 
-enemigo = Enemigo("Recursos/Enemigo.png", (AREA_MAXIMA/2), (AREA_MAXIMA/2), 2)
+enemigo = Enemigo("Recursos/Enemigo.png", 550, 550, 1)
 
 lobjetos = generarObjetos(OBJETOS_MAXIMOS, AREA_MAXIMA, DISTANCIA_MINIMA)
 
@@ -126,6 +126,12 @@ fsize = 12
 fuente = pygame.font.Font("Recursos/arial.ttf", fsize)
 text21 = Texto("Recursos/arial.ttf",18)
 text21.setTexto("PUTOOO")
+text22 = Texto("Recursos/arial.ttf",12)
+text22.setTexto("PE:")
+text23 = Texto("Recursos/arial.ttf",12)
+text23.setTexto("PN:")
+
+
 """
 Bucle Principal 
 """
@@ -216,7 +222,7 @@ while intro:
 		if i.laserLibre == False:
 			i.imprimir(nave.X, nave.Y, pantalla)
 	nave.imprimir(pantalla)
-	enemigo.imprimir(nave.X, nave.Y, pantalla)
+	enemigo.imprimir(nave, pantalla)
 	
 	pantalla.imprimir()
 	
@@ -233,6 +239,11 @@ while intro:
 	pantalla.display.blit(texto5, (665,105))
 	text21.setTexto("C Laser: ", )
 	text21.imprimir(pantalla,665,130)
+	text22.setTexto("Nave: " + str(nave.getPos()), )
+	text22.imprimir(pantalla,665,145)
+	text23.setTexto("C Laser: ", )
+	text23.imprimir(pantalla,665,160)
+	
 	pygame.display.update()
 
 	clock.tick(60)

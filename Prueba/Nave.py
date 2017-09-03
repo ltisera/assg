@@ -7,6 +7,13 @@ class Nave:
 		self.angulo = sumarAngulo(self.angulo, sumAngulo)
 		self.mover()
 		
+	def getX(self):
+		return self.X
+	def getY(self):
+		return self.Y
+	def getPos(self):
+		return(int(self.X),int(self.Y))
+	
 	def sumarVelocidad(self, sumar):
 		self.velocidad = self.velocidad + sumar
 		if self.velocidad <= (self.minVelocidad):
