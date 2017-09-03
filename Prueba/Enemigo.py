@@ -39,7 +39,7 @@ class Enemigo:
 	def getY(self):
 		return self.Y
 	def getPos(self):
-		return(self.X,self.Y)
+		return(int(self.X),int(self.Y))
 			
 	def imprimir(self, nave, camara):
 		self.mover(nave)

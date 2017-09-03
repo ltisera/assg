@@ -124,7 +124,7 @@ Texto
 """
 fsize = 12
 fuente = pygame.font.Font("Recursos/arial.ttf", fsize)
-text21 = Texto("Recursos/arial.ttf",18)
+text21 = Texto("Recursos/arial.ttf",12)
 text21.setTexto("PUTOOO")
 text22 = Texto("Recursos/arial.ttf",12)
 text22.setTexto("PE:")
@@ -241,7 +241,7 @@ while intro:
 	text21.imprimir(pantalla,665,130)
 	text22.setTexto("Nave: " + str(nave.getPos()), )
 	text22.imprimir(pantalla,665,145)
-	text23.setTexto("C Laser: ", )
+	text23.setTexto("Enemigo: " + str(enemigo.getPos()), )
 	text23.imprimir(pantalla,665,160)
 	
 	pygame.display.update()
