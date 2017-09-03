@@ -33,5 +33,4 @@ def lugarLibre(objeto, lobjeto, DISTANCIA_MINIMA):
 def colision(objeto, camara, nave):
 	if (type(objeto) is Planeta.Planeta):
 		if (distancia(objeto.getCentroX(), camara.X+camara.getCentroX(), objeto.getCentroY(), camara.Y+camara.getCentroY()) <= (objeto.imagen.get_width()/2)+10):
-			print("Aterrizaje forzoso")
 			nave.boom()

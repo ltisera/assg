@@ -188,7 +188,7 @@ while intro:
 			recargaLaser += 1
 		
 	#Impresion
-	pantalla.mover(nave.X, nave.Y)
+	#pantalla.mover(nave.X, nave.Y)
 	
 	for i in lestrella:
 		i.imprimir(pantalla)
@@ -212,19 +212,28 @@ while intro:
 			for i in lsector[infDER]:
 				i.imprimir(pantalla, nave)
 				
-	#pygame.display.set_caption("Coord X:" + str(pantalla.X))
-	pygame.draw.line(pantalla.display,pygame.Color(255,255,255,255),[0-pantalla.X,0-pantalla.Y],[AREA_MAXIMA-pantalla.X,0-pantalla.Y],5)
-	pygame.draw.line(pantalla.display,pygame.Color(255,255,255,255),[0-pantalla.X,0-pantalla.Y],[0-pantalla.X,AREA_MAXIMA-pantalla.Y],5)
-	pygame.draw.line(pantalla.display,pygame.Color(255,255,255,255),[AREA_MAXIMA-pantalla.X,0-pantalla.Y],[AREA_MAXIMA-pantalla.X,AREA_MAXIMA-pantalla.Y],5)
-	pygame.draw.line(pantalla.display,pygame.Color(255,255,255,255),[0-pantalla.X,AREA_MAXIMA-pantalla.Y],[AREA_MAXIMA-pantalla.X,AREA_MAXIMA-pantalla.Y],5)
+	BLANCO = (255,255,255)
 	
+	pygame.draw.line(pantalla.display, BLANCO,[0-pantalla.X,0-pantalla.Y],[AREA_MAXIMA-pantalla.X,0-pantalla.Y],5)
+	pygame.draw.line(pantalla.display, BLANCO,[0-pantalla.X,0-pantalla.Y],[0-pantalla.X,AREA_MAXIMA-pantalla.Y],5)
+	pygame.draw.line(pantalla.display, BLANCO,[AREA_MAXIMA-pantalla.X,0-pantalla.Y],[AREA_MAXIMA-pantalla.X,AREA_MAXIMA-pantalla.Y],5)
+	pygame.draw.line(pantalla.display, BLANCO,[0-pantalla.X,AREA_MAXIMA-pantalla.Y],[AREA_MAXIMA-pantalla.X,AREA_MAXIMA-pantalla.Y],5)
+	
+	#Impresion de Marcos
+	pantalla.imprimir()
+	
+	#Impresion de Laser
 	for i in llaser:
 		if i.laserLibre == False:
 			i.imprimir(nave.X, nave.Y, pantalla)
+
+	#Impresion de Nave
 	nave.imprimir(pantalla)
+	
+	#Impresion de enemigo
 	enemigo.imprimir(nave, pantalla)
 	
-	pantalla.imprimir()
+	#Impresion de Textos
 	
 	texto1 = fuente.render("X: " + str(int(pantalla.X+pantalla.getCentroX())), True, (0, 0, 255))
 	texto2 = fuente.render("Y: " + str(int(pantalla.Y+pantalla.getCentroY())), True, (0, 0, 255))
@@ -243,6 +252,7 @@ while intro:
 	text22.imprimir(pantalla,665,145)
 	text23.setTexto("Enemigo: " + str(enemigo.getPos()), )
 	text23.imprimir(pantalla,665,160)
+	
 	
 	pygame.display.update()
 
