@@ -1,27 +1,38 @@
-import pygame
+import pygame 
+import math
+from Planeta import Planeta
+from Agujero import Agujero
+import random
 
 class Pantalla:
-	def getCentro(self):
-		return self.centro
-	def getCentroX(self):
-		return self.centro[0]
-	def getCentroY(self):
-		return self.centro[1]
-	def getX(self):
-		return self.X
-	def getY(self):
-		return self.Y
-	def imprimir(self):
-		self.display.blit(self.fondo1, (650,0))
-		self.display.blit(self.fondo2, (0,475))
-	def mover(self, X, Y):
-		self.X += X
-		self.Y += Y
-	def __init__(self):
+	def generarObjetos(self, OBJETOS_MAXIMOS, DISTANCIA_MINIMA):
+		self.listaObjetos = []
+		for i in range(OBJETOS_MAXIMOS):
+			opc = random.randint(0,10)
+			if opc == 10:
+				self.listaObjetos.append(Agujero("Recursos/AgujeroNegro.png", 2, self.listaObjetos, self.areaMaxima, DISTANCIA_MINIMA))
+			elif opc <= 5:
+				self.listaObjetos.append(Planeta("Recursos/Planeta2.png", self.listaObjetos, self.areaMaxima, DISTANCIA_MINIMA))	
+			else:
+				self.listaObjetos.append(Planeta("Recursos/Planeta.png", self.listaObjetos, self.areaMaxima, DISTANCIA_MINIMA))
+		
+	def agregarObjetoASector(self, objeto):
+		self.listaSector[self.getIndiceSector(objeto.getACentroX(), objeto.getACentroY())].append(objeto)
+
+	def getIndiceSector(self, X, Y):
+		if (X >= 0 and X <= self.areaMaxima) and (Y >= 0 and Y <= self.areaMaxima):
+			return math.trunc(((X//self.area)*self.dividirArea ) + (Y//self.area))
+		else:
+			return self.cantidadAreas+1
+			
+	def __init__(self, areaMaxima, dividirArea, OBJETOS_MAXIMOS, DISTANCIA_MINIMA):
 		self.display = pygame.display.set_mode((800,600))
 		pygame.display.set_caption("ASSG")
-		self.X = 0
-		self.Y = 0
-		self.fondo1 = pygame.image.load("Recursos/1.png").convert_alpha()
-		self.fondo2 = pygame.image.load("Recursos/2.png").convert_alpha()
-		self.centro = (325, 237.5)
+		self.areaMaxima = areaMaxima
+		self.dividirArea = dividirArea
+		self.area = self.areaMaxima/self.dividirArea
+		self.cantidadAreas = math.trunc(math.pow(self.dividirArea, 2))
+		self.listaSector = [[] for i in range(self.cantidadAreas)]
+		self.generarObjetos(OBJETOS_MAXIMOS, DISTANCIA_MINIMA)
+		for i in self.listaObjetos:
+			self.agregarObjetoASector(i)

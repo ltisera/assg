@@ -10,7 +10,3 @@ class Texto:
 	def __init__(self, path_fuente, fsize, color = pygame.Color(0,0,255)):
 		self.fuente = pygame.font.Font("Recursos/arial.ttf", fsize)
 		self.color = color
-	
-	
-		
-print("eo")

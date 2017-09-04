@@ -32,67 +32,77 @@ import pygame, sys, math
 from Estrella import Estrella
 from Nave import Nave
 from Enemigo import Enemigo
-from Planeta import Planeta
 from Pantalla import Pantalla
-from Agujero import Agujero
 from Laser import Laser
 from Texto import Texto
-import random
+from Camara import Camara
 from pygame.locals import * 
 
 """
 Constantes de configuracion
 """
-AREA_MAXIMA = 20000
+
 VELOCIDAD_MINIMA = 0.1
 VELOCIDAD_MAXIMA = 20
+VELOCIDAD_LASER = 10
 
-PLANETA_MAXIMO = 30
+OBJETOS_MAXIMOS = 200
+DISTANCIA_MINIMA = 550
 ESTRELLA_MAXIMO = 75
+LASER_MAXIMO = 10
 
 """
 Funciones
 """
-
-def generarPlanetas(PLANETA_MAXIMO):
-	listaPlaneta = []
-	for i in range(PLANETA_MAXIMO):
-		if random.choice([1,2]) == 1:
-			listaPlaneta.append(Planeta("Recursos/Planeta.png", listaPlaneta))
-		else:
-			listaPlaneta.append(Planeta("Recursos/Planeta2.png", listaPlaneta))	
-	return listaPlaneta
-
+	
+def generarLaser(LASER_MAXIMO):
+	listaLaser = []
+	for i in range(LASER_MAXIMO):			
+		listaLaser.append(Laser("Recursos/laser2.png", nave, 0, 0, True))
+	return listaLaser
+	
 """
 Inicializacion de variables
 """
+
 pygame.init()
-		
-pantalla = Pantalla()
 
-nave = Nave("Recursos/Chico.png", 0, 0.1, VELOCIDAD_MINIMA, VELOCIDAD_MAXIMA)
+pantalla = Pantalla(20000, 5, OBJETOS_MAXIMOS, DISTANCIA_MINIMA)
 
-enemigo = Enemigo("Recursos/Enemigo.png", 200, 100, 1)
+camara = Camara()
 
-lplaneta = generarPlanetas(PLANETA_MAXIMO)
+nave = Nave("Recursos/Chico.png", "Recursos/kaboom.png", 0, 0.1, VELOCIDAD_MINIMA, VELOCIDAD_MAXIMA, (0,0), camara)
 
-agujero = Agujero("Recursos/AgujeroNegro.png", -400, -600, 2)
-
+enemigo = Enemigo("Recursos/Enemigo.png", 550, 550, 1)	
+	
 lestrella = []
 for i in range(ESTRELLA_MAXIMO):
 	lestrella.append(Estrella())
 	
+llaser = generarLaser(LASER_MAXIMO)	
+
 intro = True
-disparo = False
+
+recargaLaser = 200
+
+pasolaser = 12
+
 clock = pygame.time.Clock()
+clockLaser = pygame.time.Clock()
 		
 """
 Texto 
 """
 fsize = 12
 fuente = pygame.font.Font("Recursos/arial.ttf", fsize)
-text21 = Texto("Recursos/arial.ttf",18)
+text21 = Texto("Recursos/arial.ttf",12)
 text21.setTexto("PUTOOO")
+text22 = Texto("Recursos/arial.ttf",12)
+text22.setTexto("PE:")
+text23 = Texto("Recursos/arial.ttf",12)
+text23.setTexto("PN:")
+
+
 """
 Bucle Principal 
 """
@@ -108,10 +118,12 @@ while intro:
 			if event.key == K_m:
 				fsize += 1
 				fuente = pygame.font.Font("Recursos/arial.ttf", fsize)
+				pasolaser += 1
 			if event.key == K_n:
 				fsize -= 1
 				fuente = pygame.font.Font("Recursos/arial.ttf", fsize)
-
+				pasolaser -= 1
+						
 		if event.type == pygame.QUIT:
 			intro = False
 	
@@ -128,36 +140,25 @@ while intro:
 
 	if keys[K_s]:
 		nave.sumarVelocidad(-0.1)
+	
+	if keys[K_k]:
+		if recargaLaser >= pasolaser:
+			recargaLaser = 0
+			for i in llaser:
+				if i.laserLibre == True:
+					i.setLaser(VELOCIDAD_LASER, nave, False)
+					break
+		else:
+			recargaLaser += 1
 		
-	if keys[K_k] and not disparo:
-		laser = Laser("Recursos/laser2.png", pantalla, 2, nave.angulo)
-		disparo = True	
-		
+	#Movimiento
+	camara.mover(pantalla, nave)
+	
 	#Impresion
-	pantalla.mover(nave.X, nave.Y)
+	camara.imprimir(pantalla, lestrella, llaser, enemigo, nave)
 	
-	for i in lestrella:
-		i.imprimir(pantalla)
-	
-	for i in lplaneta:
-		i.imprimir(pantalla)
-	
-	#pygame.display.set_caption("Coord X:" + str(pantalla.X))
-	pygame.draw.line(pantalla.display,pygame.Color(255,255,255,255),[0-pantalla.X,-0+pantalla.Y],[AREA_MAXIMA-pantalla.X,0+pantalla.Y],5)
-	pygame.draw.line(pantalla.display,pygame.Color(255,255,255,255),[0-pantalla.X,-0+pantalla.Y],[0-pantalla.X,-AREA_MAXIMA+pantalla.Y],5)
-	pygame.draw.line(pantalla.display,pygame.Color(255,255,255,255),[AREA_MAXIMA-pantalla.X,-0+pantalla.Y],[AREA_MAXIMA-pantalla.X,-AREA_MAXIMA+pantalla.Y],5)
-	pygame.draw.line(pantalla.display,pygame.Color(255,255,255,255),[0-pantalla.X,-AREA_MAXIMA+pantalla.Y],[AREA_MAXIMA-pantalla.X,-AREA_MAXIMA+pantalla.Y],5)
-	
-	agujero.imprimir(pantalla)
-	if disparo:
-		disparo = laser.imprimir(pantalla)
-	nave.imprimir(pantalla)
-	enemigo.imprimir(nave.X, nave.Y, pantalla)
-	
-	pantalla.imprimir()
-	
-	texto1 = fuente.render("X: " + str(int(pantalla.X)), True, (0, 0, 255))
-	texto2 = fuente.render("Y: " + str(int(pantalla.Y)), True, (0, 0, 255))
+	texto1 = fuente.render("X: " + str(int(nave.getACentroX())), True, (0, 0, 255))
+	texto2 = fuente.render("Y: " + str(int(nave.getACentroY())), True, (0, 0, 255))
 	texto3 = fuente.render("Tamaño: " + str(fsize), True, (0, 0, 255))
 	texto4 = fuente.render("FPS: " + str(clock.get_fps()), True, (0, 0, 255))
 	texto5 = fuente.render("Velocidad: " + str(nave.velocidad), True, (0, 0, 255))
@@ -167,11 +168,16 @@ while intro:
 	pantalla.display.blit(texto3, (665,75))
 	pantalla.display.blit(texto4, (665,90))
 	pantalla.display.blit(texto5, (665,105))
+	text21.setTexto("Recarga Laser: " + str(recargaLaser),)
 	text21.imprimir(pantalla,665,130)
+	text22.setTexto("Nave: " + str(nave.getAPos()), )
+	text22.imprimir(pantalla,665,145)
+	text23.setTexto("Enemigo: " + str(enemigo.getAPos()), )
+	text23.imprimir(pantalla,665,160)
+	
 	pygame.display.update()
-	
-	
-	clock.tick(120)
+
+	clock.tick(60)
 """
 Prueba merge 1... Finalizado el test
 """
