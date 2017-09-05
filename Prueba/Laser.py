@@ -3,12 +3,12 @@ from Enemigo import Enemigo
 from Pantalla import Pantalla
 
 class Laser:		
-	def mover(self):
-		self.X += math.cos(math.radians(self.angulo))*self.velocidad
-		self.Y -= math.sin(math.radians(self.angulo))*self.velocidad
+	def mover(self,camara, nave):
+		self.X += (math.cos(math.radians(self.angulo))*self.velocidad) - nave.X
+		self.Y -= (math.sin(math.radians(self.angulo))*self.velocidad) - nave.Y
 
-	def imprimir(self, camara):
-		self.mover()
+	def imprimir(self, camara, nave):
+		self.mover(camara, nave)
 		if (self.X >= 0 and self.X <= 650) and (self.Y >= 0 and self.Y <= 475) and (self.X!=camara.getCentroX() and self.Y!=camara.getCentroY()):
 			camara.display.blit(pygame.transform.rotate(self.imagen, self.angulo), (self.X,self.Y))
 		else:

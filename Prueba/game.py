@@ -46,7 +46,7 @@ Constantes de configuracion
 AREA_MAXIMA = 20000
 VELOCIDAD_MINIMA = 0.1
 VELOCIDAD_MAXIMA = 20
-VELOCIDAD_LASER = 10
+VELOCIDAD_LASER = 1
 
 PLANETA_MAXIMO = 30
 ESTRELLA_MAXIMO = 75
@@ -159,7 +159,7 @@ while intro:
 			recargaLaser = 0
 			for i in llaser:
 				if i.laserLibre == True:
-					i.setLaser(pantalla.getCentroX(),pantalla.getCentroY(), VELOCIDAD_LASER, nave.angulo, False)
+					i.setLaser(pantalla.getCentroX(),pantalla.getCentroY(), VELOCIDAD_LASER+nave.velocidad, nave.angulo, False)
 					break
 		else:
 			recargaLaser += 1
@@ -182,10 +182,10 @@ while intro:
 	agujero.imprimir(pantalla)
 	for i in llaser:
 		if i.laserLibre == False:
-			i.imprimir(pantalla)
+			i.imprimir(pantalla,nave)
 	nave.imprimir(pantalla)
 	if laserEnemigo.laserLibre == False:
-		laserEnemigo.imprimir(pantalla)
+		laserEnemigo.imprimir(pantalla, nave)
 	else:
 		laserEnemigo.setLaser(enemigo.X, enemigo.Y, VELOCIDAD_LASER+enemigo.velocidad, laserEnemigo.traerAnguloLaserEnemigo(enemigo,pantalla), False)
 	enemigo.imprimir(nave.X, nave.Y, pantalla)
