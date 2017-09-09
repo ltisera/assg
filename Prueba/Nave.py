@@ -51,14 +51,14 @@ class Nave:
 	def boom(self):
 		self.colision = True
 		
-	def mover(self, pantalla):
+	def mover(self, mapa):
 		self.AX += math.cos(math.radians(self.angulo))*self.velocidad
 		self.AY += -math.sin(math.radians(self.angulo))*self.velocidad
 		self.ACentro = (self.AX + self.getRCentroX(), self.AY + self.getRCentroY())
-		self.supIZQ = pantalla.getIndiceSector(self.getAX()-800,self.getAY()-600)
-		self.supDER = pantalla.getIndiceSector(self.getAX()+800,self.getAY()-600)
-		self.infIZQ = pantalla.getIndiceSector(self.getAX()-800,self.getAY()+600)
-		self.infDER = pantalla.getIndiceSector(self.getAX()+800,self.getAY()+600)
+		self.supIZQ = mapa.getIndiceSector(self.getAX()-800,self.getAY()-600)
+		self.supDER = mapa.getIndiceSector(self.getAX()+800,self.getAY()-600)
+		self.infIZQ = mapa.getIndiceSector(self.getAX()-800,self.getAY()+600)
+		self.infDER = mapa.getIndiceSector(self.getAX()+800,self.getAY()+600)
 		
 	def imprimir(self, pantalla):
 		pantalla.display.blit(rotarCentro(self.imagen, self.angulo), (self.RX, self.RY))
@@ -66,14 +66,14 @@ class Nave:
 			pantalla.display.blit(self.imagenColision, (self.RX + (self.imagenColision.get_width()/2), self.RY + (self.imagenColision.get_height()/2)))
 			self.colision = False
 		
-	def __init__(self, directorio,directorio2, anguloOrigen, velocidad, minVelocidad, maxVelocidad, origen, camara):
+	def __init__(self, directorio,directorio2, anguloOrigen, velocidad, minVelocidad, maxVelocidad, origen, pantalla):
 		self.imagen = pygame.image.load(directorio).convert_alpha()
 		self.imagenColision = pygame.image.load(directorio2).convert_alpha()
 		self.colision = False
 		self.imagen = pygame.transform.rotate(self.imagen, anguloOrigen)
-		self.RX = camara.getCentroX() - (self.imagen.get_width()/2)
-		self.RY = camara.getCentroY() - (self.imagen.get_height()/2)
-		self.RCentro = (camara.getCentroX(),camara.getCentroY())
+		self.RX = pantalla.getCentroX() - (self.imagen.get_width()/2)
+		self.RY = pantalla.getCentroY() - (self.imagen.get_height()/2)
+		self.RCentro = (pantalla.getCentroX(),pantalla.getCentroY())
 		self.AX = origen[0]
 		self.AY = origen[1]
 		self.ACentro = (self.AX + self.getRCentroX(), self.AY + self.getRCentroY())

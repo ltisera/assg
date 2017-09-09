@@ -45,12 +45,15 @@ class Planeta:
 		self.RY = self.AY - nave.getAY()
 		self.RCentro = ((self.imagen.get_width()/2) + self.RX, (self.imagen.get_height()/2) + self.RY)
 		
+	
 	def imprimir(self, pantalla, nave):
 		self.mover(nave)
-		if ((self.getRCentroX() >= -400 and self.getRCentroX() <= 1400) and (self.getRCentroY() >= -400 and self.getRCentroY() <= 1400)):
+		cp1 = self.getRCentro()
+		if Funciones.posicionValida(self.getRCentroX(),-100,800,self.getRCentroY(),-100,800):
 			pantalla.display.blit(self.imagen, (self.RX,self.RY))
 			Funciones.colision(self, nave)	
-			
+		
+		
 	def __init__(self, directorio, lplaneta, AREA_MAXIMA, DISTANCIA_MINIMA):
 		self.imagen = pygame.image.load(directorio).convert_alpha()
 		self.RX = 0

@@ -2,6 +2,7 @@ import math
 import pygame
 import random
 import Planeta
+import Agujero
 
 def distancia(X1, X2, Y1, Y2):
 	return math.sqrt(math.pow((X1-X2),2)+math.pow((Y1-Y2),2))
@@ -22,6 +23,9 @@ def sumarAngulo(angulo, anguloSumar):
 		angulo += 360
 	return angulo
 	
+def posicionValida(x,minX,maxX,y,minY,maxY):
+		return ((x >= minX and x <= maxX) and (y >= minY and y <= maxY))
+	
 def lugarLibre(objeto, lobjeto, DISTANCIA_MINIMA):
 	libre = True
 	for i in lobjeto:
@@ -33,4 +37,9 @@ def lugarLibre(objeto, lobjeto, DISTANCIA_MINIMA):
 def colision(objeto, nave):
 	if (type(objeto) is Planeta.Planeta):
 		if (distancia(objeto.getRCentroX(), nave.getRCentroX(), objeto.getRCentroY(), nave.getRCentroY()) <= (objeto.imagen.get_width()/2)+10):
+			nave.boom()
+	if (type(objeto) is Agujero.Agujero):
+		#if (distancia(objeto.getRCentroX(), nave.getRCentroX(), objeto.getRCentroY(), nave.getRCentroY()) <= (objeto.imagen.get_width()*1.5)+10):
+			#Hacer que la nave se vaya acercando al centro del agujero
+		if (distancia(objeto.getRCentroX(), nave.getRCentroX(), objeto.getRCentroY(), nave.getRCentroY()) <= (objeto.imagen.get_width()/4)+10):
 			nave.boom()

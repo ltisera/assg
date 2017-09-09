@@ -20,6 +20,7 @@
 
 import pygame, math
 from Pantalla import Pantalla
+from Funciones import distancia
 
 class Enemigo:
 	def getAX(self):
@@ -31,6 +32,15 @@ class Enemigo:
 	def getAPos(self):
 		return(int(self.AX),int(self.AY))
 	
+	def getACentro(self):
+		return self.ACentro
+		
+	def getACentroX(self):
+		return self.ACentro[0]
+		
+	def getACentroY(self):
+		return self.ACentro[1]
+	
 	def getRX(self):
 		return self.RX
 		
@@ -39,18 +49,38 @@ class Enemigo:
 		
 	def getRPos(self):
 		return(int(self.RX),int(self.RY))
-	
+
+	def getRCentro(self):
+		return self.RCentro
+		
+	def getRCentroX(self):
+		return self.RCentro[0]
+		
+	def getRCentroY(self):
+		return self.RCentro[1]
+		
 	def mover(self, nave):
 		self.RX -= math.cos(math.radians(nave.angulo))*nave.velocidad
 		self.RY -= -math.sin(math.radians(nave.angulo))*nave.velocidad
-		if self.RX < nave.getRCentroX()-(self.imagen.get_width()/2):
-			self.RX += self.velocidad
-		elif self.RX > nave.getRCentroX()-(self.imagen.get_width()/2):
-			self.RX -= self.velocidad
-		if self.RY < nave.getRCentroY()-(self.imagen.get_height()/2):
-			self.RY += self.velocidad
-		elif self.RY > nave.getRCentroY()-(self.imagen.get_height()/2):
-			self.RY -= self.velocidad
+		self.RCentro = (self.RX + (self.imagen.get_width()/2),self.RY + (self.imagen.get_height()/2))
+		if distancia(self.getRCentroX(),nave.getRCentroX(),self.getRCentroY(),nave.getRCentroY()) > 100:
+			if self.getRCentroX() < nave.getRCentroX()-(self.imagen.get_width()/2):
+				self.RX += self.velocidad
+			elif self.getRCentroX() > nave.getRCentroX()-(self.imagen.get_width()/2):
+				self.RX -= self.velocidad
+			if self.getRCentroY() < nave.getRCentroY()-(self.imagen.get_height()/2):
+				self.RY += self.velocidad
+			elif self.getRCentroY() > nave.getRCentroY()-(self.imagen.get_height()/2):
+				self.RY -= self.velocidad
+		else:
+			if self.getRCentroX() < nave.getRCentroX()-(self.imagen.get_width()/2):
+				self.RX -= self.velocidad
+			elif self.getRCentroX() > nave.getRCentroX()-(self.imagen.get_width()/2):
+				self.RX += self.velocidad
+			if self.getRCentroY() < nave.getRCentroY()-(self.imagen.get_height()/2):
+				self.RY -= self.velocidad
+			elif self.getRCentroY() > nave.getRCentroY()-(self.imagen.get_height()/2):
+				self.RY += self.velocidad
 			
 	def imprimir(self, nave, pantalla):
 		self.mover(nave)
@@ -58,8 +88,10 @@ class Enemigo:
 		
 	def __init__(self, directorio, X, Y, velocidad):
 		self.imagen = pygame.image.load(directorio).convert_alpha()
-		self.AX = X - (self.imagen.get_width()/2)
-		self.AY = Y - (self.imagen.get_height()/2)
+		self.AX = X
+		self.AY = Y
+		self.ACentro = (self.AX + (self.imagen.get_width()/2),self.AY + (self.imagen.get_height()/2))
 		self.RX = X 
-		self.RY = Y 
+		self.RY = Y
+		self.RCentro = (self.RX + (self.imagen.get_width()/2),self.RY + (self.imagen.get_height()/2))
 		self.velocidad = velocidad

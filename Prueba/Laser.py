@@ -1,4 +1,5 @@
 import math, pygame
+import Funciones
 from Pantalla import Pantalla
 from Nave import Nave
 
@@ -9,7 +10,7 @@ class Laser:
 		
 	def imprimir(self, nave, pantalla):
 		self.mover(nave)
-		if (self.X >= 0 and self.X <= 650) and (self.Y >= 0 and self.Y <= 475):
+		if Funciones.posicionValida(self.X,0,650,self.Y,0,475):
 			pantalla.display.blit(pygame.transform.rotate(self.imagen, self.angulo), (self.X,self.Y))
 		else:
 			self.laserLibre = True

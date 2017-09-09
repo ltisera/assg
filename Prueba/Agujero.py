@@ -1,5 +1,5 @@
 import pygame, random
-from Funciones import rotarCentro, sumarAngulo, lugarLibre, colision
+import Funciones
 import Pantalla
 from Texto import Texto
 
@@ -41,16 +41,16 @@ class Agujero:
 		return self.RCentro[1]
 		
 	def mover(self,nave):
-		self.angulo = sumarAngulo(self.angulo, self.velocidad)
+		self.angulo = Funciones.sumarAngulo(self.angulo, self.velocidad)
 		self.RX = self.AX - nave.getAX()
 		self.RY = self.AY - nave.getAY()
 		self.RCentro = ((self.imagen.get_width()/2) + self.RX, (self.imagen.get_height()/2) + self.RY)
 		
 	def imprimir(self, pantalla, nave):
 		self.mover(nave)
-		if ((self.getRCentroX() >= -400 and self.getRCentroX() <= 1400) and (self.getRCentroY() >= -400 and self.getRCentroY() <= 1400)):
-			pantalla.display.blit(rotarCentro(self.imagen, self.angulo), (self.RX,self.RY))
-			colision(self, nave)
+		if Funciones.posicionValida(self.getRCentroX(),-100,800,self.getRCentroY(),-100,800):
+			pantalla.display.blit(Funciones.rotarCentro(self.imagen, self.angulo), (self.RX,self.RY))
+			Funciones.colision(self, nave)
 		
 	def __init__(self, directorio, velocidad, lobjeto, AREA_MAXIMA, DISTANCIA_MINIMA):
 		self.imagen = pygame.image.load(directorio).convert_alpha()
@@ -59,11 +59,12 @@ class Agujero:
 		self.RY = 0
 		self.RCentro = 0
 		self.angulo = 0
+		self.gravedad = 4
 		asignado = False
 		while not asignado:
 			self.AX = random.randint(10,AREA_MAXIMA-self.imagen.get_width())
 			self.AY = random.randint(10,AREA_MAXIMA-self.imagen.get_height())
 			self.ACentro = ((self.imagen.get_width()/2) + self.AX, (self.imagen.get_height()/2) + self.AY)
-			asignado = lugarLibre(self, lobjeto, DISTANCIA_MINIMA)
+			asignado = Funciones.lugarLibre(self, lobjeto, DISTANCIA_MINIMA)
 		
 		
