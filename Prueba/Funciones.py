@@ -2,6 +2,8 @@ import math
 import pygame
 import random
 import Planeta
+import Agujero
+import Enemigo
 
 def distancia(X1, X2, Y1, Y2):
 	return math.sqrt(math.pow((X1-X2),2)+math.pow((Y1-Y2),2))
@@ -22,15 +24,27 @@ def sumarAngulo(angulo, anguloSumar):
 		angulo += 360
 	return angulo
 	
+def posicionValida(x,minX,maxX,y,minY,maxY):
+		return ((x >= minX and x <= maxX) and (y >= minY and y <= maxY))
+	
 def lugarLibre(objeto, lobjeto, DISTANCIA_MINIMA):
 	libre = True
 	for i in lobjeto:
-		if (distancia(objeto.getCentroX(), i.getCentroX(), objeto.getCentroY(), i.getCentroY()) <= DISTANCIA_MINIMA):
+		if (distancia(objeto.getACentroX(), i.getACentroX(), objeto.getACentroY(), i.getACentroY()) <= DISTANCIA_MINIMA):
 			libre = False
 	return libre
 		
 			
-def colision(objeto, camara, nave):
+def colision(objeto, nave, enemigo):
 	if (type(objeto) is Planeta.Planeta):
-		if (distancia(objeto.getCentroX(), camara.X+camara.getCentroX(), objeto.getCentroY(), camara.Y+camara.getCentroY()) <= (objeto.imagen.get_width()/2)+10):
+		if (distancia(objeto.getRCentroX(), nave.getRCentroX(), objeto.getRCentroY(), nave.getRCentroY()) <= (objeto.imagen.get_width()/2)+10):
+			nave.boom()
+		if (distancia(objeto.getRCentroX(), enemigo.getRCentroX(), objeto.getRCentroY(), enemigo.getRCentroY()) <= (objeto.imagen.get_width()/2)+50):
+			enemigo.evitarColision(objeto, nave)
+			if (distancia(objeto.getRCentroX(), enemigo.getRCentroX(), objeto.getRCentroY(), enemigo.getRCentroY()) <= (objeto.imagen.get_width()/2)+10):
+				enemigo.boom()
+	if (type(objeto) is Agujero.Agujero):
+		#if (distancia(objeto.getRCentroX(), nave.getRCentroX(), objeto.getRCentroY(), nave.getRCentroY()) <= (objeto.imagen.get_width()*1.5)+10):
+			#Hacer que la nave se vaya acercando al centro del agujero
+		if (distancia(objeto.getRCentroX(), nave.getRCentroX(), objeto.getRCentroY(), nave.getRCentroY()) <= (objeto.imagen.get_width()/4)+10):
 			nave.boom()

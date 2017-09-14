@@ -32,77 +32,50 @@ import pygame, sys, math
 from Estrella import Estrella
 from Nave import Nave
 from Enemigo import Enemigo
-from Planeta import Planeta
 from Pantalla import Pantalla
-from Agujero import Agujero
+from Mapa import Mapa
 from Laser import Laser
 from Texto import Texto
-import random
 from pygame.locals import * 
 
 """
 Constantes de configuracion
 """
-AREA_MAXIMA = 20000
-DIVIDIR_AREA = 5
-AREA = AREA_MAXIMA/DIVIDIR_AREA
+
 VELOCIDAD_MINIMA = 0.1
 VELOCIDAD_MAXIMA = 20
 VELOCIDAD_LASER = 10
 
-OBJETOS_MAXIMOS = 600
+OBJETOS_MAXIMOS = 200
 DISTANCIA_MINIMA = 550
 ESTRELLA_MAXIMO = 75
 LASER_MAXIMO = 10
 
+BLANCO = (255,255,255)
+
 """
 Funciones
 """
-
-def generarObjetos(OBJETOS_MAXIMOS, AREA_MAXIMA, DISTANCIA_MINIMA):
-	listaObjetos = []
-	for i in range(OBJETOS_MAXIMOS):
-		opc = random.randint(0,10)
-		if opc == 10:
-			listaObjetos.append(Agujero("Recursos/AgujeroNegro.png", 2, listaObjetos, AREA_MAXIMA, DISTANCIA_MINIMA))
-		elif opc <= 5:
-			listaObjetos.append(Planeta("Recursos/Planeta2.png", listaObjetos, AREA_MAXIMA, DISTANCIA_MINIMA))	
-		else:
-			listaObjetos.append(Planeta("Recursos/Planeta.png", listaObjetos, AREA_MAXIMA, DISTANCIA_MINIMA))		
-	return listaObjetos
 	
 def generarLaser(LASER_MAXIMO):
 	listaLaser = []
 	for i in range(LASER_MAXIMO):			
-		listaLaser.append(Laser("Recursos/laser2.png", pantalla, 0, 0, True))
+		listaLaser.append(Laser("Recursos/laser.png", nave, 0, 0, True))
 	return listaLaser
-
-def generarSectores(DIVIDIR_AREA):
-	return [[] for i in range(math.trunc(math.pow(DIVIDIR_AREA, 2)))]
-		
-def agregarObjetoASector(listaSector, objeto, X, Y, AREA, DIVIDIR_AREA):
-	listaSector[getIndiceSector(X, Y, AREA, DIVIDIR_AREA)].append(objeto)
-
-def getIndiceSector(X, Y, AREA, DIVIDIR_AREA):
-	return math.trunc(((X//AREA)*DIVIDIR_AREA ) + (Y//AREA))
 	
 """
 Inicializacion de variables
 """
+
 pygame.init()
-		
-pantalla = Pantalla(0,0)
 
-nave = Nave("Recursos/Chico.png", "Recursos/kaboom.png", 0, 0.1, VELOCIDAD_MINIMA, VELOCIDAD_MAXIMA, (0,0))
+pantalla = Pantalla()
 
-enemigo = Enemigo("Recursos/Enemigo.png", 550, 550, 1)
+mapa = Mapa(20000, 5, OBJETOS_MAXIMOS, DISTANCIA_MINIMA)
 
-lobjetos = generarObjetos(OBJETOS_MAXIMOS, AREA_MAXIMA, DISTANCIA_MINIMA)
+nave = Nave("Recursos/Chico.png", "Recursos/kaboom.png", 0, 0.1, VELOCIDAD_MINIMA, VELOCIDAD_MAXIMA, (0,0), pantalla)
 
-lsector = generarSectores(DIVIDIR_AREA)
-
-for i in lobjetos:
-	agregarObjetoASector(lsector, i, i.getCentroX(), i.getCentroY(), AREA, DIVIDIR_AREA)	
+enemigo = Enemigo("Recursos/Enemigo.png", "Recursos/kaboom.png", 550, 550, 1)	
 	
 lestrella = []
 for i in range(ESTRELLA_MAXIMO):
@@ -152,13 +125,6 @@ while intro:
 				fsize -= 1
 				fuente = pygame.font.Font("Recursos/arial.ttf", fsize)
 				pasolaser -= 1
-			"""
-			if event.key == K_k:
-				for i in llaser:
-					if i.laserLibre == True:
-						i.setLaser(pantalla, VELOCIDAD_LASER, nave.angulo, False)
-						break
-			"""
 						
 		if event.type == pygame.QUIT:
 			intro = False
@@ -182,61 +148,51 @@ while intro:
 			recargaLaser = 0
 			for i in llaser:
 				if i.laserLibre == True:
-					i.setLaser(pantalla, VELOCIDAD_LASER, nave.angulo, False)
+					i.setLaser(VELOCIDAD_LASER, nave, False)
 					break
 		else:
 			recargaLaser += 1
 		
+	#Movimiento
+	nave.mover(mapa)
+	
 	#Impresion
-	#pantalla.mover(nave.X, nave.Y)
-	
 	for i in lestrella:
-		i.imprimir(pantalla)
-	
-	# No se en que clase ponerlos, sirven para saber en que sector esta la nave
-	supIZQ = getIndiceSector(pantalla.X-800,pantalla.Y-600, AREA, DIVIDIR_AREA)
-	supDER = getIndiceSector(pantalla.X+800,pantalla.Y-600, AREA, DIVIDIR_AREA)
-	infIZQ = getIndiceSector(pantalla.X-800,pantalla.Y+600, AREA, DIVIDIR_AREA)
-	infDER = getIndiceSector(pantalla.X+800,pantalla.Y+600, AREA, DIVIDIR_AREA)
+		i.imprimir(pantalla, nave)
 	
 	# Si a alguien se le ocurre una mejor manera de comprobar que sector imprimir bienvenido sea
-	for i in lsector[supIZQ]:
-		i.imprimir(pantalla, nave)
-	if supIZQ != supDER:
-		for i in lsector[supDER]:
-			i.imprimir(pantalla, nave)
-	if supIZQ != infIZQ:
-		for i in lsector[infIZQ]:
-			i.imprimir(pantalla, nave)
-		if infIZQ != infDER:
-			for i in lsector[infDER]:
-				i.imprimir(pantalla, nave)
-				
-	BLANCO = (255,255,255)
+	if nave.supIZQ <= 25:
+		for i in mapa.listaSector[nave.supIZQ]:
+			i.imprimir(pantalla, nave,enemigo)
+	if nave.supDER != nave.supIZQ and nave.supDER <= 25:
+		for i in mapa.listaSector[nave.supDER]:
+			i.imprimir(pantalla, nave,enemigo)
+	if nave.infIZQ != nave.supIZQ and nave.infIZQ <= 25:
+		for i in mapa.listaSector[nave.infIZQ]:
+			i.imprimir(pantalla, nave,enemigo)
+	if (nave.infDER != nave.infIZQ and nave.infDER != nave.supDER) and nave.infDER <= 25:
+		for i in mapa.listaSector[nave.infDER]:
+			i.imprimir(pantalla, nave,enemigo)
+			
 	
-	pygame.draw.line(pantalla.display, BLANCO,[0-pantalla.X,0-pantalla.Y],[AREA_MAXIMA-pantalla.X,0-pantalla.Y],5)
-	pygame.draw.line(pantalla.display, BLANCO,[0-pantalla.X,0-pantalla.Y],[0-pantalla.X,AREA_MAXIMA-pantalla.Y],5)
-	pygame.draw.line(pantalla.display, BLANCO,[AREA_MAXIMA-pantalla.X,0-pantalla.Y],[AREA_MAXIMA-pantalla.X,AREA_MAXIMA-pantalla.Y],5)
-	pygame.draw.line(pantalla.display, BLANCO,[0-pantalla.X,AREA_MAXIMA-pantalla.Y],[AREA_MAXIMA-pantalla.X,AREA_MAXIMA-pantalla.Y],5)
+	pygame.draw.line(pantalla.display,BLANCO,[0-nave.AX,0-nave.AY],[mapa.areaMaxima-nave.AX,0-nave.AY],5)
+	pygame.draw.line(pantalla.display,BLANCO,[0-nave.AX,0-nave.AY],[0-nave.AX,mapa.areaMaxima-nave.AY],5)
+	pygame.draw.line(pantalla.display,BLANCO,[mapa.areaMaxima-nave.AX,0-nave.AY],[mapa.areaMaxima-nave.AX,mapa.areaMaxima-nave.AY],5)
+	pygame.draw.line(pantalla.display,BLANCO,[0-nave.AX,mapa.areaMaxima-nave.AY],[mapa.areaMaxima-nave.AX,mapa.areaMaxima-nave.AY],5)
 	
-	#Impresion de Marcos
-	pantalla.imprimir()
-	
-	#Impresion de Laser
 	for i in llaser:
 		if i.laserLibre == False:
-			i.imprimir(nave.X, nave.Y, pantalla)
-
-	#Impresion de Nave
+			i.imprimir(nave, pantalla)
+			
 	nave.imprimir(pantalla)
-	
-	#Impresion de enemigo
 	enemigo.imprimir(nave, pantalla)
 	
-	#Impresion de Textos
+	pantalla.display.blit(pantalla.fondo1, (650,0))
+	pantalla.display.blit(pantalla.fondo2, (0,475))
+
 	
-	texto1 = fuente.render("X: " + str(int(pantalla.X+pantalla.getCentroX())), True, (0, 0, 255))
-	texto2 = fuente.render("Y: " + str(int(pantalla.Y+pantalla.getCentroY())), True, (0, 0, 255))
+	texto1 = fuente.render("X: " + str(int(nave.getACentroX())), True, (0, 0, 255))
+	texto2 = fuente.render("Y: " + str(int(nave.getACentroY())), True, (0, 0, 255))
 	texto3 = fuente.render("Tamaño: " + str(fsize), True, (0, 0, 255))
 	texto4 = fuente.render("FPS: " + str(clock.get_fps()), True, (0, 0, 255))
 	texto5 = fuente.render("Velocidad: " + str(nave.velocidad), True, (0, 0, 255))
@@ -246,13 +202,12 @@ while intro:
 	pantalla.display.blit(texto3, (665,75))
 	pantalla.display.blit(texto4, (665,90))
 	pantalla.display.blit(texto5, (665,105))
-	text21.setTexto("C Laser: ", )
+	text21.setTexto("Recarga Laser: " + str(recargaLaser),)
 	text21.imprimir(pantalla,665,130)
-	text22.setTexto("Nave: " + str(nave.getPos()), )
+	text22.setTexto("Nave: " + str(nave.getAPos()), )
 	text22.imprimir(pantalla,665,145)
-	text23.setTexto("Enemigo: " + str(enemigo.getPos()), )
+	text23.setTexto("Enemigo: " + str(enemigo.getAPos()), )
 	text23.imprimir(pantalla,665,160)
-	
 	
 	pygame.display.update()
 
