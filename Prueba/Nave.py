@@ -1,6 +1,8 @@
 import pygame, math
 import Funciones
 
+FRAMES = 4 #Para la animacion del fuego
+
 class Nave:
 	def getWidth(self):
 		return self.width
@@ -53,6 +55,11 @@ class Nave:
 			self.velocidad = self.minVelocidad
 		elif self.velocidad >= (self.maxVelocidad):
 			self.velocidad = self.maxVelocidad
+	
+	def sumarContador(self):
+		self.contador += 1
+		if self.contador > 7*FRAMES:
+			self.contador = 0	
 		
 	def boom(self):
 		self.colision = True
@@ -67,13 +74,36 @@ class Nave:
 		self.infDER = mapa.getIndiceSector(self.getAX()+800,self.getAY()+600)
 		
 	def imprimir(self, pantalla):
-		pantalla.display.blit(Funciones.rotarCentro(self.imagen, self.angulo), (self.RX, self.RY))
+		if self.velocidad < 0.5:
+			pantalla.display.blit(Funciones.rotarCentro(self.imagen, self.angulo), (self.RX, self.RY))
+		elif self.velocidad < 4:
+			pantalla.display.blit(Funciones.rotarCentro(self.lento[int(self.contador/FRAMES)], self.angulo), (self.RX, self.RY))
+		elif self.velocidad < 7:
+			pantalla.display.blit(Funciones.rotarCentro(self.normal[int(self.contador/FRAMES)], self.angulo), (self.RX, self.RY))
+		elif self.velocidad < 10:
+			pantalla.display.blit(Funciones.rotarCentro(self.rapido[int(self.contador/FRAMES)], self.angulo), (self.RX, self.RY))
+		else:
+			pantalla.display.blit(Funciones.rotarCentro(self.turbo[int(self.contador/FRAMES)], self.angulo), (self.RX, self.RY))
 		if self.colision:
 			pantalla.display.blit(self.imagenColision, (self.RX + (self.imagenColision.get_width()/2), self.RY + (self.imagenColision.get_height()/2)))
 			self.colision = False
+		self.sumarContador()
 		
 	def __init__(self, directorio,directorio2, anguloOrigen, velocidad, minVelocidad, maxVelocidad, origen, pantalla):
-		self.imagen = pygame.image.load(directorio).convert_alpha()
+		self.imagen = pygame.image.load(directorio+'/Nave.png').convert_alpha()
+		self.lento = []
+		for i in range(8):
+			self.lento.append(pygame.image.load(directorio+'/Lento{}.png'.format(i+1)).convert_alpha())
+		self.normal = []
+		for i in range(8):
+			self.normal.append(pygame.image.load(directorio+'/Normal{}.png'.format(i+1)).convert_alpha())
+		self.rapido = []
+		for i in range(8):
+			self.rapido.append(pygame.image.load(directorio+'/Rapido{}.png'.format(i+1)).convert_alpha())
+		self.turbo = []
+		for i in range(8):
+			self.turbo.append(pygame.image.load(directorio+'/Turbo{}.png'.format(i+1)).convert_alpha())
+		self.contador = 0
 		self.imagenColision = pygame.image.load(directorio2).convert_alpha()
 		self.width = self.imagen.get_width()
 		self.height = self.imagen.get_height()

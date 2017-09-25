@@ -76,7 +76,7 @@ mapa = Mapa(20000, 5, OBJETOS_MAXIMOS, DISTANCIA_MINIMA)
 
 lobjtmp = mapa.getListaObjetos()
 
-nave = Nave("Recursos/Chico.png", "Recursos/kaboom.png", 0, 0.1, VELOCIDAD_MINIMA, VELOCIDAD_MAXIMA, (0,0), pantalla)
+nave = Nave("Recursos/Nave", "Recursos/kaboom.png", 0, 0.1, VELOCIDAD_MINIMA, VELOCIDAD_MAXIMA, (0,0), pantalla)
 
 enemigo = Enemigo("Recursos/Enemigo.png", "Recursos/kaboom.png", 550, 550, 1)	
 	
