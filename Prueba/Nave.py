@@ -1,7 +1,13 @@
 import pygame, math
-from Funciones import rotarCentro, sumarAngulo
+import Funciones
 
 class Nave:
+	def getWidth(self):
+		return self.width
+
+	def getHeight(self):
+		return self.height
+
 	def getAX(self):
 		return self.AX
 		
@@ -39,7 +45,7 @@ class Nave:
 		return self.RCentro[1]
 	
 	def sumarAngulo(self, sumAngulo):
-		self.angulo = sumarAngulo(self.angulo, sumAngulo)
+		self.angulo = Funciones.sumarAngulo(self.angulo, sumAngulo)
 	
 	def sumarVelocidad(self, sumar):
 		self.velocidad = self.velocidad + sumar
@@ -61,7 +67,7 @@ class Nave:
 		self.infDER = mapa.getIndiceSector(self.getAX()+800,self.getAY()+600)
 		
 	def imprimir(self, pantalla):
-		pantalla.display.blit(rotarCentro(self.imagen, self.angulo), (self.RX, self.RY))
+		pantalla.display.blit(Funciones.rotarCentro(self.imagen, self.angulo), (self.RX, self.RY))
 		if self.colision:
 			pantalla.display.blit(self.imagenColision, (self.RX + (self.imagenColision.get_width()/2), self.RY + (self.imagenColision.get_height()/2)))
 			self.colision = False
@@ -69,6 +75,8 @@ class Nave:
 	def __init__(self, directorio,directorio2, anguloOrigen, velocidad, minVelocidad, maxVelocidad, origen, pantalla):
 		self.imagen = pygame.image.load(directorio).convert_alpha()
 		self.imagenColision = pygame.image.load(directorio2).convert_alpha()
+		self.width = self.imagen.get_width()
+		self.height = self.imagen.get_height()
 		self.colision = False
 		self.imagen = pygame.transform.rotate(self.imagen, anguloOrigen)
 		self.RX = pantalla.getCentroX() - (self.imagen.get_width()/2)

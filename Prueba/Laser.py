@@ -1,15 +1,31 @@
 import math, pygame
 import Funciones
 from Pantalla import Pantalla
-from Nave import Nave
 
-class Laser:		
+
+class Laser:
+	def getWidth(self):
+		return self.width
+
+	def getHeight(self):
+		return self.height
+
+	def getCoordenadas(self):
+		return (int(self.AX), int(self.AY))
+
 	def mover(self, nave):
-		self.X += math.cos(math.radians(self.angulo))*self.velocidad - math.cos(math.radians(nave.angulo))*nave.velocidad 
-		self.Y += -math.sin(math.radians(self.angulo))*self.velocidad + math.sin(math.radians(nave.angulo))*nave.velocidad
-		
+		cosAngulo = math.cos(math.radians(self.angulo))
+		sinAngulo = math.sin(math.radians(self.angulo))
+
+		self.X += cosAngulo * self.velocidad
+		self.Y += -sinAngulo * self.velocidad
+		self.AX += cosAngulo * self.velocidad
+		self.AY += -sinAngulo * self.velocidad
+
 	def imprimir(self, nave, pantalla):
+		
 		self.mover(nave)
+		#
 		if Funciones.posicionValida(self.X,0,650,self.Y,0,475):
 			pantalla.display.blit(pygame.transform.rotate(self.imagen, self.angulo), (self.X,self.Y))
 		else:
@@ -20,12 +36,18 @@ class Laser:
 		self.angulo = nave.angulo
 		self.X = nave.getRCentroX()
 		self.Y = nave.getRCentroY()
+		self.AX = nave.getACentroX()
+		self.AY = nave.getACentroY()
 		self.laserLibre = libre
 		
 	def __init__(self, directorio, nave, velocidad, angulo, libre):
 		self.imagen = pygame.image.load(directorio).convert_alpha()
+		self.width = self.imagen.get_width()
+		self.height = self.imagen.get_height()
 		self.angulo = angulo
 		self.velocidad = velocidad
 		self.X = nave.getRCentroX()
 		self.Y = nave.getRCentroY()
+		self.AX = nave.getACentroX()
+		self.AY = nave.getACentroY()
 		self.laserLibre = libre

@@ -20,9 +20,15 @@
 
 import pygame, math
 from Pantalla import Pantalla
-from Funciones import distancia
+import Funciones 
 
 class Enemigo:
+	def getWidth(self):
+		return self.width
+
+	def getHeight(self):
+		return self.height
+
 	def getAX(self):
 		return self.AX
 		
@@ -58,12 +64,15 @@ class Enemigo:
 		
 	def getRCentroY(self):
 		return self.RCentro[1]
+
+	def boom(self):
+		self.colision = True
 		
 	def mover(self, nave):
 		self.RX -= math.cos(math.radians(nave.angulo))*nave.velocidad
 		self.RY -= -math.sin(math.radians(nave.angulo))*nave.velocidad
 		self.RCentro = (self.RX + (self.imagen.get_width()/2),self.RY + (self.imagen.get_height()/2))
-		if distancia(self.getRCentroX(),nave.getRCentroX(),self.getRCentroY(),nave.getRCentroY()) > 100:
+		if Funciones.distancia(self.getRCentroX(),nave.getRCentroX(),self.getRCentroY(),nave.getRCentroY()) > 100:
 			if self.getRCentroX() < nave.getRCentroX()-(self.imagen.get_width()/2):
 				self.RX += self.velocidad
 			elif self.getRCentroX() > nave.getRCentroX()-(self.imagen.get_width()/2):
@@ -82,12 +91,23 @@ class Enemigo:
 			elif self.getRCentroY() > nave.getRCentroY()-(self.imagen.get_height()/2):
 				self.RY += self.velocidad
 			
-	def imprimir(self, nave, pantalla):
+	def imprimir(self, nave, pantalla, llaser):
 		self.mover(nave)
-		pantalla.display.blit(self.imagen, (self.RX,self.RY))
+		Funciones.colision(self, nave)
+		for i in llaser:
+			if i.laserLibre == False:
+				Funciones.colision(self, i)	
+		if (self.colision):
+			pantalla.display.blit(self.imagenColision, (self.RX,self.RY))
+		else: 
+			pantalla.display.blit(self.imagen, (self.RX,self.RY))
 		
-	def __init__(self, directorio, X, Y, velocidad):
+	def __init__(self, directorio, directorio2, X, Y, velocidad):
 		self.imagen = pygame.image.load(directorio).convert_alpha()
+		self.imagenColision = pygame.image.load(directorio2).convert_alpha()
+		self.colision = False
+		self.width = self.imagen.get_width()
+		self.height = self.imagen.get_height()
 		self.AX = X
 		self.AY = Y
 		self.ACentro = (self.AX + (self.imagen.get_width()/2),self.AY + (self.imagen.get_height()/2))

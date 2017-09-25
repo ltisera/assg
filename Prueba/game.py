@@ -36,6 +36,7 @@ from Pantalla import Pantalla
 from Mapa import Mapa
 from Laser import Laser
 from Texto import Texto
+from Planeta import Planeta
 from pygame.locals import * 
 
 """
@@ -73,9 +74,11 @@ pantalla = Pantalla()
 
 mapa = Mapa(20000, 5, OBJETOS_MAXIMOS, DISTANCIA_MINIMA)
 
+lobjtmp = mapa.getListaObjetos()
+
 nave = Nave("Recursos/Chico.png", "Recursos/kaboom.png", 0, 0.1, VELOCIDAD_MINIMA, VELOCIDAD_MAXIMA, (0,0), pantalla)
 
-enemigo = Enemigo("Recursos/Enemigo.png", 550, 550, 1)	
+enemigo = Enemigo("Recursos/Enemigo.png", "Recursos/kaboom.png", 550, 550, 1)	
 	
 lestrella = []
 for i in range(ESTRELLA_MAXIMO):
@@ -87,7 +90,7 @@ intro = True
 
 recargaLaser = 200
 
-pasolaser = 12
+pasolaser = 6
 
 clock = pygame.time.Clock()
 clockLaser = pygame.time.Clock()
@@ -118,9 +121,13 @@ while intro:
 				intro = False
 			
 			if event.key == K_m:
-				fsize += 1
-				fuente = pygame.font.Font("Recursos/arial.ttf", fsize)
-				pasolaser += 1
+				print("Imprimimos, la lista de obketos")
+				cplan = 0
+				for i in lobjtmp:
+					if(isinstance(i, Planeta)):
+						cplan += 1
+						print("soy un planetin")
+				print("Conte " + str(cplan) + "planetas entre " + str(len(lobjtmp)))
 			if event.key == K_n:
 				fsize -= 1
 				fuente = pygame.font.Font("Recursos/arial.ttf", fsize)
@@ -163,16 +170,16 @@ while intro:
 	# Si a alguien se le ocurre una mejor manera de comprobar que sector imprimir bienvenido sea
 	if nave.supIZQ <= 25:
 		for i in mapa.listaSector[nave.supIZQ]:
-			i.imprimir(pantalla, nave)
+			i.imprimir(pantalla, nave, llaser)
 	if nave.supDER != nave.supIZQ and nave.supDER <= 25:
 		for i in mapa.listaSector[nave.supDER]:
-			i.imprimir(pantalla, nave)
+			i.imprimir(pantalla, nave, llaser)
 	if nave.infIZQ != nave.supIZQ and nave.infIZQ <= 25:
 		for i in mapa.listaSector[nave.infIZQ]:
-			i.imprimir(pantalla, nave)
+			i.imprimir(pantalla, nave, llaser)
 	if (nave.infDER != nave.infIZQ and nave.infDER != nave.supDER) and nave.infDER <= 25:
 		for i in mapa.listaSector[nave.infDER]:
-			i.imprimir(pantalla, nave)
+			i.imprimir(pantalla, nave, llaser)
 			
 	
 	pygame.draw.line(pantalla.display,BLANCO,[0-nave.AX,0-nave.AY],[mapa.areaMaxima-nave.AX,0-nave.AY],5)
@@ -183,9 +190,12 @@ while intro:
 	for i in llaser:
 		if i.laserLibre == False:
 			i.imprimir(nave, pantalla)
-			
+	"""
+	Logica movimientos y colisiones
+
+	"""
+	enemigo.imprimir(nave, pantalla, llaser)
 	nave.imprimir(pantalla)
-	enemigo.imprimir(nave, pantalla)
 	
 	pantalla.display.blit(pantalla.fondo1, (650,0))
 	pantalla.display.blit(pantalla.fondo2, (0,475))
@@ -206,7 +216,7 @@ while intro:
 	text21.imprimir(pantalla,665,130)
 	text22.setTexto("Nave: " + str(nave.getAPos()), )
 	text22.imprimir(pantalla,665,145)
-	text23.setTexto("Enemigo: " + str(enemigo.getAPos()), )
+	text23.setTexto("Laser[0]: " + str(llaser[0].getCoordenadas()) )
 	text23.imprimir(pantalla,665,160)
 	
 	pygame.display.update()

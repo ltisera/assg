@@ -5,6 +5,7 @@ from Agujero import Agujero
 import random
 
 class  Mapa:
+	#Devuelve la lista de objetos generada para cada sector
 	def generarObjetos(self, OBJETOS_MAXIMOS, DISTANCIA_MINIMA):
 		self.listaObjetos = []
 		for i in range(OBJETOS_MAXIMOS):
@@ -15,7 +16,10 @@ class  Mapa:
 				self.listaObjetos.append(Planeta("Recursos/Planeta2.png", self.listaObjetos, self.areaMaxima, DISTANCIA_MINIMA))	
 			else:
 				self.listaObjetos.append(Planeta("Recursos/Planeta.png", self.listaObjetos, self.areaMaxima, DISTANCIA_MINIMA))
-		
+	
+	def getListaObjetos(self):
+		return self.listaObjetos
+	
 	def agregarObjetoASector(self, objeto):
 		self.listaSector[self.getIndiceSector(objeto.getACentroX(), objeto.getACentroY())].append(objeto)
 

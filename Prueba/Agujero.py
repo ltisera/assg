@@ -4,6 +4,12 @@ import Pantalla
 from Texto import Texto
 
 class Agujero:
+	def getWidth(self):
+		return self.width
+
+	def getHeight(self):
+		return self.height
+
 	def getAX(self):
 		return self.AX
 		
@@ -46,7 +52,7 @@ class Agujero:
 		self.RY = self.AY - nave.getAY()
 		self.RCentro = ((self.imagen.get_width()/2) + self.RX, (self.imagen.get_height()/2) + self.RY)
 		
-	def imprimir(self, pantalla, nave):
+	def imprimir(self, pantalla, nave, llaser):
 		self.mover(nave)
 		if Funciones.posicionValida(self.getRCentroX(),-100,800,self.getRCentroY(),-100,800):
 			pantalla.display.blit(Funciones.rotarCentro(self.imagen, self.angulo), (self.RX,self.RY))
@@ -54,6 +60,8 @@ class Agujero:
 		
 	def __init__(self, directorio, velocidad, lobjeto, AREA_MAXIMA, DISTANCIA_MINIMA):
 		self.imagen = pygame.image.load(directorio).convert_alpha()
+		self.width = self.imagen.get_width()
+		self.height = self.imagen.get_height()
 		self.velocidad = velocidad
 		self.RX = 0
 		self.RY = 0

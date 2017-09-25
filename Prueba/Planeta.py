@@ -1,9 +1,17 @@
 import pygame, random
 import Funciones
 import Pantalla
+import Laser
+
 from Texto import Texto
 
 class Planeta:
+	def getWidth(self):
+		return self.width
+
+	def getHeight(self):
+		return self.height
+
 	def getAX(self):
 		return self.AX
 		
@@ -46,16 +54,22 @@ class Planeta:
 		self.RCentro = ((self.imagen.get_width()/2) + self.RX, (self.imagen.get_height()/2) + self.RY)
 		
 	
-	def imprimir(self, pantalla, nave):
+	def imprimir(self, pantalla, nave, llaser):
 		self.mover(nave)
 		cp1 = self.getRCentro()
-		if Funciones.posicionValida(self.getRCentroX(),-100,800,self.getRCentroY(),-100,800):
+		if Funciones.posicionValida(self.getRCentroX(),-200,800,self.getRCentroY(),-200,800):
 			pantalla.display.blit(self.imagen, (self.RX,self.RY))
-			Funciones.colision(self, nave)	
+			Funciones.colision(self, nave)
+			#Funciones.colision(self, enemigo)
+			for i in llaser:
+				if i.laserLibre == False:
+					Funciones.colision(self, i)	
 		
 		
 	def __init__(self, directorio, lplaneta, AREA_MAXIMA, DISTANCIA_MINIMA):
 		self.imagen = pygame.image.load(directorio).convert_alpha()
+		self.width = self.imagen.get_width()
+		self.height = self.imagen.get_height()
 		self.RX = 0
 		self.RY = 0
 		self.RCentro = 0
