@@ -41,7 +41,7 @@ def lugarLibre(objeto, lobjeto, DISTANCIA_MINIMA):
 	return libre
 		
 			
-def colision(objeto1, objeto2):
+def colisonVieja(objeto1, objeto2):
 	
 	if(isinstance(objeto1, Planeta.Planeta) and type(objeto2) is Nave.Nave):
 		if (distancia(objeto1.getRCentroX(), objeto2.getRCentroX(), objeto1.getRCentroY(), objeto2.getRCentroY()) <= (objeto1.imagen.get_width()/2)+10):
@@ -64,13 +64,21 @@ def colision(objeto1, objeto2):
 
 	if((isinstance(objeto1, Laser.Laser) and isinstance(objeto2, Planeta.Planeta)) 
 		or (isinstance(objeto1, Planeta.Planeta) and isinstance(objeto2, Laser.Laser))):
-		if (distancia(objeto1.getRCentroX(), objeto2.X,objeto1.getRCentroY(), objeto2.Y) <= (objeto1.getWidth()/2)):
+		if (distancia(objeto1.getRCentroX(), objeto2.getRX(),objeto1.getRCentroY(), objeto2.getRY()) <= (objeto1.getWidth()/2)):
 			if (isinstance(objeto2, Laser.Laser)):
 				objeto2.laserLibre = True
 			else:
 				objeto1.laserLibre = True
-
+"""
 	if  ((isinstance(objeto1, Laser.Laser) and isinstance(objeto2, Enemigo.Enemigo)) 
 		or (isinstance(objeto1, Enemigo.Enemigo) and isinstance(objeto2, Laser.Laser))):
-		if (distancia(objeto1.getRCentroX(), objeto2.X,objeto1.getRCentroY(), objeto2.Y) <= (objeto1.imagen.get_width()/2)):
+		if (distancia(objeto1.getRCentroX(), objeto2.getRX(),objeto1.getRCentroY(), objeto2.getRY()) <= (objeto1.imagen.get_width()/2)):
 			objeto2.laserLibre = True
+"""
+""" Esta es la nueva Colision que hay que usar
+"""
+def hayColision (objeto1, objeto2):
+	#deberiamos testear si son objetos validos
+	if (distancia(objeto1.getRCentroX(), objeto2.getRX() ,objeto1.getRCentroY(), objeto2.getRY()) <= (objeto1.imagen.get_width()/2)):
+		return True
+	return False

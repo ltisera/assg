@@ -23,6 +23,19 @@ from Pantalla import Pantalla
 import Funciones 
 
 class Enemigo:
+	def destruirEnemigo(self):
+		self.vida = 100
+		self.RX = -200
+		self.RY = -200
+
+	def getVida(self):
+		return self.vida
+
+	def setVida(self, cuantaVida):
+		self.vida = cuantaVida
+		if (self.vida <= 0):
+			self.destruirEnemigo()
+
 	def getWidth(self):
 		return self.width
 
@@ -90,13 +103,21 @@ class Enemigo:
 				self.RY -= self.velocidad
 			elif self.getRCentroY() > nave.getRCentroY()-(self.imagen.get_height()/2):
 				self.RY += self.velocidad
-			
+
+	def impBarraVida(self, vida, pantalla):
+		pygame.draw.rect(pantalla.display, (0,255,0), (self.RX + 10, self.RY -10, (vida * 30) / 100, 3))
+
+	def reduceVida(self, cantidad):
+		self.vida -= cantidad
+
 	def imprimir(self, nave, pantalla, llaser):
 		self.mover(nave)
-		Funciones.colision(self, nave)
+		Funciones.colisonVieja(self, nave)
+		self.impBarraVida(self.vida, pantalla)
 		for i in llaser:
 			if i.laserLibre == False:
-				Funciones.colision(self, i)	
+				Funciones.colisonVieja(self, i)
+
 		if (self.colision):
 			pantalla.display.blit(self.imagenColision, (self.RX,self.RY))
 		else: 
@@ -115,3 +136,5 @@ class Enemigo:
 		self.RY = Y
 		self.RCentro = (self.RX + (self.imagen.get_width()/2),self.RY + (self.imagen.get_height()/2))
 		self.velocidad = velocidad
+		self.vida = 100
+

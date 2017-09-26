@@ -4,6 +4,18 @@ from Pantalla import Pantalla
 
 
 class Laser:
+	def getRX(self):
+		return self.RX
+		
+	def getRY(self):
+		return self.RY
+		
+	def getRCentroX(self):
+		return self.RCentro[0]
+		
+	def getRCentroY(self):
+		return self.RCentro[1]
+
 	def getWidth(self):
 		return self.width
 
@@ -17,8 +29,8 @@ class Laser:
 		cosAngulo = math.cos(math.radians(self.angulo))
 		sinAngulo = math.sin(math.radians(self.angulo))
 
-		self.X += cosAngulo * self.velocidad
-		self.Y += -sinAngulo * self.velocidad
+		self.RX += cosAngulo * self.velocidad
+		self.RY += -sinAngulo * self.velocidad
 		self.AX += cosAngulo * self.velocidad
 		self.AY += -sinAngulo * self.velocidad
 
@@ -26,16 +38,16 @@ class Laser:
 		
 		self.mover(nave)
 		#
-		if Funciones.posicionValida(self.X,0,650,self.Y,0,475):
-			pantalla.display.blit(pygame.transform.rotate(self.imagen, self.angulo), (self.X,self.Y))
+		if Funciones.posicionValida(self.RX,0,650,self.RY,0,475):
+			pantalla.display.blit(pygame.transform.rotate(self.imagen, self.angulo), (self.RX,self.RY))
 		else:
 			self.laserLibre = True
 			
 	def setLaser(self, velocidad, nave, libre):
 		self.velocidad = velocidad
 		self.angulo = nave.angulo
-		self.X = nave.getRCentroX()
-		self.Y = nave.getRCentroY()
+		self.RX = nave.getRCentroX()
+		self.RY = nave.getRCentroY()
 		self.AX = nave.getACentroX()
 		self.AY = nave.getACentroY()
 		self.laserLibre = libre
@@ -46,8 +58,12 @@ class Laser:
 		self.height = self.imagen.get_height()
 		self.angulo = angulo
 		self.velocidad = velocidad
-		self.X = nave.getRCentroX()
-		self.Y = nave.getRCentroY()
+		
+		self.RX = nave.getRCentroX()
+		self.RY = nave.getRCentroY()
 		self.AX = nave.getACentroX()
 		self.AY = nave.getACentroY()
+
+		self.RCentro = (self.RX + (self.imagen.get_width()/2),self.RY + (self.imagen.get_height()/2))
+		
 		self.laserLibre = libre

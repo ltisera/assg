@@ -59,11 +59,11 @@ class Planeta:
 		cp1 = self.getRCentro()
 		if Funciones.posicionValida(self.getRCentroX(),-200,800,self.getRCentroY(),-200,800):
 			pantalla.display.blit(self.imagen, (self.RX,self.RY))
-			Funciones.colision(self, nave)
-			#Funciones.colision(self, enemigo)
+			Funciones.colisonVieja(self, nave)
+			#Funciones.colisonVieja(self, enemigo)
 			for i in llaser:
 				if i.laserLibre == False:
-					Funciones.colision(self, i)	
+					Funciones.colisonVieja(self, i)	
 		
 		
 	def __init__(self, directorio, lplaneta, AREA_MAXIMA, DISTANCIA_MINIMA):

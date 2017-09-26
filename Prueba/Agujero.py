@@ -56,7 +56,7 @@ class Agujero:
 		self.mover(nave)
 		if Funciones.posicionValida(self.getRCentroX(),-100,800,self.getRCentroY(),-100,800):
 			pantalla.display.blit(Funciones.rotarCentro(self.imagen, self.angulo), (self.RX,self.RY))
-			Funciones.colision(self, nave)
+			Funciones.colisonVieja(self, nave)
 		
 	def __init__(self, directorio, velocidad, lobjeto, AREA_MAXIMA, DISTANCIA_MINIMA):
 		self.imagen = pygame.image.load(directorio).convert_alpha()

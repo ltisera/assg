@@ -29,6 +29,7 @@ por que ya voy mareado con este tema de lo que se mueve y lo que no
 """
 
 import pygame, sys, math
+import Funciones
 from Estrella import Estrella
 from Nave import Nave
 from Enemigo import Enemigo
@@ -44,7 +45,7 @@ Constantes de configuracion
 """
 
 VELOCIDAD_MINIMA = 0.1
-VELOCIDAD_MAXIMA = 20
+VELOCIDAD_MAXIMA = 200
 VELOCIDAD_LASER = 10
 
 OBJETOS_MAXIMOS = 200
@@ -145,7 +146,7 @@ while intro:
 		nave.sumarAngulo(-2)
 		
 	if keys[K_w]:
-		nave.sumarVelocidad(0.02)
+		nave.sumarVelocidad(0.07)
 
 	if keys[K_s]:
 		nave.sumarVelocidad(-0.1)
@@ -190,6 +191,9 @@ while intro:
 	for i in llaser:
 		if i.laserLibre == False:
 			i.imprimir(nave, pantalla)
+			if(Funciones.hayColision(enemigo, i) == True):
+				enemigo.setVida (enemigo.getVida() - 10 )
+				i.laserLibre = True
 	"""
 	Logica movimientos y colisiones
 
