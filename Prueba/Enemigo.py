@@ -105,7 +105,13 @@ class Enemigo:
 				self.RY += self.velocidad
 
 	def impBarraVida(self, vida, pantalla):
-		pygame.draw.rect(pantalla.display, (0,255,0), (self.RX + 10, self.RY -10, (vida * 30) / 100, 3))
+		colorBarra = (255,0,0)
+		if(vida >= 33):
+			colorBarra = (255,255,0)
+		if(vida >=66):
+			colorBarra = (0,255,0)
+
+		pygame.draw.rect(pantalla.display, colorBarra, (self.RX + 10, self.RY -10, (vida * 30) / 100, 3))
 
 	def reduceVida(self, cantidad):
 		self.vida -= cantidad
