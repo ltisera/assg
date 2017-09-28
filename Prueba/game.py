@@ -30,6 +30,8 @@ por que ya voy mareado con este tema de lo que se mueve y lo que no
 
 import pygame, sys, math
 import Funciones
+from Explosion import Explosion
+
 from Estrella import Estrella
 from Nave import Nave
 from Enemigo import Enemigo
@@ -38,6 +40,7 @@ from Mapa import Mapa
 from Laser import Laser
 from Texto import Texto
 from Planeta import Planeta
+
 from pygame.locals import * 
 
 """
@@ -80,7 +83,9 @@ lobjtmp = mapa.getListaObjetos()
 nave = Nave("Recursos/Nave", "Recursos/kaboom.png", 0, 0.1, VELOCIDAD_MINIMA, VELOCIDAD_MAXIMA, (0,0), pantalla)
 
 enemigo = Enemigo("Recursos/Enemigo.png", "Recursos/kaboom.png", 550, 550, 1)	
-	
+
+#explosion = Explosion("Recursos/Explosion1.png")
+
 lestrella = []
 for i in range(ESTRELLA_MAXIMO):
 	lestrella.append(Estrella())
@@ -140,10 +145,10 @@ while intro:
 	#Lectura de TECLAS
 	keys = pygame.key.get_pressed()
 	if keys[K_a]:
-		nave.sumarAngulo(2)
+		nave.sumarAngulo(4)
 		
 	if keys[K_d]:
-		nave.sumarAngulo(-2)
+		nave.sumarAngulo(-4)
 		
 	if keys[K_w]:
 		nave.sumarVelocidad(0.07)
@@ -200,7 +205,7 @@ while intro:
 	"""
 	enemigo.imprimir(nave, pantalla, llaser)
 	nave.imprimir(pantalla)
-	
+	#explosion.imprimir(pantalla)
 	pantalla.display.blit(pantalla.fondo1, (650,0))
 	pantalla.display.blit(pantalla.fondo2, (0,475))
 

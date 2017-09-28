@@ -21,12 +21,10 @@
 import pygame, math
 from Pantalla import Pantalla
 import Funciones 
-
+from Explosion import Explosion
 class Enemigo:
 	def destruirEnemigo(self):
-		self.vida = 100
-		self.RX = -200
-		self.RY = -200
+		self.destruido = True
 
 	def getVida(self):
 		return self.vida
@@ -117,19 +115,28 @@ class Enemigo:
 		self.vida -= cantidad
 
 	def imprimir(self, nave, pantalla, llaser):
-		self.mover(nave)
-		Funciones.colisonVieja(self, nave)
-		self.impBarraVida(self.vida, pantalla)
-		for i in llaser:
-			if i.laserLibre == False:
-				Funciones.colisonVieja(self, i)
+		if(self.destruido == False):
+			self.mover(nave)
+			Funciones.colisonVieja(self, nave)
+			self.impBarraVida(self.vida, pantalla)
+			for i in llaser:
+				if i.laserLibre == False:
+					Funciones.colisonVieja(self, i)
 
-		if (self.colision):
-			pantalla.display.blit(self.imagenColision, (self.RX,self.RY))
-		else: 
-			pantalla.display.blit(self.imagen, (self.RX,self.RY))
-		
+			if (self.colision):
+				pantalla.display.blit(self.imagenColision, (self.RX,self.RY))
+			else: 
+				pantalla.display.blit(self.imagen, (self.RX,self.RY))
+		else:
+			#Efecto de explosion
+			print("Explota")
+			if(self.explotaEnemigo.imprimir(pantalla,self.getRX(), self.getRY()) == 0):
+				self.destruido = False
+				self.vida = 100
+				self.RX = -200
+				self.RY = -200
 	def __init__(self, directorio, directorio2, X, Y, velocidad):
+		self.explotaEnemigo = Explosion("Recursos/Explosion1.png")
 		self.imagen = pygame.image.load(directorio).convert_alpha()
 		self.imagenColision = pygame.image.load(directorio2).convert_alpha()
 		self.colision = False
@@ -143,4 +150,4 @@ class Enemigo:
 		self.RCentro = (self.RX + (self.imagen.get_width()/2),self.RY + (self.imagen.get_height()/2))
 		self.velocidad = velocidad
 		self.vida = 100
-
+		self.destruido = False
