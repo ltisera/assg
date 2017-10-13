@@ -12,9 +12,9 @@ def main():
     pantalla = pygame.display.set_mode((ancho,alto))
     pygame.display.set_caption("NAVE")
     
-    nave = pygame.image.load("nave.png")
-    fondo = pygame.image.load("fondonombre.jpg")
-    boton = [pygame.image.load("botonjugar.png"), pygame.image.load("botonopciones.png"), pygame.image.load("botoncreditos.png"), pygame.image.load("salir.png")]
+    nave = pygame.image.load("Recursos/Menu/nave.png")
+    fondo = pygame.image.load("Recursos/Menu/fondonombre.jpg")
+    boton = [pygame.image.load("Recursos/Menu/botonjugar.png"), pygame.image.load("Recursos/Menu/botonopciones.png"), pygame.image.load("Recursos/Menu/botoncreditos.png"), pygame.image.load("Recursos/Menu/salir.png")]
     
     while True:
         for event in pygame.event.get():
@@ -25,7 +25,7 @@ def main():
                     if navey == 255:
                         pass
                     else:
-                        navey -= 70                    
+                        navey -= 70            
                 elif event.key == pygame.K_DOWN:
                     if navey == 465:
                         pass
@@ -33,7 +33,7 @@ def main():
                         navey += 70
                 elif event.key == pygame.K_RETURN:
                     if navey == 255:
-                        import juego
+                        import Game
                     if navey == 325:
                         print ("opciones")
                     if navey == 395:
