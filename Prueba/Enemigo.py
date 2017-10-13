@@ -114,12 +114,6 @@ class Enemigo:
 	def reduceVida(self, cantidad):
 		self.vida -= cantidad
 
-	def setPuntos(self, puntos):
-		self.puntos += puntos
-
-	def getPuntos(self):
-		return self.puntos
-
 	def imprimir(self, nave, pantalla, llaser):
 		if(self.destruido == False):
 			self.mover(nave)
@@ -141,8 +135,6 @@ class Enemigo:
 				self.vida = 100
 				self.RX = -200
 				self.RY = -200
-				self.setPuntos(100)
-
 	def __init__(self, directorio, directorio2, X, Y, velocidad):
 		self.explotaEnemigo = Explosion("Recursos/Explosion1.png")
 		self.imagen = pygame.image.load(directorio).convert_alpha()
@@ -159,4 +151,3 @@ class Enemigo:
 		self.velocidad = velocidad
 		self.vida = 100
 		self.destruido = False
-		self.puntos = 0
