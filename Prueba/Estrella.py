@@ -6,7 +6,7 @@ class Estrella:
 		self.posX = random.randint(-200,850)
 		self.posY = random.randint(-200,675)
 		self.colorE = pygame.Color(255,255,255,255)
-		self.rectPos = pygame.Rect(self.posX, self.posY,1,1)
+		self.rectPos = pygame.Rect(self.posX, self.posY,2,2)
 		
 	def imprimir(self, pantalla, nave):
 		self.rectPos.x = -nave.getAX()+self.posX
@@ -22,4 +22,4 @@ class Estrella:
 				self.posY += random.randint(675,875)
 			elif self.rectPos.y > 675:
 				self.posY -= random.randint(675,875)
-			self.rectPos = pygame.Rect(self.posX, self.posY,1,1)
+			self.rectPos = pygame.Rect(self.posX, self.posY,2,2)

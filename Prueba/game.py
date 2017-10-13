@@ -47,8 +47,8 @@ from pygame.locals import *
 Constantes de configuracion
 """
 
-VELOCIDAD_MINIMA = 0.1
-VELOCIDAD_MAXIMA = 200
+VELOCIDAD_MINIMA = 0.2
+VELOCIDAD_MAXIMA = 15
 VELOCIDAD_LASER = 10
 
 OBJETOS_MAXIMOS = 200
@@ -145,16 +145,16 @@ while intro:
 	#Lectura de TECLAS
 	keys = pygame.key.get_pressed()
 	if keys[K_a]:
-		nave.sumarAngulo(4)
+		nave.sumarAngulo(3)
 		
 	if keys[K_d]:
-		nave.sumarAngulo(-4)
+		nave.sumarAngulo(-3)
 		
 	if keys[K_w]:
-		nave.sumarVelocidad(0.07)
+		nave.sumarVelocidad(0.06)
 
 	if keys[K_s]:
-		nave.sumarVelocidad(-0.1)
+		nave.sumarVelocidad(-0.2)
 	
 	if keys[K_k]:
 		if recargaLaser >= pasolaser:
@@ -212,9 +212,9 @@ while intro:
 	
 	texto1 = fuente.render("X: " + str(int(nave.getACentroX())), True, (0, 0, 255))
 	texto2 = fuente.render("Y: " + str(int(nave.getACentroY())), True, (0, 0, 255))
-	texto3 = fuente.render("Tamaño: " + str(fsize), True, (0, 0, 255))
+	texto3 = fuente.render("Puntos: " + str(enemigo.getPuntos()), True, (0, 0, 255))
 	texto4 = fuente.render("FPS: " + str(clock.get_fps()), True, (0, 0, 255))
-	texto5 = fuente.render("Velocidad: " + str(nave.velocidad), True, (0, 0, 255))
+	texto5 = fuente.render("Velocidad: " + str(int(nave.velocidad)), True, (0, 0, 255))
 	#lock 125
 	pantalla.display.blit(texto1, (665,45))
 	pantalla.display.blit(texto2, (665,60))
