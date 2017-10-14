@@ -1,28 +1,39 @@
 import pygame
 
+def creditos(pantalla):
+	fondoc = pygame.image.load("Recursos/Menu/fondocreditos.jpg")
+	pause = True
+	while pause:
+		for evento in pygame.event.get():
+			if evento.type == pygame.KEYDOWN:
+				if evento.key == pygame.K_RETURN:
+					pause = False
+
+		pantalla.blit(fondoc,(0,0))
+		pygame.display.update()
+
 def main():
     ancho = 800
     alto = 600
     navex = 285
-    navey = 255
-    
-    reloj = pygame.time.Clock()
-    
+    navey = 325
+  
     pygame.init()
     pantalla = pygame.display.set_mode((ancho,alto))
     pygame.display.set_caption("NAVE")
     
     nave = pygame.image.load("Recursos/Menu/nave.png")
     fondo = pygame.image.load("Recursos/Menu/fondonombre.jpg")
-    boton = [pygame.image.load("Recursos/Menu/botonjugar.png"), pygame.image.load("Recursos/Menu/botonopciones.png"), pygame.image.load("Recursos/Menu/botoncreditos.png"), pygame.image.load("Recursos/Menu/salir.png")]
+    boton = [pygame.image.load("Recursos/Menu/botonjugar.png"), pygame.image.load("Recursos/Menu/botoncreditos.png"), pygame.image.load("Recursos/Menu/salir.png")]
     
-    while True:
+    salir = False
+    while not salir:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                pygame.quit()
+                salir = True
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_UP:
-                    if navey == 255:
+                    if navey == 325:
                         pass
                     else:
                         navey -= 70            
@@ -32,23 +43,18 @@ def main():
                     else:
                         navey += 70
                 elif event.key == pygame.K_RETURN:
-                    if navey == 255:
-                        import Game
                     if navey == 325:
-                        print ("opciones")
+                    	salir = True
+                    	import Game
                     if navey == 395:
-                        print ("creditos")
+                    	creditos(pantalla)
                     if navey == 465:
-                        pygame.quit()
+                        salir = True
         
         pantalla.blit(fondo,(0,0))
-       
-        reloj.tick(20)
-       
-        pantalla.blit(boton[0],(ancho/2-118, 250))
-        pantalla.blit(boton[1],(ancho/2-118, 320))
-        pantalla.blit(boton[2],(ancho/2-118, 390))
-        pantalla.blit(boton[3],(ancho/2-118, 460))
+        pantalla.blit(boton[0],(ancho/2-118, 320))
+        pantalla.blit(boton[1],(ancho/2-118, 390))
+        pantalla.blit(boton[2],(ancho/2-118, 460))
         
         pantalla.blit(nave,(navex,navey))
         pygame.display.update()
