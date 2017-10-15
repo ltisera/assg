@@ -72,6 +72,19 @@ def generarLaser(LASER_MAXIMO):
 Inicializacion de variables
 """
 
+def pausa(pantalla):
+	pygame.mixer.music.pause()
+	fondoc = pygame.image.load("Recursos/Menu/fondopausa.jpg")
+	pause = True
+	while pause:
+		for evento in pygame.event.get():
+			if evento.type == pygame.KEYDOWN:
+				if evento.key == pygame.K_RETURN:
+					pause = False
+
+		pantalla.display.blit(fondoc,(0,0))
+		pygame.display.update()
+
 pygame.init()
 
 pantalla = Pantalla()
@@ -141,6 +154,11 @@ while intro:
 	
 	#Lectura de TECLAS
 	keys = pygame.key.get_pressed()
+
+	if keys[K_p]:
+		pausa(pantalla)
+		pygame.mixer.music.unpause()
+
 	if keys[K_a]:
 		nave.sumarAngulo(3.5)
 		
@@ -212,7 +230,7 @@ while intro:
 	texto1 = fuente.render("COORDENADAS: ", True, (0, 0, 255))
 	texto2 = fuente.render("X: " + str(int(nave.getACentroX())), True, (0, 0, 255))
 	texto3 = fuente.render("Y: " + str(int(nave.getACentroY())), True, (0, 0, 255))
-	texto4 = fuente.render("Velocidad: " + str(int(nave.velocidad)) + " años-luz", True, (255, 255, 255))
+	texto4 = fuente.render("Velocidad: " + str(int(nave.velocidad)) + ".000 Km/s", True, (255, 255, 255))
 	texto5 = fuente.render("Puntos: " + str(enemigo.getPuntos()), True, (255, 255, 255))
 	#lock 125
 	pantalla.display.blit(texto1, (665,45))
