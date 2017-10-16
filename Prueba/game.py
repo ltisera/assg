@@ -112,6 +112,8 @@ text22 = Texto("Recursos/arial.ttf",12)
 text22.setTexto("PE:")
 text23 = Texto("Recursos/arial.ttf",12)
 text23.setTexto("PN:")
+text24 = Texto("Recursos/arial.ttf", 12)
+text24.setTexto("PUNTOS: ")
 
 
 """
@@ -204,29 +206,35 @@ while intro:
 
 	"""
 	enemigo.imprimir(nave, pantalla, llaser)
+	if(enemigo.fueDestruidoPorCompleto()):
+		nave.sumarPuntos(100)
+		enemigo = Enemigo("Recursos/Enemigo.png", "Recursos/kaboom.png", 550, 550, 1) 
 	nave.imprimir(pantalla)
 	#explosion.imprimir(pantalla)
 	pantalla.display.blit(pantalla.fondo1, (650,0))
 	pantalla.display.blit(pantalla.fondo2, (0,475))
-
+	print("PUNTOS DE NAVE: "+ str(int(nave.getPuntos())))
 	
 	texto1 = fuente.render("X: " + str(int(nave.getACentroX())), True, (0, 0, 255))
 	texto2 = fuente.render("Y: " + str(int(nave.getACentroY())), True, (0, 0, 255))
 	texto3 = fuente.render("Tamaño: " + str(fsize), True, (0, 0, 255))
 	texto4 = fuente.render("FPS: " + str(clock.get_fps()), True, (0, 0, 255))
 	texto5 = fuente.render("Velocidad: " + str(nave.velocidad), True, (0, 0, 255))
+	texto6 = fuente.render("PUNTOS: " + str(nave.getPuntos()), True, (200, 200, 200))
 	#lock 125
 	pantalla.display.blit(texto1, (665,45))
 	pantalla.display.blit(texto2, (665,60))
 	pantalla.display.blit(texto3, (665,75))
 	pantalla.display.blit(texto4, (665,90))
 	pantalla.display.blit(texto5, (665,105))
+	pantalla.display.blit(texto6, (20, 490))
 	text21.setTexto("Recarga Laser: " + str(recargaLaser),)
 	text21.imprimir(pantalla,665,130)
 	text22.setTexto("Nave: " + str(nave.getAPos()), )
 	text22.imprimir(pantalla,665,145)
 	text23.setTexto("Laser[0]: " + str(llaser[0].getCoordenadas()) )
 	text23.imprimir(pantalla,665,160)
+
 	
 	pygame.display.update()
 

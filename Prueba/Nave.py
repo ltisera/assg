@@ -45,7 +45,10 @@ class Nave:
 		
 	def getRCentroY(self):
 		return self.RCentro[1]
-	
+	def getPuntos(self):
+		return self.puntos
+	def setPuntos(self, puntosNuevo):
+		self.puntos = puntosNuevo
 	def sumarAngulo(self, sumAngulo):
 		self.angulo = Funciones.sumarAngulo(self.angulo, sumAngulo)
 	
@@ -88,8 +91,13 @@ class Nave:
 			pantalla.display.blit(self.imagenColision, (self.RX + (self.imagenColision.get_width()/2), self.RY + (self.imagenColision.get_height()/2)))
 			self.colision = False
 		self.sumarContador()
+	def sumarPuntos(self, puntosS):
+		self.puntos += puntosS
 		
+	def getPuntos(self):
+		return self.puntos
 	def __init__(self, directorio,directorio2, anguloOrigen, velocidad, minVelocidad, maxVelocidad, origen, pantalla):
+		self.puntos = 0
 		self.imagen = pygame.image.load(directorio+'/Nave.png').convert_alpha()
 		self.lento = []
 		for i in range(8):
