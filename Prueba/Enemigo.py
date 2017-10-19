@@ -24,7 +24,7 @@ import Funciones
 from Explosion import Explosion
 class Enemigo:
 	def destruirEnemigo(self):
-		self.explotando = True
+		self.destruido = True
 
 	def getVida(self):
 		return self.vida
@@ -33,8 +33,7 @@ class Enemigo:
 		self.vida = cuantaVida
 		if (self.vida <= 0):
 			self.destruirEnemigo()
-	def fueDestruidoPorCompleto(self):
-		return self.exploto
+
 	def getWidth(self):
 		return self.width
 
@@ -115,9 +114,15 @@ class Enemigo:
 	def reduceVida(self, cantidad):
 		self.vida -= cantidad
 
+	def setPuntos(self, puntos):
+		self.puntos += puntos
+
+	def getPuntos(self):
+		return self.puntos
+
 	def imprimir(self, nave, pantalla, llaser):
-		if(self.explotando == False):
-			self.mover(nave)
+		if(self.destruido == False):
+			#self.mover(nave)
 			Funciones.colisonVieja(self, nave)
 			self.impBarraVida(self.vida, pantalla)
 			for i in llaser:
@@ -132,14 +137,93 @@ class Enemigo:
 			#Efecto de explosion
 			print("Explota")
 			if(self.explotaEnemigo.imprimir(pantalla,self.getRX(), self.getRY()) == 0):
-				self.explotando = False
-				self.exploto = True
+				self.destruido = False
+				self.vida = 100
+				self.RX = -200
+				self.RY = -200
+				self.setPuntos(100)
+	def evitarColision(self, nave, planeta):
 	
-
+		#### Cuadrantes
+		if(self.RY <= planeta.RY and self.RX < planeta.RX):#posicionEnemigo == SupIzq
+			if(nave.RY < planeta.RY and nave.RX >= planeta.RX): #posicionNave == SupDer):
+				self.RY -= self.velocidad
+			if(nave.RY > planeta.RY and nave.RX <= planeta.RX): #posicionNave == InfIzq):
+				self.RX -= self.velocidad
+			
+		if(self.RY < planeta.RY and self.RX >= planeta.RX):#posicionEnemigo == SupDer):
+			if(nave.RY <= planeta.RY and nave.RX < planeta.RX):#posicionNave == SupIzq):
+				self.RY -= self.velocidad
+			if(nave.RY >= planeta.RY and nave.RX > planeta.RX):#posicionNave == InfDer):
+				self.RX += self.velocidad
+		
+		if(self.RY > planeta.RY and self.RX <= planeta.RX):# posicionEnemigo == InfIzq):
+			if(nave.RY <= planeta.RY and nave.RX < planeta.RX):#posicionNave == SupIzq):
+				self.RX -= self.velocidad
+			if(nave.RY >= planeta.RY and nave.RX > planeta.RX):#posicionNave == InfDer):
+				self.RY += self.velocidad
+		
+		if(self.RY >= planeta.RY and self.RX > planeta.RX):#posicionEnemigo == InfDer):
+			if(nave.RY < planeta.RY and nave.RX >= planeta.RX):#posicionNave == SupDer):
+				self.RX += self.velocidad
+			if(nave.RY > planeta.RY and nave.RX <= planeta.RX):#posicionNave == InfIzq):
+				self.RY += self.velocidad
+		self.RCentro = (self.RX + (self.imagen.get_width()/2),self.RY + (self.imagen.get_height()/2))
+	"""
+	### Octantes
+	
+	if(posicionEnemigo == InfSupIzq):
+		if(posicionNave== SupSupIzq or posicionNave== InfInfDer):
+			self.RX -= self.velocidad
+		if(posicionNave== SupInfDer):
+			self.RY -= self.velocidad
+	
+	if(posicionEnemigo == SupSupIzq):
+		if(posicionNave == InfSupIzq ):
+			self.RX -= self.velocidad
+		if(posicionNave == SupInfDer or posicionNave== InfInfDer):
+			self.RY -= self.velocidad
+	
+	if(posicionEnemigo == InfSupDer):
+		if(posicionNave == InfInfIzq or posicionNave== SupInfIzq):
+			self.RX += self.velocidad
+		if(posicionNave == SupSupDer):
+			self.RY -= self.velocidad
+	
+	if(posicionEnemigo == SupSupDer):
+		if(posicionNave== InfSupDer):
+			self.RX += self.velocidad
+		if(posicionNave == InfInfIzq or posicionNave == SupInfIzq):
+			self.RY -= self.velocidad
+	
+	if(posicionEnemigo == InfInfIzq):
+		if(posicionNave == SupInfIzq):
+			self.RX -= self.velocidad
+		if(posicionNave == SupSupDer or posicionNave == InfSupDer ):
+			self.RY += self.velocidad
+	
+	if(posicionEnemigo == SupInfIzq):
+		if(posicionNave == SupSupDer or posicionNave == InfSupDer):
+			self.RX -= self.velocidad
+		if(posicionNave == InfInfIzq):
+			self.RY += self.velocidad
+	
+	if(posicionEnemigo == InfInfDer):
+		if(posicionNave == InfSupIzq or posicionNave == SupSupIzq):
+			self.RY += self.velocidad
+		if(posicionNave == SupInfDer):
+			self.RX += self.velocidad
+	
+	if(posicionEnemigo == SupInfDer):
+		if(posicionNave == InfInfDer):
+			self.RY += self.velocidad
+		if(posicionNave == InfSupIzq or posicionNave == SupSupIzq):
+			self.RX += self.velocidad
+	"""
 	def __init__(self, directorio, directorio2, X, Y, velocidad):
 		self.explotaEnemigo = Explosion("Recursos/Explosion1.png")
 		self.imagen = pygame.image.load(directorio).convert_alpha()
-		self.exploto = False
+		self.rect = self.imagen.get_rect()
 		self.imagenColision = pygame.image.load(directorio2).convert_alpha()
 		self.colision = False
 		self.width = self.imagen.get_width()
@@ -152,4 +236,5 @@ class Enemigo:
 		self.RCentro = (self.RX + (self.imagen.get_width()/2),self.RY + (self.imagen.get_height()/2))
 		self.velocidad = velocidad
 		self.vida = 100
-		self.explotando = False
+		self.destruido = False
+		self.puntos = 0

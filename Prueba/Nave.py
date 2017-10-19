@@ -1,5 +1,6 @@
 import pygame, math
 import Funciones
+from Explosion import Explosion
 
 FRAMES = 4 #Para la animacion del fuego
 
@@ -45,10 +46,7 @@ class Nave:
 		
 	def getRCentroY(self):
 		return self.RCentro[1]
-	def getPuntos(self):
-		return self.puntos
-	def setPuntos(self, puntosNuevo):
-		self.puntos = puntosNuevo
+	
 	def sumarAngulo(self, sumAngulo):
 		self.angulo = Funciones.sumarAngulo(self.angulo, sumAngulo)
 	
@@ -59,6 +57,22 @@ class Nave:
 		elif self.velocidad >= (self.maxVelocidad):
 			self.velocidad = self.maxVelocidad
 	
+	def reduceVida(self, cantidad):
+		if(self.vida > cantidad):
+			self.vida -= cantidad
+		else:
+			self.vida = 0
+			self.explotando = True
+			
+		
+	def impBarraVida(self, vida, pantalla):
+		colorBarra = (255,0,0)
+		if(vida >= 33):
+			colorBarra = (255,255,0)
+		if(vida >=66):
+			colorBarra = (0,255,0)
+		pygame.draw.rect(pantalla.display, colorBarra, (0, 475, (vida * 650) / 100, 10))
+	
 	def sumarContador(self):
 		self.contador += 1
 		if self.contador > 7*FRAMES:
@@ -66,6 +80,9 @@ class Nave:
 		
 	def boom(self):
 		self.colision = True
+	
+	def fueDestruidoPorCompleto(self):
+		return self.exploto
 		
 	def mover(self, mapa):
 		self.AX += math.cos(math.radians(self.angulo))*self.velocidad
@@ -75,8 +92,20 @@ class Nave:
 		self.supDER = mapa.getIndiceSector(self.getAX()+800,self.getAY()-600)
 		self.infIZQ = mapa.getIndiceSector(self.getAX()-800,self.getAY()+600)
 		self.infDER = mapa.getIndiceSector(self.getAX()+800,self.getAY()+600)
-		
+
 	def imprimir(self, pantalla):
+		if(self.explotando == False):
+			self.imprimirNave(pantalla)
+		else:
+			#Efecto de explosion
+			self.velocidad = 0.1
+			if(self.explotaNave.imprimir(pantalla,self.getRX()+(self.imagen.get_width()/2)-10, self.getRY()+(self.imagen.get_height()/2)-10) == 0):
+				self.explotando = False
+				self.exploto = True
+				self.vida = 100
+				
+	def imprimirNave(self, pantalla):
+		self.impBarraVida(self.vida, pantalla)
 		if self.velocidad < 0.5:
 			pantalla.display.blit(Funciones.rotarCentro(self.imagen, self.angulo), (self.RX, self.RY))
 		elif self.velocidad < 4:
@@ -88,16 +117,21 @@ class Nave:
 		else:
 			pantalla.display.blit(Funciones.rotarCentro(self.turbo[int(self.contador/FRAMES)], self.angulo), (self.RX, self.RY))
 		if self.colision:
+			if self.exploto:
+				self.tiempoChoque = 40
+				self.exploto = False
 			pantalla.display.blit(self.imagenColision, (self.RX + (self.imagenColision.get_width()/2), self.RY + (self.imagenColision.get_height()/2)))
-			self.colision = False
+			if(self.tiempoChoque==0): 
+				self.reduceVida((self.velocidad*100)/15)
+				self.velocidad = -(self.velocidad/2)
+				
+			self.tiempoChoque += 1
+			if(self.tiempoChoque >=40):
+				self.tiempoChoque =0
+				self.colision = False
 		self.sumarContador()
-	def sumarPuntos(self, puntosS):
-		self.puntos += puntosS
 		
-	def getPuntos(self):
-		return self.puntos
 	def __init__(self, directorio,directorio2, anguloOrigen, velocidad, minVelocidad, maxVelocidad, origen, pantalla):
-		self.puntos = 0
 		self.imagen = pygame.image.load(directorio+'/Nave.png').convert_alpha()
 		self.lento = []
 		for i in range(8):
@@ -132,3 +166,8 @@ class Nave:
 		self.angulo = 0
 		self.velocidad = 0
 		self.sumarVelocidad(velocidad)
+		self.tiempoChoque = 0
+		self.vida = 100
+		self.explotaNave = Explosion("Recursos/Explosion1.png")
+		self.exploto = False
+		self.explotando = False

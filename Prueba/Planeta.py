@@ -43,10 +43,10 @@ class Planeta:
 		return self.RCentro
 		
 	def getRCentroX(self):
-		return self.RCentro[0]
+		return (self.imagen.get_width()/2) + self.RX#self.RCentro[0]
 		
 	def getRCentroY(self):
-		return self.RCentro[1]
+		return (self.imagen.get_height()/2) + self.RY#self.RCentro[1]
 		
 	def mover(self,nave):
 		self.RX = self.AX - nave.getAX()
@@ -68,6 +68,7 @@ class Planeta:
 		
 	def __init__(self, directorio, lplaneta, AREA_MAXIMA, DISTANCIA_MINIMA):
 		self.imagen = pygame.image.load(directorio).convert_alpha()
+		self.rect = self.imagen.get_rect()
 		self.width = self.imagen.get_width()
 		self.height = self.imagen.get_height()
 		self.RX = 0
