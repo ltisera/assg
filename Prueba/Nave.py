@@ -122,7 +122,7 @@ class Nave:
 				self.exploto = False
 			pantalla.display.blit(self.imagenColision, (self.RX + (self.imagenColision.get_width()/2), self.RY + (self.imagenColision.get_height()/2)))
 			if(self.tiempoChoque==0): 
-				self.reduceVida((self.velocidad*100)/15)
+				self.reduceVida(math.fabs((self.velocidad*100)/15))
 				self.velocidad = -(self.velocidad/2)
 				
 			self.tiempoChoque += 1
