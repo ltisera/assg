@@ -114,15 +114,26 @@ text23 = Texto("Recursos/arial.ttf",12)
 text23.setTexto("PN:")
 
 timepoLuegoDeExplosion = 0
+tiempoDeSpawneo = 0
+imprimirNave = True
 """
 Bucle Principal 
 """
 while intro:
 	if(nave.fueDestruidoPorCompleto()):
 		timepoLuegoDeExplosion += 1
+		imprimirNave = False
 		if(timepoLuegoDeExplosion >=60):
 			nave = Nave("Recursos/Nave", "Recursos/kaboom.png", 0, 0.1, VELOCIDAD_MINIMA, VELOCIDAD_MAXIMA, (0,0), pantalla)
 			timepoLuegoDeExplosion = 0
+			tiempoDeSpawneo += 1
+			imprimirNave = True
+	if(tiempoDeSpawneo>=1):
+		tiempoDeSpawneo += 1
+		if(tiempoDeSpawneo>=120):
+			tiempoDeSpawneo = 0
+			imprimirNave = True
+
 
 	pantalla.display.fill((29,21,13))
 	
@@ -243,7 +254,12 @@ while intro:
 	pantalla.display.blit(pantalla.fondo1, (650,0))
 	pantalla.display.blit(pantalla.fondo2, (0,475))
 	if(timepoLuegoDeExplosion == 0):
-		nave.imprimir(pantalla)
+		if((tiempoDeSpawneo//10)%2 !=0):
+			imprimirNave = False
+		else: 
+			imprimirNave = True
+	if(imprimirNave):
+			nave.imprimir(pantalla)
 	
 	texto1 = fuente.render("X: " + str(int(nave.getACentroX())), True, (0, 0, 255))
 	texto2 = fuente.render("Y: " + str(int(nave.getACentroY())), True, (0, 0, 255))
