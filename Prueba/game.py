@@ -211,8 +211,9 @@ while intro:
 		enemigo = Enemigo("Recursos/Enemigo.png", "Recursos/kaboom.png", 550, 550, 1) 
 	nave.imprimir(pantalla)
 	#explosion.imprimir(pantalla)
-	pantalla.display.blit(pantalla.fondo1, (650,0))
+	#pantalla.display.blit(pantalla.fondo1, (650,0))
 	pantalla.display.blit(pantalla.fondo2, (0,475))
+	pantalla.display.blit(pantalla.fondo3, (0,475))
 	print("PUNTOS DE NAVE: "+ str(int(nave.getPuntos())))
 	
 	texto1 = fuente.render("X: " + str(int(nave.getACentroX())), True, (0, 0, 255))

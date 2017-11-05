@@ -15,5 +15,6 @@ class Pantalla:
 		pygame.display.set_caption("ASSG")
 		self.fondo1 = pygame.image.load("Recursos/1.png").convert_alpha()
 		self.fondo2 = pygame.image.load("Recursos/2.png").convert_alpha()
+		self.fondo3 = pygame.image.load("Recursos/2Mascara.png").convert_alpha()
 		self.centro = (325, 237.5)
 		
