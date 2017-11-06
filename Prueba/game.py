@@ -41,6 +41,16 @@ from Laser import Laser
 from Texto import Texto
 from Planeta import Planeta
 
+=======
+from Estrella import Estrella
+from Nave import Nave
+from Enemigo import Enemigo
+from Planeta import Planeta
+from Pantalla import Pantalla
+from Agujero import Agujero
+from Laser import Laser
+from Texto import Texto
+import random
 from pygame.locals import * 
 
 """
@@ -116,6 +126,7 @@ text23.setTexto("PN:")
 timepoLuegoDeExplosion = 0
 tiempoDeSpawneo = 0
 imprimirNave = True
+laserEnemigo = Laser("Recursos/laser1.png",pantalla,VELOCIDAD_LASER+enemigo.velocidad,nave.angulo,False)
 """
 Bucle Principal 
 """
@@ -266,6 +277,10 @@ while intro:
 	texto3 = fuente.render("Puntos: " + str(enemigo.getPuntos()), True, (0, 0, 255))
 	texto4 = fuente.render("FPS: " + str(clock.get_fps()), True, (0, 0, 255))
 	texto5 = fuente.render("Velocidad: " + str(int(nave.velocidad)), True, (0, 0, 255))
+	if laserEnemigo.laserLibre == False:
+		laserEnemigo.imprimir(pantalla, nave)
+	else:
+		laserEnemigo.setLaser(enemigo.X, enemigo.Y, VELOCIDAD_LASER+enemigo.velocidad, laserEnemigo.traerAnguloLaserEnemigo(enemigo,pantalla), False)
 	#lock 125
 	pantalla.display.blit(texto1, (665,45))
 	pantalla.display.blit(texto2, (665,60))
