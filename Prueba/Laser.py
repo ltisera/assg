@@ -29,28 +29,32 @@ class Laser:
 		cosAngulo = math.cos(math.radians(self.angulo))
 		sinAngulo = math.sin(math.radians(self.angulo))
 
-		self.RX += cosAngulo * self.velocidad
-		self.RY += -sinAngulo * self.velocidad
-		self.AX += cosAngulo * self.velocidad
-		self.AY += -sinAngulo * self.velocidad
+		self.RX += (cosAngulo * self.velocidad)
+		self.RY += (-sinAngulo * self.velocidad) 
+		self.AX += (cosAngulo * self.velocidad) 
+		self.AY += (-sinAngulo * self.velocidad) 
 
 	def imprimir(self, nave, pantalla):
 		
 		self.mover(nave)
 		#
 		if Funciones.posicionValida(self.RX,0,650,self.RY,0,475):
-			pantalla.display.blit(pygame.transform.rotate(self.imagen, self.angulo), (self.RX - 3.5,self.RY - 3.5))
+			pantalla.display.blit(pygame.transform.rotate(self.imagen, self.angulo),(self.RX - 3.5,self.RY - 3.5))
 		else:
 			self.laserLibre = True
 			
-	def setLaser(self, velocidad, nave, libre):
+	def setLaser(self, rx, ry, ax, ay, velocidad, angulo, libre):
 		self.velocidad = velocidad
-		self.angulo = nave.angulo
-		self.RX = nave.getRCentroX()
-		self.RY = nave.getRCentroY()
-		self.AX = nave.getACentroX()
-		self.AY = nave.getACentroY()
+		self.angulo = angulo
+		self.RX = rx
+		self.RY = ry
+		self.AX = ax
+		self.AY = ay
 		self.laserLibre = libre
+		
+		
+		
+		
 		
 	def __init__(self, directorio, nave, velocidad, angulo, libre):
 		self.imagen = pygame.image.load(directorio).convert_alpha()
@@ -67,3 +71,28 @@ class Laser:
 		self.RCentro = (self.RX + (self.imagen.get_width()/2),self.RY + (self.imagen.get_height()/2))
 		
 		self.laserLibre = libre
+	
+	def  traerAnguloLaserEnemigo(self,enemigo, camara):
+		objetivoX = camara.getCentroX()
+		objetivoY = camara.getCentroY()
+		if (enemigo.RX > objetivoX and enemigo.RY <= objetivoY):
+			if(objetivoY==enemigo.RY):
+				self.angulo = 0
+			else:
+				self.angulo = 270-math.degrees(math.atan((enemigo.RX - objetivoX)/(objetivoY - enemigo.RY)))
+		elif (enemigo.RX > objetivoX and enemigo.RY >= objetivoY):
+			if(objetivoY==enemigo.RY):
+				self.angulo = 270
+			else:
+				self.angulo = 90+ math.degrees(math.atan((enemigo.RX - objetivoX)/(enemigo.RY - objetivoY)))
+		elif (enemigo.RX < objetivoX) and (enemigo.RY >= objetivoY):
+			if(objetivoY==enemigo.RY):
+				self.angulo= 180
+			else:
+				self.angulo = 90- math.degrees(math.atan((objetivoX - enemigo.RX)/(enemigo.RY - objetivoY)))
+		else:
+			if(objetivoY==enemigo.RY):
+				self.angulo = 90
+			else:
+				self.angulo = 360-(90- math.degrees(math.atan((objetivoX - enemigo.RX)/(objetivoY - enemigo.RY))))
+		return self.angulo

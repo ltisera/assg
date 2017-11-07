@@ -41,7 +41,7 @@ from Laser import Laser
 from Texto import Texto
 from Planeta import Planeta
 
-=======
+
 from Estrella import Estrella
 from Nave import Nave
 from Enemigo import Enemigo
@@ -59,7 +59,7 @@ Constantes de configuracion
 
 VELOCIDAD_MINIMA = 0.2
 VELOCIDAD_MAXIMA = 15
-VELOCIDAD_LASER = 10
+VELOCIDAD_LASER = 1
 
 OBJETOS_MAXIMOS = 200
 DISTANCIA_MINIMA = 550
@@ -126,7 +126,7 @@ text23.setTexto("PN:")
 timepoLuegoDeExplosion = 0
 tiempoDeSpawneo = 0
 imprimirNave = True
-laserEnemigo = Laser("Recursos/laser1.png",pantalla,VELOCIDAD_LASER+enemigo.velocidad,nave.angulo,False)
+laserEnemigo = Laser("Recursos/laser.png",nave,VELOCIDAD_LASER+enemigo.velocidad,nave.angulo,False)
 """
 Bucle Principal 
 """
@@ -136,6 +136,8 @@ while intro:
 		imprimirNave = False
 		if(timepoLuegoDeExplosion >=60):
 			nave = Nave("Recursos/Nave", "Recursos/kaboom.png", 0, 0.1, VELOCIDAD_MINIMA, VELOCIDAD_MAXIMA, (0,0), pantalla)
+			enemigo = Enemigo("Recursos/Enemigo.png", "Recursos/kaboom.png", 550, 550, 1)
+			laserEnemigo = Laser("Recursos/laser.png",nave,VELOCIDAD_LASER+enemigo.velocidad,nave.angulo,False)
 			timepoLuegoDeExplosion = 0
 			tiempoDeSpawneo += 1
 			imprimirNave = True
@@ -189,7 +191,7 @@ while intro:
 				recargaLaser = 0
 				for i in llaser:
 					if i.laserLibre == True:
-						i.setLaser(VELOCIDAD_LASER, nave, False)
+						i.setLaser(nave.RX, nave.RY, nave.AX, nave.AY, VELOCIDAD_LASER, nave.angulo, False)
 						break
 			else:
 				recargaLaser += 1
@@ -270,7 +272,7 @@ while intro:
 		else: 
 			imprimirNave = True
 	if(imprimirNave):
-			nave.imprimir(pantalla)
+			nave.imprimir(pantalla, laserEnemigo)
 	
 	texto1 = fuente.render("X: " + str(int(nave.getACentroX())), True, (0, 0, 255))
 	texto2 = fuente.render("Y: " + str(int(nave.getACentroY())), True, (0, 0, 255))
@@ -278,9 +280,9 @@ while intro:
 	texto4 = fuente.render("FPS: " + str(clock.get_fps()), True, (0, 0, 255))
 	texto5 = fuente.render("Velocidad: " + str(int(nave.velocidad)), True, (0, 0, 255))
 	if laserEnemigo.laserLibre == False:
-		laserEnemigo.imprimir(pantalla, nave)
+		laserEnemigo.imprimir(nave, pantalla)
 	else:
-		laserEnemigo.setLaser(enemigo.X, enemigo.Y, VELOCIDAD_LASER+enemigo.velocidad, laserEnemigo.traerAnguloLaserEnemigo(enemigo,pantalla), False)
+		laserEnemigo.setLaser(enemigo.RX, enemigo.RY, enemigo.AX, enemigo.AY, VELOCIDAD_LASER+enemigo.velocidad, laserEnemigo.traerAnguloLaserEnemigo(enemigo,pantalla), False)
 	#lock 125
 	pantalla.display.blit(texto1, (665,45))
 	pantalla.display.blit(texto2, (665,60))

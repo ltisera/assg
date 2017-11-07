@@ -93,9 +93,9 @@ class Nave:
 		self.infIZQ = mapa.getIndiceSector(self.getAX()-800,self.getAY()+600)
 		self.infDER = mapa.getIndiceSector(self.getAX()+800,self.getAY()+600)
 
-	def imprimir(self, pantalla):
+	def imprimir(self, pantalla, laserEnemigo):
 		if(self.explotando == False):
-			self.imprimirNave(pantalla)
+			self.imprimirNave(pantalla, laserEnemigo)
 		else:
 			#Efecto de explosion
 			self.velocidad = 0.1
@@ -104,7 +104,8 @@ class Nave:
 				self.exploto = True
 				self.vida = 100
 				
-	def imprimirNave(self, pantalla):
+	def imprimirNave(self, pantalla, laserEnemigo):
+		colisionLaserEnemigo = False
 		self.impBarraVida(self.vida, pantalla)
 		if self.velocidad < 0.5:
 			pantalla.display.blit(Funciones.rotarCentro(self.imagen, self.angulo), (self.RX, self.RY))
@@ -116,6 +117,9 @@ class Nave:
 			pantalla.display.blit(Funciones.rotarCentro(self.rapido[int(self.contador/FRAMES)], self.angulo), (self.RX, self.RY))
 		else:
 			pantalla.display.blit(Funciones.rotarCentro(self.turbo[int(self.contador/FRAMES)], self.angulo), (self.RX, self.RY))
+		if not self.colision and Funciones.hayColision(self, laserEnemigo):
+			self.reduceVida(5)
+			laserEnemigo.laserLibre = True
 		if self.colision:
 			if self.exploto:
 				self.tiempoChoque = 40
