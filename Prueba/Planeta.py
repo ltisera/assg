@@ -57,7 +57,7 @@ class Planeta:
 	def imprimir(self, pantalla, nave, llaser):
 		self.mover(nave)
 		cp1 = self.getRCentro()
-		if Funciones.posicionValida(self.getRCentroX(),-200,800,self.getRCentroY(),-200,800):
+		if Funciones.posicionValida(self.getRCentroX(),-200,1000,self.getRCentroY(),-200,800):
 			pantalla.display.blit(self.imagen, (self.RX,self.RY))
 			Funciones.colisonVieja(self, nave)
 			#Funciones.colisonVieja(self, enemigo)

@@ -54,7 +54,7 @@ class Agujero:
 		
 	def imprimir(self, pantalla, nave, llaser):
 		self.mover(nave)
-		if Funciones.posicionValida(self.getRCentroX(),-100,800,self.getRCentroY(),-100,800):
+		if Funciones.posicionValida(self.getRCentroX(),-200,1000,self.getRCentroY(),-200,800):
 			pantalla.display.blit(Funciones.rotarCentro(self.imagen, self.angulo), (self.RX,self.RY))
 			Funciones.colisonVieja(self, nave)
 		

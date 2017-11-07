@@ -80,7 +80,7 @@ mapa = Mapa(20000, 5, OBJETOS_MAXIMOS, DISTANCIA_MINIMA)
 
 lobjtmp = mapa.getListaObjetos()
 
-nave = Nave("Recursos/Nave", "Recursos/kaboom.png", 0, 0.1, VELOCIDAD_MINIMA, VELOCIDAD_MAXIMA, (0,0), pantalla)
+nave = Nave("Recursos/Nave", "Recursos/kaboom.png", 0, 0.1, VELOCIDAD_MINIMA, VELOCIDAD_MAXIMA, (0,0), pantalla, 8, 161, 183, 509)
 
 enemigo = Enemigo("Recursos/Enemigo.png", "Recursos/kaboom.png", 550, 550, 1)	
 
@@ -129,7 +129,7 @@ while intro:
 				intro = False
 			
 			if event.key == K_m:
-				print("Imprimimos, la lista de obketos")
+				print("Imprimimos, la lista de objetos")
 				cplan = 0
 				for i in lobjtmp:
 					if(isinstance(i, Planeta)):
@@ -199,7 +199,7 @@ while intro:
 		if i.laserLibre == False:
 			i.imprimir(nave, pantalla)
 			if(Funciones.hayColision(enemigo, i) == True):
-				enemigo.setVida (enemigo.getVida() - 10 )
+				enemigo.reduceVida(10)
 				i.laserLibre = True
 	"""
 	Logica movimientos y colisiones
@@ -213,22 +213,21 @@ while intro:
 	#explosion.imprimir(pantalla)
 	#pantalla.display.blit(pantalla.fondo1, (650,0))
 	pantalla.display.blit(pantalla.fondo2, (0,475))
+	nave.imprimirVida(pantalla)
 	pantalla.display.blit(pantalla.fondo3, (0,475))
-	print("PUNTOS DE NAVE: "+ str(int(nave.getPuntos())))
-	
 	texto1 = fuente.render("X: " + str(int(nave.getACentroX())), True, (0, 0, 255))
 	texto2 = fuente.render("Y: " + str(int(nave.getACentroY())), True, (0, 0, 255))
 	texto3 = fuente.render("Tamaño: " + str(fsize), True, (0, 0, 255))
 	texto4 = fuente.render("FPS: " + str(clock.get_fps()), True, (0, 0, 255))
 	texto5 = fuente.render("Velocidad: " + str(nave.velocidad), True, (0, 0, 255))
-	texto6 = fuente.render("PUNTOS: " + str(nave.getPuntos()), True, (200, 200, 200))
+	texto6 = fuente.render("PUNTOS: " + str(nave.getPuntos()), True, (0, 0, 0))
 	#lock 125
 	pantalla.display.blit(texto1, (665,45))
 	pantalla.display.blit(texto2, (665,60))
 	pantalla.display.blit(texto3, (665,75))
 	pantalla.display.blit(texto4, (665,90))
 	pantalla.display.blit(texto5, (665,105))
-	pantalla.display.blit(texto6, (20, 490))
+	pantalla.display.blit(texto6, (665,500))
 	text21.setTexto("Recarga Laser: " + str(recargaLaser),)
 	text21.imprimir(pantalla,665,130)
 	text22.setTexto("Nave: " + str(nave.getAPos()), )

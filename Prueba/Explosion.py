@@ -40,11 +40,11 @@ class Explosion(pygame.sprite.Sprite):
 		y0 = nfila * self.frame_heigth 
 		x1 = self.frame_width
 		y1 = self.frame_heigth 
-		print("Columna: " + str(ncolumna) + " Fila: " + str(nfila) )
+		#print("Columna: " + str(ncolumna) + " Fila: " + str(nfila) )
 		ractual = (x0, y0, x1, y1)
-		print(self.image.get_rect())
+		#print(self.image.get_rect())
 		pantalla.display.blit(self.image.subsurface(ractual), (RX-7,RY-19))
-		print("X= " + str(RX) + " Y= "+ str(RY))
+		#print("X= " + str(RX) + " Y= "+ str(RY))
 		return self.current_frame
 
 	def __init__(self, directorio):

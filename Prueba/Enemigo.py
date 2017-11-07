@@ -19,6 +19,7 @@
 #
 
 import pygame, math
+from Barra import Barra
 from Pantalla import Pantalla
 import Funciones 
 from Explosion import Explosion
@@ -27,14 +28,11 @@ class Enemigo:
 		self.explotando = True
 
 	def getVida(self):
-		return self.vida
+		return self.vida.getValor()
 
-	def setVida(self, cuantaVida):
-		self.vida = cuantaVida
-		if (self.vida <= 0):
-			self.destruirEnemigo()
 	def fueDestruidoPorCompleto(self):
 		return self.exploto
+
 	def getWidth(self):
 		return self.width
 
@@ -103,23 +101,15 @@ class Enemigo:
 			elif self.getRCentroY() > nave.getRCentroY()-(self.imagen.get_height()/2):
 				self.RY += self.velocidad
 
-	def impBarraVida(self, vida, pantalla):
-		colorBarra = (255,0,0)
-		if(vida >= 33):
-			colorBarra = (255,255,0)
-		if(vida >=66):
-			colorBarra = (0,255,0)
-
-		pygame.draw.rect(pantalla.display, colorBarra, (self.RX + 10, self.RY -10, (vida * 30) / 100, 3))
-
 	def reduceVida(self, cantidad):
-		self.vida -= cantidad
+		if (self.vida.sumarValor(-cantidad) < 0):
+			self.destruirEnemigo()
 
 	def imprimir(self, nave, pantalla, llaser):
 		if(self.explotando == False):
 			self.mover(nave)
 			Funciones.colisonVieja(self, nave)
-			self.impBarraVida(self.vida, pantalla)
+			
 			for i in llaser:
 				if i.laserLibre == False:
 					Funciones.colisonVieja(self, i)
@@ -128,18 +118,21 @@ class Enemigo:
 				pantalla.display.blit(self.imagenColision, (self.RX,self.RY))
 			else: 
 				pantalla.display.blit(self.imagen, (self.RX,self.RY))
+				self.vida.imprimir(pantalla, self.RX + 10, self.RY -10)
 		else:
 			#Efecto de explosion
-			print("Explota")
 			if(self.explotaEnemigo.imprimir(pantalla,self.getRX(), self.getRY()) == 0):
+				self.vida.setValor(100)
 				self.explotando = False
-				self.exploto = True
-	
+				self.RX = -200
+				self.RY = -200
+				nave.sumarPuntos(100)
 
 	def __init__(self, directorio, directorio2, X, Y, velocidad):
 		self.explotaEnemigo = Explosion("Recursos/Explosion1.png")
 		self.imagen = pygame.image.load(directorio).convert_alpha()
 		self.exploto = False
+		self.explotando = False
 		self.imagenColision = pygame.image.load(directorio2).convert_alpha()
 		self.colision = False
 		self.width = self.imagen.get_width()
@@ -151,5 +144,5 @@ class Enemigo:
 		self.RY = Y
 		self.RCentro = (self.RX + (self.imagen.get_width()/2),self.RY + (self.imagen.get_height()/2))
 		self.velocidad = velocidad
-		self.vida = 100
-		self.explotando = False
+		self.vida = Barra(((255,0,0),(255,255,0),(0,255,0)), 0, 100, 100, 3, 30)
+
