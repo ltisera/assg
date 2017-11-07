@@ -39,6 +39,7 @@ from Pantalla import Pantalla
 from Mapa import Mapa
 from Laser import Laser
 from Texto import Texto
+from Barra import Barra
 from Planeta import Planeta
 
 from pygame.locals import * 
@@ -57,6 +58,8 @@ ESTRELLA_MAXIMO = 75
 LASER_MAXIMO = 10
 
 BLANCO = (255,255,255)
+
+PASO_LASER = 100
 
 """
 Funciones
@@ -80,7 +83,7 @@ mapa = Mapa(20000, 5, OBJETOS_MAXIMOS, DISTANCIA_MINIMA)
 
 lobjtmp = mapa.getListaObjetos()
 
-nave = Nave("Recursos/Nave", "Recursos/kaboom.png", 0, 0.1, VELOCIDAD_MINIMA, VELOCIDAD_MAXIMA, (0,0), pantalla, 8, 161, 183, 509)
+nave = Nave("Recursos/Nave", 0, 0.1, VELOCIDAD_MINIMA, VELOCIDAD_MAXIMA, (0,0), pantalla, 8, 161, (183, 509), (183, 535), (383, 509))
 
 enemigo = Enemigo("Recursos/Enemigo.png", "Recursos/kaboom.png", 550, 550, 1)	
 
@@ -94,9 +97,9 @@ llaser = generarLaser(LASER_MAXIMO)
 
 intro = True
 
-recargaLaser = 200
+recargaLaser = Barra(((255,0,0),(255,0,0)), 0, PASO_LASER, PASO_LASER, 8, 161, 383, 535) 
 
-pasolaser = 6
+pasolaser = 0
 
 clock = pygame.time.Clock()
 clockLaser = pygame.time.Clock()
@@ -159,14 +162,12 @@ while intro:
 		nave.sumarVelocidad(-0.1)
 	
 	if keys[K_k]:
-		if recargaLaser >= pasolaser:
-			recargaLaser = 0
+		if pasolaser > 0:
+			recargaLaser.setValor(0)
 			for i in llaser:
 				if i.laserLibre == True:
 					i.setLaser(VELOCIDAD_LASER, nave, False)
 					break
-		else:
-			recargaLaser += 1
 		
 	#Movimiento
 	nave.mover(mapa)
@@ -205,6 +206,8 @@ while intro:
 	Logica movimientos y colisiones
 
 	"""
+	pasolaser = recargaLaser.sumarValor(10) 
+
 	enemigo.imprimir(nave, pantalla, llaser)
 	if(enemigo.fueDestruidoPorCompleto()):
 		nave.sumarPuntos(100)
@@ -213,7 +216,8 @@ while intro:
 	#explosion.imprimir(pantalla)
 	#pantalla.display.blit(pantalla.fondo1, (650,0))
 	pantalla.display.blit(pantalla.fondo2, (0,475))
-	nave.imprimirVida(pantalla)
+	nave.imprimirBarras(pantalla)
+	recargaLaser.imprimir(pantalla)
 	pantalla.display.blit(pantalla.fondo3, (0,475))
 	texto1 = fuente.render("X: " + str(int(nave.getACentroX())), True, (0, 0, 255))
 	texto2 = fuente.render("Y: " + str(int(nave.getACentroY())), True, (0, 0, 255))
@@ -228,7 +232,6 @@ while intro:
 	pantalla.display.blit(texto4, (665,90))
 	pantalla.display.blit(texto5, (665,105))
 	pantalla.display.blit(texto6, (665,500))
-	text21.setTexto("Recarga Laser: " + str(recargaLaser),)
 	text21.imprimir(pantalla,665,130)
 	text22.setTexto("Nave: " + str(nave.getAPos()), )
 	text22.imprimir(pantalla,665,145)

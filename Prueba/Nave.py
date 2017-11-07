@@ -5,6 +5,8 @@ from Explosion import Explosion
 
 
 FRAMES = 4 #Para la animacion del fuego
+TIEMPO_DE_ESPERA_DEL_ESCUDO = 300
+CANT_MIN_INICIAR_TURBO = 10
 
 class Nave:
 	def getWidth(self):
@@ -64,9 +66,16 @@ class Nave:
 			self.velocidad = self.minVelocidad
 		elif self.velocidad >= (self.maxVelocidad):
 			self.velocidad = self.maxVelocidad
-	
+		if self.velocidad >= 9.9:
+			if self.turboActivo == False and self.cargaturbo.getValor() < CANT_MIN_INICIAR_TURBO:
+				if self.velocidad-sumar <= 9.9:
+					self.velocidad = 9.9
+			else:
+				self.turboActivo = True
+
 	def reduceVida(self, cantidad):
-		if (self.vida.sumarValor(-cantidad) < 0):
+		self.ultimoGolpe = 0
+		if (self.vida.sumarValor(self.escudo.sumarValor(-cantidad)) < 0): 
 			self.explotando = True
 
 	def sumarContador(self):
@@ -97,8 +106,10 @@ class Nave:
 		self.infIZQ = mapa.getIndiceSector(self.getAX()-800,self.getAY()+600)
 		self.infDER = mapa.getIndiceSector(self.getAX()+800,self.getAY()+600)
 		
-	def imprimirVida(self, pantalla):
-		self.vida.imprimir(pantalla)	
+	def imprimirBarras(self, pantalla):
+		self.vida.imprimir(pantalla)
+		self.escudo.imprimir(pantalla)
+		self.cargaturbo.imprimir(pantalla)	
 
 	def imprimirNave(self, pantalla):
 		if self.velocidad < 0.5:
@@ -111,6 +122,12 @@ class Nave:
 			pantalla.display.blit(Funciones.rotarCentro(self.rapido[int(self.contador/FRAMES)], self.angulo), (self.RX, self.RY))
 		else:
 			pantalla.display.blit(Funciones.rotarCentro(self.turbo[int(self.contador/FRAMES)], self.angulo), (self.RX, self.RY))
+			if self.turboActivo == True:
+				if self.cargaturbo.sumarValor((-self.velocidad/100)-0.06) < 0:
+					self.turboActivo = False
+			else:
+				self.velocidad -= 0.1
+		self.cargaturbo.sumarValor(0.06)
 		if self.colision:
 			if self.exploto:
 				self.tiempoChoque = 40
@@ -122,6 +139,9 @@ class Nave:
 			if(self.tiempoChoque >=40):
 				self.tiempoChoque =0
 				self.colision = False
+		if self.ultimoGolpe > TIEMPO_DE_ESPERA_DEL_ESCUDO:
+			self.escudo.sumarValor(0.06)
+		self.ultimoGolpe += 1
 		self.sumarContador()
 
 	def sumarPuntos(self, puntos):
@@ -130,7 +150,7 @@ class Nave:
 	def getPuntos(self):
 		return self.puntos
 
-	def __init__(self, directorio,directorio2, anguloOrigen, velocidad, minVelocidad, maxVelocidad, origen, pantalla, vidaHeight, vidaWidth, vidaX, vidaY):
+	def __init__(self, directorio, anguloOrigen, velocidad, minVelocidad, maxVelocidad, origen, pantalla, barraHeight, barraWidth, vida, escudo, turbo):
 		self.puntos = 0
 		self.imagen = pygame.image.load(directorio+'/Nave.png').convert_alpha()
 		self.lento = []
@@ -166,7 +186,11 @@ class Nave:
 		self.velocidad = 0
 		self.sumarVelocidad(velocidad)
 		self.tiempoChoque = 0
-		self.vida = Barra(((255,0,0),(255,255,0),(0,255,0)), 0, 100, 100, vidaHeight, vidaWidth, vidaX, vidaY)
+		self.vida = Barra(((255,0,0),(255,255,0),(0,255,0)), 0, 100, 100, barraHeight, barraWidth, vida[0], vida[1])
+		self.escudo = Barra(((0,76,153),(0,102,204),(0,128,255),(51,153,255),(102,178,255)), 0, 100, 0, barraHeight, barraWidth, escudo[0], escudo[1])
+		self.cargaturbo = Barra(((0,76,153),(0,102,204),(0,128,255),(51,153,255),(102,178,255)), 0, 100, 0, barraHeight, barraWidth, turbo[0], turbo[1])
 		self.explotaNave = Explosion("Recursos/Explosion1.png")
 		self.exploto = False
 		self.explotando = False
+		self.ultimoGolpe = 0
+		self.turboActivo = False

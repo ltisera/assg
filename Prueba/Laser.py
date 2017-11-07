@@ -38,7 +38,7 @@ class Laser:
 		
 		self.mover(nave)
 		#
-		if Funciones.posicionValida(self.RX,0,650,self.RY,0,475):
+		if Funciones.posicionValida(self.RX,0,800,self.RY,0,600):
 			pantalla.display.blit(pygame.transform.rotate(self.imagen, self.angulo), (self.RX - 4.5,self.RY - 4.5))
 		else:
 			self.laserLibre = True

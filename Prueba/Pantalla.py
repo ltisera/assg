@@ -16,5 +16,5 @@ class Pantalla:
 		self.fondo1 = pygame.image.load("Recursos/1.png").convert_alpha()
 		self.fondo2 = pygame.image.load("Recursos/2.png").convert_alpha()
 		self.fondo3 = pygame.image.load("Recursos/2Mascara.png").convert_alpha()
-		self.centro = (325, 237.5)
+		self.centro = (400, 237.5)
 		

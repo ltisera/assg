@@ -30,7 +30,7 @@ class Barra:
 			X = self.X
 		if Y == 0:
 			Y = self.Y
-		pygame.draw.rect(pantalla.display, self.getColor(), (X, Y, (self.valor*self.width)/100 , self.height))
+		pygame.draw.rect(pantalla.display, self.getColor(), (X, Y, (self.valor*self.width)/100, self.height))
 
 	def __init__(self, color, minimo, maximo, valorInicial, height, width, X = 0, Y = 0):
 		self.color = []
@@ -38,7 +38,7 @@ class Barra:
 			self.color.append(i)
 		self.minimo = minimo
 		self.maximo = maximo
-		self.valor = valorInicial
+		self.setValor(valorInicial)
 		self.height = height
 		self.width = width
 		self.X = X
