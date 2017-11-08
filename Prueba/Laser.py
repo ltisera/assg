@@ -38,19 +38,13 @@ class Laser:
 		self.daño = daño
 
 	def mover(self, nave):
-
-		#EL LASER AHORA ANDA BIEN!
 		cosAngulo = math.cos(math.radians(self.angulo))
 		sinAngulo = math.sin(math.radians(self.angulo))
-		
-		self.velocidad = nave.getVelocidad() + 10 
 
+		self.RX += cosAngulo * self.velocidad
+		self.RY += -sinAngulo * self.velocidad
 		self.AX += cosAngulo * self.velocidad
 		self.AY += -sinAngulo * self.velocidad
-
-		self.RX = self.AX - nave.getAX()
-		self.RY = self.AY - nave.getAY()
-		
 
 	def imprimir(self, pantalla, nave):
 		
