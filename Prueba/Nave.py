@@ -63,6 +63,9 @@ class Nave:
 	def sumarAngulo(self, sumAngulo):
 		self.angulo = Funciones.sumarAngulo(self.angulo, sumAngulo)
 	
+	def getVelocidad(self):
+		return self.velocidad
+
 	def sumarVelocidad(self, sumar):
 		self.velocidad = self.velocidad + sumar
 		if self.velocidad <= (self.minVelocidad):
