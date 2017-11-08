@@ -130,6 +130,8 @@ text24.setTexto("PUNTOS: ")
 """
 Bucle Principal 
 """
+cadencia = 0
+
 while intro:
 
 	pantalla.display.fill((29,21,13))
@@ -248,8 +250,16 @@ while intro:
 
 	
 	pygame.display.update()
+	if (cadencia == 70):
+
+		cadencia = 1
+		enemigo.setDisparar()
+	else:
+		cadencia += 1
 
 	clock.tick(60)
+
+
 """
 Prueba merge 1... Finalizado el test
 """
