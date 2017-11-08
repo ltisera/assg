@@ -253,7 +253,7 @@ while intro:
 	while(not colision and contadorObjetos < len(lobjtmp)):
 		if(type(lobjtmp[contadorObjetos]) is Planeta):
 			#colision = pygame.sprite.collide_rect(lobjtmp[contadorObjetos], enemigo)
-			colision = Funciones.hayColision(lobjtmp[contadorObjetos], enemigo)
+			colision = Funciones.hayColisionCordenadasAbsolutas(lobjtmp[contadorObjetos], enemigo)
 		if(not colision): 
 			contadorObjetos += 1
 	#

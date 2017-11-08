@@ -82,3 +82,9 @@ def hayColision (objeto1, objeto2):
 	if (distancia(objeto1.getRCentroX(), objeto2.getRX() ,objeto1.getRCentroY(), objeto2.getRY()) <= (objeto1.imagen.get_width()/2) or distancia(objeto1.getRCentroX(), objeto2.getRX() ,objeto1.getRCentroY(), objeto2.getRY()) <= (objeto2.imagen.get_width()/2)):
 		return True
 	return False
+	
+def hayColisionCordenadasAbsolutas (objeto1, objeto2):
+	#deberiamos testear si son objetos validos
+	if (distancia(objeto1.getACentroX(), objeto2.getAX() ,objeto1.getACentroY(), objeto2.getAY()) <= (objeto1.imagen.get_width()/2) or distancia(objeto1.getACentroX(), objeto2.getAX() ,objeto1.getACentroY(), objeto2.getAY()) <= (objeto2.imagen.get_width()/2)):
+		return True
+	return False
