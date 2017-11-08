@@ -105,6 +105,7 @@ for i in range(ESTRELLA_MAXIMO):
 llaser = generarLaser(LASER_MAXIMO, DAÑO_LASER)	
 
 intro = True
+cheats = False
 
 recargaLaser = Barra(((255,0,0),(255,0,0)), 0, PASO_LASER, PASO_LASER, 8, 161, 383, 535) 
 
@@ -141,25 +142,42 @@ while intro:
 		if event.type == pygame.KEYDOWN:
 			if event.key == K_ESCAPE:
 				intro = False
+
+			if cheats == True:
 			
-			if event.key == K_m:
-				print("Imprimimos, la lista de objetos")
-				cplan = 0
-				for i in lobjtmp:
-					if(isinstance(i, Planeta)):
-						cplan += 1
-						print("soy un planetin")
-				print("Conte " + str(cplan) + "planetas entre " + str(len(lobjtmp)))
-			if event.key == K_n:
-				fsize -= 1
-				fuente = pygame.font.Font("Recursos/arial.ttf", fsize)
-				pasolaser -= 1
+				if event.key == K_m:
+					print("Imprimimos, la lista de objetos")
+					cplan = 0
+					for i in lobjtmp:
+						if(isinstance(i, Planeta)):
+							cplan += 1
+							print("soy un planetin")
+					print("Conte " + str(cplan) + "planetas entre " + str(len(lobjtmp)))
+
+				if event.key == K_n:
+					fsize -= 1
+					fuente = pygame.font.Font("Recursos/arial.ttf", fsize)
+					pasolaser -= 1
+
+				if event.key == K_o:
+					enemigo.destruirEnemigo()
 						
 		if event.type == pygame.QUIT:
 			intro = False
 	
 	#Lectura de TECLAS
 	keys = pygame.key.get_pressed()
+
+	if keys[K_LCTRL] and keys[K_LSHIFT] and keys[K_c]:
+		if cheats == False:
+			cheats = True
+			print("Cheats Mode ON")
+
+	if keys[K_LCTRL] and keys[K_LSHIFT] and keys[K_x]:
+		if cheats == False:
+			cheats = True
+			print("Cheats Mode ON")
+
 	if keys[K_a]:
 		nave.sumarAngulo(4)
 		

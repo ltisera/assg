@@ -127,7 +127,6 @@ class Enemigo:
 
 	def imprimir(self, pantalla, nave, VELOCIDAD_LASER):
 		if(self.explotando == False):
-			
 			self.mover(nave)
 			pantalla.display.blit(self.imagen, (self.RX,self.RY))
 			self.vida.imprimir(pantalla, self.RX + 10, self.RY -10)
@@ -145,7 +144,8 @@ class Enemigo:
 		
 		else:
 			#Efecto de explosion
-			if(self.explotaEnemigo.imprimir(pantalla,self.getRX(), self.getRY()) == 0):
+			self.laser.setLibre(True)
+			if(self.explotaEnemigo.imprimir(pantalla,self.AX - nave.getAX(), self.AY - nave.getAY()) == 0):
 				self.explotando = False
 				self.exploto = True
 				nave.sumarPuntos(self.puntos)
