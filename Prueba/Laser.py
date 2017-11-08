@@ -9,12 +9,30 @@ class Laser:
 		
 	def getRY(self):
 		return self.RY
+
+	def getAX(self):
+		return self.AX
+		
+	def getAY(self):
+		return self.AY
+
+	def getRCentro(self):
+		return self.RCentro
 		
 	def getRCentroX(self):
 		return self.RCentro[0]
 		
 	def getRCentroY(self):
 		return self.RCentro[1]
+
+	def getACentro(self):
+		return self.ACentro
+		
+	def getACentroX(self):
+		return self.ACentro[0]
+		
+	def getACentroY(self):
+		return self.ACentro[1]
 
 	def getWidth(self):
 		return self.width
@@ -50,6 +68,9 @@ class Laser:
 
 		self.RX = self.AX - nave.getAX()
 		self.RY = self.AY - nave.getAY()
+
+		self.ACentro = (self.RX + (self.imagen.get_width()/2),self.RY + (self.imagen.get_height()/2))
+		self.RCentro = (self.RX + (self.imagen.get_width()/2),self.RY + (self.imagen.get_height()/2))
 		
 
 	def imprimir(self, pantalla, nave):
@@ -64,10 +85,12 @@ class Laser:
 	def setLaser(self, velocidad, angulo, objeto, libre):
 		self.velocidad = velocidad
 		self.angulo = angulo
-		self.RX = objeto.getRCentroX()
-		self.RY = objeto.getRCentroY()
+		self.RX = objeto.getACentroX()
+		self.RY = objeto.getACentroY()
 		self.AX = objeto.getACentroX()
 		self.AY = objeto.getACentroY()
+		self.ACentro = (self.RX + (self.imagen.get_width()/2),self.RY + (self.imagen.get_height()/2))
+		self.RCentro = (self.RX + (self.imagen.get_width()/2),self.RY + (self.imagen.get_height()/2))
 		self.laserLibre = libre
 		
 	def __init__(self, directorio, objeto, velocidad, angulo, libre, daño):
@@ -77,11 +100,12 @@ class Laser:
 		self.angulo = angulo
 		self.velocidad = velocidad
 		
-		self.RX = objeto.getRCentroX()
-		self.RY = objeto.getRCentroY()
+		self.RX = objeto.getACentroX()
+		self.RY = objeto.getACentroY()
 		self.AX = objeto.getACentroX()
 		self.AY = objeto.getACentroY()
 
+		self.ACentro = (self.RX + (self.imagen.get_width()/2),self.RY + (self.imagen.get_height()/2))
 		self.RCentro = (self.RX + (self.imagen.get_width()/2),self.RY + (self.imagen.get_height()/2))
 		
 		self.laserLibre = libre

@@ -99,7 +99,7 @@ class Enemigo:
 				self.AY -= self.velocidad
 			elif self.getRCentroY() > nave.getRCentroY()-(self.imagen.get_height()/2):
 				self.AY += self.velocidad
-		self.ACentro = (self.RX + (self.imagen.get_width()/2),self.RY + (self.imagen.get_height()/2))
+		self.ACentro = (self.AX + (self.imagen.get_width()/2),self.AY + (self.imagen.get_height()/2))
 		self.RX = self.AX - nave.getAX()
 		self.RY = self.AY - nave.getAY()
 		self.RCentro = (self.RX + (self.imagen.get_width()/2),self.RY + (self.imagen.get_height()/2))
