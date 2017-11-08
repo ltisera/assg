@@ -66,6 +66,7 @@ VELOCIDAD_ENEMIGO = 1
 DAÑO_ENEMIGO = 10
 VIDA_ENEMIGO = 100 
 PUNTOS_ENEMIGO = 100
+VELOCIDAD_LASER_ENEMIGO = VELOCIDAD_LASER-7
 
 """
 Funciones
@@ -218,7 +219,7 @@ while intro:
 	"""
 	pasolaser = recargaLaser.sumarValor(10) 
 
-	enemigo.imprimir(pantalla, nave, VELOCIDAD_LASER)
+	enemigo.imprimir(pantalla, nave, VELOCIDAD_LASER_ENEMIGO)
 	if(enemigo.fueDestruidoPorCompleto()):
 		dificultad += 1
 		enemigo.reset(0, 0, VELOCIDAD_ENEMIGO+dificultad, DAÑO_ENEMIGO+dificultad, VIDA_ENEMIGO+dificultad, PUNTOS_ENEMIGO+dificultad) 

@@ -60,8 +60,6 @@ class Laser:
 		#EL LASER AHORA ANDA BIEN!
 		cosAngulo = math.cos(math.radians(self.angulo))
 		sinAngulo = math.sin(math.radians(self.angulo))
-		
-		self.velocidad = nave.getVelocidad() + 10 
 
 		self.AX += cosAngulo * self.velocidad
 		self.AY += -sinAngulo * self.velocidad
@@ -99,7 +97,6 @@ class Laser:
 		self.height = self.imagen.get_height()
 		self.angulo = angulo
 		self.velocidad = velocidad
-		
 		self.RX = objeto.getACentroX()
 		self.RY = objeto.getACentroY()
 		self.AX = objeto.getACentroX()

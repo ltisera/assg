@@ -124,7 +124,6 @@ class Enemigo:
 
 	def setDisparar(self):
 		self.disparar = True
-		print("Entro")
 
 	def imprimir(self, pantalla, nave, VELOCIDAD_LASER):
 		if(self.explotando == False):
@@ -135,13 +134,12 @@ class Enemigo:
 			
 			if self.laser.getLibre() == False:
 				self.laser.imprimir(pantalla, nave)
-				if Funciones.hayColision(nave, self.laser) == True:
+				if Funciones.hayColisionA(self.laser, nave) == True:
 					nave.reduceVida(self.laser.getDaño())
 					self.laser.setLibre(True)
 		
 			else:
 				if(self.disparar == True):
-					print("BOMM")
 					self.disparar = False
 					self.laser.setLaser(VELOCIDAD_LASER+self.velocidad, Funciones.calcularAnguloEntrePuntos(self.getACentroX(), self.getACentroY(), nave.getACentroX(), nave.getACentroY()), self, False)
 		
