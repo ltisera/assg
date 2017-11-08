@@ -16,6 +16,9 @@ class Barra:
 			self.valor = self.maximo	
 		return diferencia
 
+	def setMaximo(self, maximo):
+		self.maximo = maximo
+
 	def sumarValor(self, sumar):
 		return self.setValor(self.valor+sumar)
 	

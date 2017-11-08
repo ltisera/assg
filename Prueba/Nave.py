@@ -15,6 +15,9 @@ class Nave:
 	def getHeight(self):
 		return self.height
 
+	def getAngulo(self):
+		return self.angulo
+
 	def getAX(self):
 		return self.AX
 		

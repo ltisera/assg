@@ -25,6 +25,18 @@ class Laser:
 	def getCoordenadas(self):
 		return (int(self.AX), int(self.AY))
 
+	def getLibre(self):
+		return self.laserLibre	
+
+	def setLibre(self, libre):
+		self.laserLibre = libre
+
+	def getDaño(self):
+		return self.daño
+
+	def setDaño(self, daño):
+		self.daño = daño
+
 	def mover(self, nave):
 		cosAngulo = math.cos(math.radians(self.angulo))
 		sinAngulo = math.sin(math.radians(self.angulo))
@@ -34,7 +46,7 @@ class Laser:
 		self.AX += cosAngulo * self.velocidad
 		self.AY += -sinAngulo * self.velocidad
 
-	def imprimir(self, nave, pantalla):
+	def imprimir(self, pantalla, nave):
 		
 		self.mover(nave)
 		#
@@ -43,27 +55,28 @@ class Laser:
 		else:
 			self.laserLibre = True
 			
-	def setLaser(self, velocidad, nave, libre):
+	def setLaser(self, velocidad, angulo, objeto, libre):
 		self.velocidad = velocidad
-		self.angulo = nave.angulo
-		self.RX = nave.getRCentroX()
-		self.RY = nave.getRCentroY()
-		self.AX = nave.getACentroX()
-		self.AY = nave.getACentroY()
+		self.angulo = angulo
+		self.RX = objeto.getRCentroX()
+		self.RY = objeto.getRCentroY()
+		self.AX = objeto.getACentroX()
+		self.AY = objeto.getACentroY()
 		self.laserLibre = libre
 		
-	def __init__(self, directorio, nave, velocidad, angulo, libre):
+	def __init__(self, directorio, objeto, velocidad, angulo, libre, daño):
 		self.imagen = pygame.image.load(directorio).convert_alpha()
 		self.width = self.imagen.get_width()
 		self.height = self.imagen.get_height()
 		self.angulo = angulo
 		self.velocidad = velocidad
 		
-		self.RX = nave.getRCentroX()
-		self.RY = nave.getRCentroY()
-		self.AX = nave.getACentroX()
-		self.AY = nave.getACentroY()
+		self.RX = objeto.getRCentroX()
+		self.RY = objeto.getRCentroY()
+		self.AX = objeto.getACentroX()
+		self.AY = objeto.getACentroY()
 
 		self.RCentro = (self.RX + (self.imagen.get_width()/2),self.RY + (self.imagen.get_height()/2))
 		
 		self.laserLibre = libre
+		self.daño = daño

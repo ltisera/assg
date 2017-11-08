@@ -23,6 +23,8 @@ from Barra import Barra
 from Pantalla import Pantalla
 import Funciones 
 from Explosion import Explosion
+from Laser import Laser
+
 class Enemigo:
 	def destruirEnemigo(self):
 		self.explotando = True
@@ -76,65 +78,76 @@ class Enemigo:
 		return self.RCentro[1]
 
 	def boom(self):
-		self.colision = True
+		return
 		
 	def mover(self, nave):
-		self.RX -= math.cos(math.radians(nave.angulo))*nave.velocidad
-		self.RY -= -math.sin(math.radians(nave.angulo))*nave.velocidad
-		self.RCentro = (self.RX + (self.imagen.get_width()/2),self.RY + (self.imagen.get_height()/2))
 		if Funciones.distancia(self.getRCentroX(),nave.getRCentroX(),self.getRCentroY(),nave.getRCentroY()) > 100:
 			if self.getRCentroX() < nave.getRCentroX()-(self.imagen.get_width()/2):
-				self.RX += self.velocidad
+				self.AX += self.velocidad
 			elif self.getRCentroX() > nave.getRCentroX()-(self.imagen.get_width()/2):
-				self.RX -= self.velocidad
+				self.AX -= self.velocidad
 			if self.getRCentroY() < nave.getRCentroY()-(self.imagen.get_height()/2):
-				self.RY += self.velocidad
+				self.AY += self.velocidad
 			elif self.getRCentroY() > nave.getRCentroY()-(self.imagen.get_height()/2):
-				self.RY -= self.velocidad
+				self.AY -= self.velocidad
 		else:
 			if self.getRCentroX() < nave.getRCentroX()-(self.imagen.get_width()/2):
-				self.RX -= self.velocidad
+				self.AX -= self.velocidad
 			elif self.getRCentroX() > nave.getRCentroX()-(self.imagen.get_width()/2):
-				self.RX += self.velocidad
+				self.AX += self.velocidad
 			if self.getRCentroY() < nave.getRCentroY()-(self.imagen.get_height()/2):
-				self.RY -= self.velocidad
+				self.AY -= self.velocidad
 			elif self.getRCentroY() > nave.getRCentroY()-(self.imagen.get_height()/2):
-				self.RY += self.velocidad
+				self.AY += self.velocidad
+		self.ACentro = (self.RX + (self.imagen.get_width()/2),self.RY + (self.imagen.get_height()/2))
+		self.RX = self.AX - nave.getAX()
+		self.RY = self.AY - nave.getAY()
+		self.RCentro = (self.RX + (self.imagen.get_width()/2),self.RY + (self.imagen.get_height()/2))
 
 	def reduceVida(self, cantidad):
 		if (self.vida.sumarValor(-cantidad) < 0):
 			self.destruirEnemigo()
 
-	def imprimir(self, nave, pantalla, llaser):
-		if(self.explotando == False):
-			self.mover(nave)
-			Funciones.colisonVieja(self, nave)
-			
-			for i in llaser:
-				if i.laserLibre == False:
-					Funciones.colisonVieja(self, i)
+	def reset(self, X, Y, velocidad, daño, vida, puntos):
+		self.exploto = False
+		self.explotando = False
+		self.AX = X
+		self.AY = Y
+		self.ACentro = (self.AX + (self.imagen.get_width()/2),self.AY + (self.imagen.get_height()/2))
+		self.RX = 0 
+		self.RY = 0
+		self.RCentro = (self.RX + (self.imagen.get_width()/2),self.RY + (self.imagen.get_height()/2))
+		self.vida.setMaximo(vida)
+		self.vida.setValor(vida)
+		self.laser.setDaño(daño)
+		self.puntos = puntos
 
-			if (self.colision):
-				pantalla.display.blit(self.imagenColision, (self.RX,self.RY))
-			else: 
-				pantalla.display.blit(self.imagen, (self.RX,self.RY))
-				self.vida.imprimir(pantalla, self.RX + 10, self.RY -10)
+	def imprimir(self, pantalla, nave, VELOCIDAD_LASER):
+		if(self.explotando == False):
+			
+			self.mover(nave)
+			pantalla.display.blit(self.imagen, (self.RX,self.RY))
+			self.vida.imprimir(pantalla, self.RX + 10, self.RY -10)
+			if self.laser.getLibre() == False:
+				self.laser.imprimir(pantalla, nave)
+				if Funciones.hayColision(nave, self.laser) == True:
+					nave.reduceVida(self.laser.getDaño())
+					self.laser.setLibre(True)
+			else:
+				self.laser.setLaser(VELOCIDAD_LASER+self.velocidad, Funciones.calcularAnguloEntrePuntos(self.getACentroX(), self.getACentroY(), nave.getACentroX(), nave.getACentroY()), self, False)
+	
 		else:
 			#Efecto de explosion
 			if(self.explotaEnemigo.imprimir(pantalla,self.getRX(), self.getRY()) == 0):
-				self.vida.setValor(100)
 				self.explotando = False
-				self.RX = -200
-				self.RY = -200
-				nave.sumarPuntos(100)
+				self.exploto = True
+				nave.sumarPuntos(self.puntos)
 
-	def __init__(self, directorio, directorio2, X, Y, velocidad):
+	def __init__(self, directorio, directorio2, X, Y, velocidad, daño, vida, puntos):
 		self.explotaEnemigo = Explosion("Recursos/Explosion1.png")
 		self.imagen = pygame.image.load(directorio).convert_alpha()
 		self.exploto = False
 		self.explotando = False
-		self.imagenColision = pygame.image.load(directorio2).convert_alpha()
-		self.colision = False
 		self.width = self.imagen.get_width()
 		self.height = self.imagen.get_height()
 		self.AX = X
@@ -144,5 +157,7 @@ class Enemigo:
 		self.RY = Y
 		self.RCentro = (self.RX + (self.imagen.get_width()/2),self.RY + (self.imagen.get_height()/2))
 		self.velocidad = velocidad
-		self.vida = Barra(((255,0,0),(255,255,0),(0,255,0)), 0, 100, 100, 3, 30)
+		self.vida = Barra(((255,0,0),(255,255,0),(0,255,0)), 0, vida, vida, 3, 30)
+		self.laser = Laser(directorio2, self, 0, 0, True, daño)
+		self.puntos = puntos
 

@@ -26,6 +26,10 @@ def sumarAngulo(angulo, anguloSumar):
 		angulo += 360
 	return angulo
 
+def calcularAnguloEntrePuntos(XO, YO, X, Y):
+	#implementar
+	return  1
+
 """
 posicionValida(x, minX, maxX, y, minY, maxY):
 	True si Xe Y se encuentran dentro del rango min - max
@@ -66,14 +70,14 @@ def colisonVieja(objeto1, objeto2):
 		or (isinstance(objeto1, Planeta.Planeta) and isinstance(objeto2, Laser.Laser))):
 		if (distancia(objeto1.getRCentroX(), objeto2.getRX(),objeto1.getRCentroY(), objeto2.getRY()) <= (objeto1.getWidth()/2)):
 			if (isinstance(objeto2, Laser.Laser)):
-				objeto2.laserLibre = True
+				objeto2.setLibre(True)
 			else:
-				objeto1.laserLibre = True
+				objeto1.setLibre(True)
 """
 	if  ((isinstance(objeto1, Laser.Laser) and isinstance(objeto2, Enemigo.Enemigo)) 
 		or (isinstance(objeto1, Enemigo.Enemigo) and isinstance(objeto2, Laser.Laser))):
 		if (distancia(objeto1.getRCentroX(), objeto2.getRX(),objeto1.getRCentroY(), objeto2.getRY()) <= (objeto1.imagen.get_width()/2)):
-			objeto2.laserLibre = True
+			objeto2.setLibre(True)
 """
 """ Esta es la nueva Colision que hay que usar
 """

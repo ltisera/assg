@@ -60,15 +60,21 @@ LASER_MAXIMO = 10
 BLANCO = (255,255,255)
 
 PASO_LASER = 100
+DAÑO_LASER = 10
+
+VELOCIDAD_ENEMIGO = 1
+DAÑO_ENEMIGO = 10
+VIDA_ENEMIGO = 100 
+PUNTOS_ENEMIGO = 100
 
 """
 Funciones
 """
 	
-def generarLaser(LASER_MAXIMO):
+def generarLaser(LASER_MAXIMO, DAÑO_LASER):
 	listaLaser = []
 	for i in range(LASER_MAXIMO):			
-		listaLaser.append(Laser("Recursos/laser.png", nave, 0, 0, True))
+		listaLaser.append(Laser("Recursos/laser.png", nave, 0, 0, True, DAÑO_LASER))
 	return listaLaser
 	
 """
@@ -85,7 +91,9 @@ lobjtmp = mapa.getListaObjetos()
 
 nave = Nave("Recursos/Nave", 0, 0.1, VELOCIDAD_MINIMA, VELOCIDAD_MAXIMA, (0,0), pantalla, 8, 161, (183, 509), (183, 535), (383, 509))
 
-enemigo = Enemigo("Recursos/Enemigo.png", "Recursos/kaboom.png", 550, 550, 1)	
+enemigo = Enemigo("Recursos/Enemigo.png", "Recursos/laser2.png", 0, 0, VELOCIDAD_ENEMIGO, DAÑO_ENEMIGO, VIDA_ENEMIGO, PUNTOS_ENEMIGO)	
+
+dificultad = 0
 
 #explosion = Explosion("Recursos/Explosion1.png")
 
@@ -93,7 +101,7 @@ lestrella = []
 for i in range(ESTRELLA_MAXIMO):
 	lestrella.append(Estrella())
 	
-llaser = generarLaser(LASER_MAXIMO)	
+llaser = generarLaser(LASER_MAXIMO, DAÑO_LASER)	
 
 intro = True
 
@@ -165,8 +173,8 @@ while intro:
 		if pasolaser > 0:
 			recargaLaser.setValor(0)
 			for i in llaser:
-				if i.laserLibre == True:
-					i.setLaser(VELOCIDAD_LASER, nave, False)
+				if i.getLibre() == True:
+					i.setLaser(VELOCIDAD_LASER, nave.getAngulo(), nave, False)
 					break
 		
 	#Movimiento
@@ -197,21 +205,21 @@ while intro:
 	pygame.draw.line(pantalla.display,BLANCO,[0-nave.AX,mapa.areaMaxima-nave.AY],[mapa.areaMaxima-nave.AX,mapa.areaMaxima-nave.AY],5)
 	
 	for i in llaser:
-		if i.laserLibre == False:
-			i.imprimir(nave, pantalla)
+		if i.getLibre() == False:
+			i.imprimir(pantalla, nave)
 			if(Funciones.hayColision(enemigo, i) == True):
-				enemigo.reduceVida(10)
-				i.laserLibre = True
+				enemigo.reduceVida(i.getDaño())
+				i.setLibre(True)
 	"""
 	Logica movimientos y colisiones
 
 	"""
 	pasolaser = recargaLaser.sumarValor(10) 
 
-	enemigo.imprimir(nave, pantalla, llaser)
+	enemigo.imprimir(pantalla, nave, VELOCIDAD_LASER)
 	if(enemigo.fueDestruidoPorCompleto()):
-		nave.sumarPuntos(100)
-		enemigo = Enemigo("Recursos/Enemigo.png", "Recursos/kaboom.png", 550, 550, 1) 
+		dificultad += 1
+		enemigo.reset(0, 0, VELOCIDAD_ENEMIGO+dificultad, DAÑO_ENEMIGO+dificultad, VIDA_ENEMIGO+dificultad, PUNTOS_ENEMIGO+dificultad) 
 	nave.imprimir(pantalla)
 	#explosion.imprimir(pantalla)
 	pantalla.display.blit(pantalla.fondo1, (625,0))
