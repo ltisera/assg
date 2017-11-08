@@ -118,7 +118,7 @@ class Nave:
 		else:
 			pantalla.display.blit(Funciones.rotarCentro(self.turbo[int(self.contador/FRAMES)], self.angulo), (self.RX, self.RY))
 		if not self.colision and Funciones.hayColision(self, laserEnemigo):
-			self.reduceVida(5)
+			self.reduceVida(0)
 			laserEnemigo.laserLibre = True
 		if self.colision:
 			if self.exploto:
@@ -133,6 +133,7 @@ class Nave:
 			if(self.tiempoChoque >=40):
 				self.tiempoChoque =0
 				self.colision = False
+				self.velocidad = 0.1
 		self.sumarContador()
 		
 	def __init__(self, directorio,directorio2, anguloOrigen, velocidad, minVelocidad, maxVelocidad, origen, pantalla):

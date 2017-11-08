@@ -29,10 +29,10 @@ class Laser:
 		cosAngulo = math.cos(math.radians(self.angulo))
 		sinAngulo = math.sin(math.radians(self.angulo))
 
-		self.RX += (cosAngulo * self.velocidad)
-		self.RY += (-sinAngulo * self.velocidad) 
 		self.AX += (cosAngulo * self.velocidad) 
-		self.AY += (-sinAngulo * self.velocidad) 
+		self.AY -= (sinAngulo * self.velocidad) 
+		self.RX = self.AX - nave.AX
+		self.RY = self.AY - nave.AY 
 
 	def imprimir(self, nave, pantalla):
 		
@@ -43,30 +43,30 @@ class Laser:
 		else:
 			self.laserLibre = True
 			
-	def setLaser(self, rx, ry, ax, ay, velocidad, angulo, libre):
+	def setLaser(self, objeto, velocidad, angulo, libre):
 		self.velocidad = velocidad
 		self.angulo = angulo
-		self.RX = rx
-		self.RY = ry
-		self.AX = ax
-		self.AY = ay
+		self.RX = objeto.getRCentroX()
+		self.RY = objeto.getRCentroY()
+		self.AX = objeto.getACentroX()
+		self.AY = objeto.getACentroY()
 		self.laserLibre = libre
 		
 		
 		
 		
 		
-	def __init__(self, directorio, nave, velocidad, angulo, libre):
+	def __init__(self, directorio, objeto, velocidad, angulo, libre):
 		self.imagen = pygame.image.load(directorio).convert_alpha()
 		self.width = self.imagen.get_width()
 		self.height = self.imagen.get_height()
 		self.angulo = angulo
 		self.velocidad = velocidad
 		
-		self.RX = nave.getRCentroX()
-		self.RY = nave.getRCentroY()
-		self.AX = nave.getACentroX()
-		self.AY = nave.getACentroY()
+		self.RX = objeto.getRCentroX()
+		self.RY = objeto.getRCentroY()
+		self.AX = objeto.getACentroX()
+		self.AY = objeto.getACentroY()
 
 		self.RCentro = (self.RX + (self.imagen.get_width()/2),self.RY + (self.imagen.get_height()/2))
 		

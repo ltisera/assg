@@ -59,7 +59,7 @@ Constantes de configuracion
 
 VELOCIDAD_MINIMA = 0.2
 VELOCIDAD_MAXIMA = 15
-VELOCIDAD_LASER = 1
+VELOCIDAD_LASER = 10
 
 OBJETOS_MAXIMOS = 200
 DISTANCIA_MINIMA = 550
@@ -126,7 +126,7 @@ text23.setTexto("PN:")
 timepoLuegoDeExplosion = 0
 tiempoDeSpawneo = 0
 imprimirNave = True
-laserEnemigo = Laser("Recursos/laser.png",nave,VELOCIDAD_LASER+enemigo.velocidad,nave.angulo,False)
+laserEnemigo = Laser("Recursos/laserEnemigo.png",enemigo,VELOCIDAD_LASER+enemigo.velocidad,nave.angulo,False)
 """
 Bucle Principal 
 """
@@ -137,7 +137,7 @@ while intro:
 		if(timepoLuegoDeExplosion >=60):
 			nave = Nave("Recursos/Nave", "Recursos/kaboom.png", 0, 0.1, VELOCIDAD_MINIMA, VELOCIDAD_MAXIMA, (0,0), pantalla)
 			enemigo = Enemigo("Recursos/Enemigo.png", "Recursos/kaboom.png", 550, 550, 1)
-			laserEnemigo = Laser("Recursos/laser.png",nave,VELOCIDAD_LASER+enemigo.velocidad,nave.angulo,False)
+			laserEnemigo = Laser("Recursos/laserEnemigo.png",enemigo,VELOCIDAD_LASER+enemigo.velocidad,nave.angulo,False)
 			timepoLuegoDeExplosion = 0
 			tiempoDeSpawneo += 1
 			imprimirNave = True
@@ -146,6 +146,11 @@ while intro:
 		if(tiempoDeSpawneo>=120):
 			tiempoDeSpawneo = 0
 			imprimirNave = True
+	
+	if enemigo.destruidoPorCompleto:
+		enemigo = Enemigo("Recursos/Enemigo.png", "Recursos/kaboom.png", 550, 550, 1)
+		laserEnemigo = Laser("Recursos/laserEnemigo.png",enemigo,VELOCIDAD_LASER+enemigo.velocidad,nave.angulo,False)
+		enemigo.destruidoPorCompleto = False
 
 
 	pantalla.display.fill((29,21,13))
@@ -191,7 +196,8 @@ while intro:
 				recargaLaser = 0
 				for i in llaser:
 					if i.laserLibre == True:
-						i.setLaser(nave.RX, nave.RY, nave.AX, nave.AY, VELOCIDAD_LASER, nave.angulo, False)
+						
+						i.setLaser(nave, VELOCIDAD_LASER, nave.angulo, False)
 						break
 			else:
 				recargaLaser += 1
@@ -236,7 +242,7 @@ while intro:
 	
 	
 	
-	enemigo.imprimir(nave, pantalla, llaser)
+
 	#
 	#
 	### ENEMIGO COLISIONA CON ALGUN PLANETA?
@@ -260,7 +266,14 @@ while intro:
 		print("ENEMIGO COLISIONÓ contra lobjtmp[" + str(int(contadorObjetos))+"] de tipo"+ str(type(lobjtmp[contadorObjetos])))
 		#enemigo.evitarColision(nave, lobjtmp[contadorObjetos])
 	
+	
 	enemigo.mover(nave)
+	if laserEnemigo.laserLibre == False:
+		laserEnemigo.imprimir(nave, pantalla)
+	else:
+		laserEnemigo.setLaser(enemigo, VELOCIDAD_LASER+enemigo.velocidad, laserEnemigo.traerAnguloLaserEnemigo(enemigo,pantalla), False)
+	enemigo.imprimir(nave, pantalla, llaser)
+	
 	
 	#nave.imprimir(pantalla)
 	#explosion.imprimir(pantalla)
@@ -279,10 +292,7 @@ while intro:
 	texto3 = fuente.render("Puntos: " + str(enemigo.getPuntos()), True, (0, 0, 255))
 	texto4 = fuente.render("FPS: " + str(clock.get_fps()), True, (0, 0, 255))
 	texto5 = fuente.render("Velocidad: " + str(int(nave.velocidad)), True, (0, 0, 255))
-	if laserEnemigo.laserLibre == False:
-		laserEnemigo.imprimir(nave, pantalla)
-	else:
-		laserEnemigo.setLaser(enemigo.RX, enemigo.RY, enemigo.AX, enemigo.AY, VELOCIDAD_LASER+enemigo.velocidad, laserEnemigo.traerAnguloLaserEnemigo(enemigo,pantalla), False)
+
 	#lock 125
 	pantalla.display.blit(texto1, (665,45))
 	pantalla.display.blit(texto2, (665,60))

@@ -82,25 +82,38 @@ class Enemigo:
 	def mover(self, nave):
 		self.RX -= math.cos(math.radians(nave.angulo))*nave.velocidad
 		self.RY -= -math.sin(math.radians(nave.angulo))*nave.velocidad
+		self.AX -= math.cos(math.radians(nave.angulo))*nave.velocidad
+		self.AY -= -math.sin(math.radians(nave.angulo))*nave.velocidad
+		
 		self.RCentro = (self.RX + (self.imagen.get_width()/2),self.RY + (self.imagen.get_height()/2))
+		self.ACentro = (self.AX + (self.imagen.get_width()/2),self.AY + (self.imagen.get_height()/2))
+		
 		if Funciones.distancia(self.getRCentroX(),nave.getRCentroX(),self.getRCentroY(),nave.getRCentroY()) > 100:
 			if self.getRCentroX() < nave.getRCentroX()-(self.imagen.get_width()/2):
 				self.RX += self.velocidad
+				self.AX += self.velocidad
 			elif self.getRCentroX() > nave.getRCentroX()-(self.imagen.get_width()/2):
 				self.RX -= self.velocidad
+				self.AX -= self.velocidad
 			if self.getRCentroY() < nave.getRCentroY()-(self.imagen.get_height()/2):
 				self.RY += self.velocidad
+				self.AY += self.velocidad
 			elif self.getRCentroY() > nave.getRCentroY()-(self.imagen.get_height()/2):
 				self.RY -= self.velocidad
+				self.AY -= self.velocidad
 		else:
 			if self.getRCentroX() < nave.getRCentroX()-(self.imagen.get_width()/2):
 				self.RX -= self.velocidad
+				self.AX -= self.velocidad
 			elif self.getRCentroX() > nave.getRCentroX()-(self.imagen.get_width()/2):
 				self.RX += self.velocidad
+				self.AX += self.velocidad
 			if self.getRCentroY() < nave.getRCentroY()-(self.imagen.get_height()/2):
 				self.RY -= self.velocidad
+				self.AY -= self.velocidad
 			elif self.getRCentroY() > nave.getRCentroY()-(self.imagen.get_height()/2):
 				self.RY += self.velocidad
+				self.AY += self.velocidad
 
 	def impBarraVida(self, vida, pantalla):
 		colorBarra = (255,0,0)
@@ -138,9 +151,7 @@ class Enemigo:
 			print("Explota")
 			if(self.explotaEnemigo.imprimir(pantalla,self.getRX(), self.getRY()) == 0):
 				self.destruido = False
-				self.vida = 100
-				self.RX = -200
-				self.RY = -200
+				self.destruidoPorCompleto = True
 				self.setPuntos(100)
 	def evitarColision(self, nave, planeta):
 	
@@ -238,3 +249,4 @@ class Enemigo:
 		self.vida = 100
 		self.destruido = False
 		self.puntos = 0
+		self.destruidoPorCompleto = False
