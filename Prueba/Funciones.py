@@ -27,8 +27,7 @@ def sumarAngulo(angulo, anguloSumar):
 	return angulo
 
 def calcularAnguloEntrePuntos(XO, YO, X, Y):
-	#implementar
-	return  1
+	return math.atan2(-Y+YO,X-OX)*(180*math.pi)
 
 """
 posicionValida(x, minX, maxX, y, minY, maxY):
