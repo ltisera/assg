@@ -1,0 +1,5 @@
+ASSG (A Simple Space Game)
+Eres el capitán de una nave espacial. 
+Mientras navegabas por el espacio, unos aliens reconocieron que no perteneces a ese lugar, por lo tanto te comienzan a seguir declarando la guerra entre su especie y la humana! 
+Luego de destruirlos te encuentras con la nave madre, que también lograste derrotar.
+Justo después de cumplir tu misión y salvar la raza humana, te despiertas en una habitación, tu habitación. Al parecer fue todo un sueño…
