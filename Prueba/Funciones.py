@@ -43,6 +43,12 @@ def lugarLibre(objeto, lobjeto, DISTANCIA_MINIMA):
 			libre = False
 	return libre
 		
+def setValor(Valor, minValor, maxValor):
+	if Valor > maxValor:
+		Valor = maxValor
+	elif Valor < minValor:
+		Valor = minValor
+	return Valor
 			
 def colisonVieja(objeto1, objeto2):
 	

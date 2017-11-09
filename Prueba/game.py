@@ -48,6 +48,8 @@ from pygame.locals import *
 Constantes de configuracion
 """
 
+AREA_MAXIMA = 20000
+
 VELOCIDAD_MINIMA = 0.1
 VELOCIDAD_MAXIMA = 200
 VELOCIDAD_LASER = 10
@@ -88,7 +90,7 @@ Juego
 
 pygame.init()
 
-pantalla = Pantalla()
+pantalla = Pantalla(AREA_MAXIMA)
 
 fsize = 12
 fuente = pygame.font.Font("Recursos/arial.ttf", fsize)
@@ -104,7 +106,7 @@ while intro:
 	Inicializacion de variables
 	"""
 	if reset:
-		mapa = Mapa(20000, 5, OBJETOS_MAXIMOS, DISTANCIA_MINIMA)
+		mapa = Mapa(AREA_MAXIMA, 5, OBJETOS_MAXIMOS, DISTANCIA_MINIMA)
 
 		lobjtmp = mapa.getListaObjetos()
 
@@ -147,25 +149,17 @@ while intro:
 				Menu.pausa(pantalla)
 
 			if cheats == True:
-			
-				if event.key == K_m:
-					print("Imprimimos, la lista de objetos")
-					cplan = 0
-					for i in lobjtmp:
-						if(isinstance(i, Planeta)):
-							cplan += 1
-							print("soy un planetin")
-					print("Conte " + str(cplan) + "planetas entre " + str(len(lobjtmp)))
-
-				if event.key == K_n:
-					fsize -= 1
-					fuente = pygame.font.Font("Recursos/arial.ttf", fsize)
-					pasolaser -= 1
 
 				if event.key == K_o:
-					for i in lenemigo:
-						i.destruirEnemigo()
-						
+					if peleaBoss:
+						boss.destruirEnemigo()
+					else:
+						for i in lenemigo:
+							i.destruirEnemigo()
+
+				if event.key == K_i:
+					nave.sumarVidas(1)
+
 		if event.type == pygame.QUIT:
 			intro = False
 	
@@ -203,7 +197,7 @@ while intro:
 					break
 		
 	#Movimiento
-	nave.mover(mapa)
+	nave.mover(mapa, cheats)
 	
 	#Impresion
 	for i in lestrella:
@@ -252,8 +246,6 @@ while intro:
 			lenemigo.remove(i) #Destruye al enemigo muerto
 
 	if nave.gameOver():
-		#intro = False
-		#if Menu.gameOver(pantalla) == true: #Si no continua vuelve a la pantalla original
 		Menu.gameOver(pantalla, nave.getPuntos())
 		intro, reset = Menu.main(pantalla)
 	else:
@@ -272,8 +264,8 @@ while intro:
 	texto5 = fuente.render("Velocidad: " + str(nave.velocidad), True, COLOR_TEXTO)
 	texto6 = fuente.render("Nave: " + str(nave.getAPos()), True, COLOR_TEXTO)
 	texto7 = fuente.render("Laser[0]: " + str(llaser[0].getCoordenadas()), True, COLOR_TEXTO)
-	texto8 = fuente.render("PUNTOS: " + str(nave.getPuntos()), True, COLOR_TEXTO)
-	texto9 = fuente.render("VIDAS: " + str(nave.vidas), True, COLOR_TEXTO)
+	texto8 = fuente.render("PUNTOS: " + str(nave.getPuntos()), True, (0,0,0))
+	texto9 = fuente.render("VIDAS: " + str(nave.getVidas()), True, (0,0,0))
 
 	pantalla.display.blit(texto1, (645,45))
 	pantalla.display.blit(texto2, (645,60))
@@ -282,8 +274,8 @@ while intro:
 	pantalla.display.blit(texto5, (645,105))
 	pantalla.display.blit(texto6, (645,130))
 	pantalla.display.blit(texto7, (645,145))
-	pantalla.display.blit(texto8, (645,500))
-	pantalla.display.blit(texto9, (645,520))
+	pantalla.display.blit(texto8, (645,505))
+	pantalla.display.blit(texto9, (645,530))
 
 	#Clock de generacion de enemigos y boss
 	

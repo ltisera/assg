@@ -20,10 +20,16 @@ class Nave:
 
 	def getAX(self):
 		return self.AX
-		
+	
+	def setAX(self, X, minX, maxX):
+		self.AX = Funciones.setValor(X, minX-self.getRX(), maxX-self.getRX())
+
 	def getAY(self):
 		return self.AY
 		
+	def setAY(self, Y, minY, maxY):
+		self.AY = Funciones.setValor(Y, minY-self.getRY(), maxY-self.getRY())
+
 	def getAPos(self):
 		return(int(self.AX),int(self.AY))
 	
@@ -60,6 +66,9 @@ class Nave:
 	def setPuntos(self, puntosNuevo):
 		self.puntos = puntosNuevo
 
+	def getVidas(self):
+		return self.vidas
+
 	def sumarAngulo(self, sumAngulo):
 		self.angulo = Funciones.sumarAngulo(self.angulo, sumAngulo)
 	
@@ -78,6 +87,9 @@ class Nave:
 					self.velocidad = 9.9
 			else:
 				self.turboActivo = True
+
+	def sumarVidas(self, cantidad):
+		self.vidas += cantidad
 
 	def reduceVida(self, cantidad):
 		self.ultimoGolpe = 0
@@ -107,9 +119,13 @@ class Nave:
 				self.vida.setValor(100)
 				self.vidas -= 1
 		
-	def mover(self, mapa):
-		self.AX += math.cos(math.radians(self.angulo))*self.velocidad
-		self.AY += -math.sin(math.radians(self.angulo))*self.velocidad
+	def mover(self, mapa, cheats):
+		if cheats == True:
+			self.AX += math.cos(math.radians(self.angulo))*self.velocidad
+			self.AY -= math.sin(math.radians(self.angulo))*self.velocidad
+		else:
+			self.setAX(self.AX + math.cos(math.radians(self.angulo))*self.velocidad,0,mapa.getAreaMaxima())
+			self.setAY(self.AY - math.sin(math.radians(self.angulo))*self.velocidad,0,mapa.getAreaMaxima())
 		self.ACentro = (self.AX + self.getRCentroX(), self.AY + self.getRCentroY())
 		self.supIZQ = mapa.getIndiceSector(self.getAX()-800,self.getAY()-600)
 		self.supDER = mapa.getIndiceSector(self.getAX()+800,self.getAY()-600)

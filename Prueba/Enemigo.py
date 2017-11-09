@@ -43,9 +43,23 @@ class Enemigo:
 
 	def getAX(self):
 		return self.AX
-		
+
+	def setAX(self, X, minX, maxX):
+		self.AX = Funciones.setValor(X, minX+50, maxX-100)
+
 	def getAY(self):
 		return self.AY
+		
+	def setAY(self, Y, minY, maxY):
+		self.AY = Funciones.setValor(Y, minY+50, maxY-50)
+
+	def setCordenadas(self, nave, AX, AY, maximo):
+		self.setAX(AX,0,maximo)
+		self.setAY(AY,0,maximo)
+		self.ACentro = (self.AX + (self.imagen.get_width()/2),self.AY + (self.imagen.get_height()/2))
+		self.RX = self.AX - nave.getAX()
+		self.RY = self.AY - nave.getAY()
+		self.RCentro = (self.RX + (self.imagen.get_width()/2),self.RY + (self.imagen.get_height()/2))
 		
 	def getAPos(self):
 		return(int(self.AX),int(self.AY))
@@ -99,10 +113,6 @@ class Enemigo:
 				self.AY -= self.velocidad
 			elif self.getRCentroY() > nave.getRCentroY()-(self.imagen.get_height()/2):
 				self.AY += self.velocidad
-		self.ACentro = (self.AX + (self.imagen.get_width()/2),self.AY + (self.imagen.get_height()/2))
-		self.RX = self.AX - nave.getAX()
-		self.RY = self.AY - nave.getAY()
-		self.RCentro = (self.RX + (self.imagen.get_width()/2),self.RY + (self.imagen.get_height()/2))
 
 	def reduceVida(self, cantidad):
 		if (self.vida.sumarValor(-cantidad) < 0):
@@ -125,7 +135,7 @@ class Enemigo:
 	def setDisparar(self):
 		self.disparar = True
 	
-	def cercaDeOtroEnemigo(self, lenemigo, nave):
+	def cercaDeOtroEnemigo(self, lenemigo):
 		cerca = False
 		for i in lenemigo:
 			if(Funciones.distancia(self.getACentroX(), i.getACentroX(), self.getACentroY(), i.getACentroY()) <= 100 and (self.ACentro != i.ACentro)):
@@ -158,18 +168,14 @@ class Enemigo:
 				
 				if(self.AX < i.AX and self.AY == i.AY):
 					self.AX += self.velocidad
-				
-				self.ACentro = (self.AX + (self.imagen.get_width()/2),self.AY + (self.imagen.get_height()/2))
-				self.RX = self.AX - nave.getAX()
-				self.RY = self.AY - nave.getAY()
-				self.RCentro = (self.RX + (self.imagen.get_width()/2),self.RY + (self.imagen.get_height()/2))
-		
+
 		return cerca
 
 	def imprimir(self, pantalla, nave, VELOCIDAD_LASER, lenemigo):
 		if(self.explotando == False):
-			if(not self.cercaDeOtroEnemigo(lenemigo, nave)):
+			if(not self.cercaDeOtroEnemigo(lenemigo)):
 				self.mover(nave)
+			self.setCordenadas(nave, self.AX, self.AY, pantalla.getAreaMaxima())
 			pantalla.display.blit(self.imagen, (self.RX,self.RY))
 			self.vida.imprimir(pantalla, self.RX + 10, self.RY -10)
 			

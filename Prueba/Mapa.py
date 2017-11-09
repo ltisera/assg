@@ -5,6 +5,9 @@ from Agujero import Agujero
 import random
 
 class  Mapa:
+	def getAreaMaxima(self):
+		return self.areaMaxima
+		
 	#Devuelve la lista de objetos generada para cada sector
 	def generarObjetos(self, OBJETOS_MAXIMOS, DISTANCIA_MINIMA):
 		self.listaObjetos = []
