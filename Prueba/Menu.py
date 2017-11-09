@@ -24,15 +24,37 @@ def creditos(pantalla):
 		pantalla.display.blit(fondoc,(0,0))
 		pygame.display.update()
 
-def ganaste(pantalla):
-	#Implementar menu o algo que diga ganaste
-	creditos()
+def mostrarPuntos(pantalla, puntos):
+	COLOR_TEXTO = (0,255,0)
+	fuente = pygame.font.Font("Recursos/arial.ttf", 48)
+	puntajeFinal = fuente.render("PUNTAJE FINAL: " + str(int(puntos)), True, COLOR_TEXTO)
+	pantalla.display.blit(puntajeFinal, (50,300))
 
-def gameOver():
-	#Implementar continuar o volver a menu
-	#Si coninua devolver False
-	#Si NO continua mostrar creditos y devolver True
-	return
+def pantallaFinal(pantalla, puntos, mensaje, posicionDeMensaje):
+	fondoFinal = pygame.image.load("Recursos/Menu/fondoFinal.jpg")
+	COLOR_TEXTO = (0,255,0)
+	fuente = pygame.font.Font("Recursos/arial.ttf", 48)
+	fuente2 = pygame.font.Font("Recursos/arial.ttf", 20)
+	textoFinal = fuente.render(mensaje, True, COLOR_TEXTO)
+	textoContinuar = fuente2.render("Presione la tecla ENTER...", True, COLOR_TEXTO)
+	continuar = False
+	while not continuar:
+		for event in pygame.event.get():
+			if event.type == pygame.KEYDOWN:
+				if event.key == pygame.K_RETURN:
+					continuar = True
+		pantalla.display.blit(fondoFinal,(0,0))
+		pantalla.display.blit(textoFinal, (posicionDeMensaje,50))
+		pantalla.display.blit(textoContinuar, (50,500))
+		mostrarPuntos(pantalla, puntos)
+		pygame.display.update()
+	creditos(pantalla)
+
+def ganaste(pantalla, puntos):
+	pantallaFinal(pantalla, puntos, "¡GANASTE!", 250)
+
+def gameOver(pantalla, puntos):
+	pantallaFinal(pantalla, puntos, "¡GAME OVER!", 200)
 	
 def main(pantalla):
     ancho = 800

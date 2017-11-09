@@ -252,9 +252,10 @@ while intro:
 			lenemigo.remove(i) #Destruye al enemigo muerto
 
 	if nave.gameOver():
-		intro = False
-		if Menu.gameOver(pantalla) == true: #Si no continua vuelve a la pantalla original
-			intro, reset = Menu.main(pantalla)
+		#intro = False
+		#if Menu.gameOver(pantalla) == true: #Si no continua vuelve a la pantalla original
+		Menu.gameOver(pantalla, nave.getPuntos())
+		intro, reset = Menu.main(pantalla)
 	else:
 		nave.imprimir(pantalla)
 	#explosion.imprimir(pantalla)
@@ -292,7 +293,7 @@ while intro:
 			peleaBoss = True
 		else:
 			if(boss.fueDestruidoPorCompleto()):
-				Menu.ganaste(pantalla)
+				Menu.ganaste(pantalla, nave.getPuntos())
 				intro, reset = Menu.main(pantalla)
 			else:
 				boss.imprimir(pantalla, nave, VELOCIDAD_LASER_ENEMIGO, lenemigo)	
