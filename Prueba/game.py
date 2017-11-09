@@ -1,4 +1,4 @@
-﻿"""
+"""
 TO-DO:
 
 22/08/2017
@@ -28,7 +28,7 @@ por que ya voy mareado con este tema de lo que se mueve y lo que no
 
 """
 
-import pygame, sys, math
+import pygame, sys, math, random, time
 import Funciones
 from Explosion import Explosion
 
@@ -75,7 +75,7 @@ Funciones
 def generarLaser(LASER_MAXIMO, DAÑO_LASER):
 	listaLaser = []
 	for i in range(LASER_MAXIMO):			
-		listaLaser.append(Laser("Recursos/laser.png", nave, 0, 0, True, DAÑO_LASER))
+		listaLaser.append(Laser("Recursos/laser.png", nave, 0, 0, True, DAÑO_LASER, VELOCIDAD_LASER))
 	return listaLaser
 	
 """
@@ -92,7 +92,7 @@ lobjtmp = mapa.getListaObjetos()
 
 nave = Nave("Recursos/Nave", 0, 0.1, VELOCIDAD_MINIMA, VELOCIDAD_MAXIMA, (0,0), pantalla, 8, 161, (183, 509), (183, 535), (383, 509))
 
-enemigo = Enemigo("Recursos/Enemigo.png", "Recursos/laser2.png", 0, 0, VELOCIDAD_ENEMIGO, DAÑO_ENEMIGO, VIDA_ENEMIGO, PUNTOS_ENEMIGO)	
+lenemigo = []
 
 dificultad = 0
 
@@ -113,7 +113,9 @@ pasolaser = 0
 
 clock = pygame.time.Clock()
 clockLaser = pygame.time.Clock()
-		
+cadencia = time.clock()
+timeEnemigo = time.clock() #Timer de generacion de enemigo
+
 """
 Texto 
 """
@@ -132,7 +134,6 @@ text24.setTexto("PUNTOS: ")
 """
 Bucle Principal 
 """
-cadencia = 0
 
 while intro:
 
@@ -160,7 +161,8 @@ while intro:
 					pasolaser -= 1
 
 				if event.key == K_o:
-					enemigo.destruirEnemigo()
+					for i in lenemigo:
+						i.destruirEnemigo()
 						
 		if event.type == pygame.QUIT:
 			intro = False
@@ -174,9 +176,9 @@ while intro:
 			print("Cheats Mode ON")
 
 	if keys[K_LCTRL] and keys[K_LSHIFT] and keys[K_x]:
-		if cheats == False:
-			cheats = True
-			print("Cheats Mode ON")
+		if cheats == True:
+			cheats = False
+			print("Cheats Mode Off")
 
 	if keys[K_a]:
 		nave.sumarAngulo(4)
@@ -228,19 +230,22 @@ while intro:
 	for i in llaser:
 		if i.getLibre() == False:
 			i.imprimir(pantalla, nave)
-			if(Funciones.hayColision(enemigo, i) == True):
-				enemigo.reduceVida(i.getDaño())
-				i.setLibre(True)
+			for e in lenemigo:
+				if(Funciones.hayColision(e, i) == True):
+					e.reduceVida(i.getDaño())
+					i.setLibre(True)
 	"""
 	Logica movimientos y colisiones
 
 	"""
 	pasolaser = recargaLaser.sumarValor(10) 
+	
+	for i in lenemigo:	
+		i.imprimir(pantalla, nave, VELOCIDAD_LASER_ENEMIGO)
+		if(i.fueDestruidoPorCompleto()):
+			dificultad += 1
+			lenemigo.remove(i) #Destruye al enemigo muerto
 
-	enemigo.imprimir(pantalla, nave, VELOCIDAD_LASER_ENEMIGO)
-	if(enemigo.fueDestruidoPorCompleto()):
-		dificultad += 1
-		enemigo.reset(0, 0, VELOCIDAD_ENEMIGO+dificultad, DAÑO_ENEMIGO+dificultad, VIDA_ENEMIGO+dificultad, PUNTOS_ENEMIGO+dificultad) 
 	nave.imprimir(pantalla)
 	#explosion.imprimir(pantalla)
 	pantalla.display.blit(pantalla.fondo1, (625,0))
@@ -269,12 +274,16 @@ while intro:
 
 	
 	pygame.display.update()
-	if (cadencia == 70):
 
-		cadencia = 1
-		enemigo.setDisparar()
-	else:
-		cadencia += 1
+	if (time.clock()-cadencia >= 1.1):
+		cadencia = time.clock()
+		for i in lenemigo:
+			i.setDisparar()
+
+
+	if (time.clock()-timeEnemigo >= 3):
+		timeEnemigo = time.clock()
+		lenemigo.append(Enemigo("Recursos/Enemigo.png", "Recursos/laser2.png", random.randint(int(nave.getACentroX()-300), int(nave.getACentroX()+300)), random.randint(int(nave.getACentroY()-400), int(nave.getACentroY()+400)), VELOCIDAD_ENEMIGO, DAÑO_ENEMIGO, VIDA_ENEMIGO, PUNTOS_ENEMIGO))
 
 	clock.tick(60)
 

@@ -61,6 +61,9 @@ class Laser:
 		cosAngulo = math.cos(math.radians(self.angulo))
 		sinAngulo = math.sin(math.radians(self.angulo))
 
+		if self.velocidadAumento > 0:
+			self.velocidad = nave.getVelocidad() + self.velocidadAumento
+
 		self.AX += cosAngulo * self.velocidad
 		self.AY += -sinAngulo * self.velocidad
 
@@ -91,12 +94,13 @@ class Laser:
 		self.RCentro = (self.RX + (self.imagen.get_width()/2),self.RY + (self.imagen.get_height()/2))
 		self.laserLibre = libre
 		
-	def __init__(self, directorio, objeto, velocidad, angulo, libre, daño):
+	def __init__(self, directorio, objeto, velocidad, angulo, libre, daño, velocidadAumento = 0):
 		self.imagen = pygame.image.load(directorio).convert_alpha()
 		self.width = self.imagen.get_width()
 		self.height = self.imagen.get_height()
 		self.angulo = angulo
 		self.velocidad = velocidad
+		self.velocidadAumento = velocidadAumento
 		self.RX = objeto.getACentroX()
 		self.RY = objeto.getACentroY()
 		self.AX = objeto.getACentroX()
