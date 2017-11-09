@@ -124,10 +124,52 @@ class Enemigo:
 
 	def setDisparar(self):
 		self.disparar = True
+	
+	def cercaDeOtroEnemigo(self, lenemigo, nave):
+		cerca = False
+		for i in lenemigo:
+			if(Funciones.distancia(self.getACentroX(), i.getACentroX(), self.getACentroY(), i.getACentroY()) <= 100 and (self.ACentro != i.ACentro)):
+				cerca = True
+				
+				if(self.AX > i.AX and self.AY > i.AY):
+					self.AX += self.velocidad
+					self.AY += self.velocidad
+					
+				if(self.AX < i.AX and self.AY > i.AY):
+					self.AX -= self.velocidad
+					self.AY += self.velocidad
 
-	def imprimir(self, pantalla, nave, VELOCIDAD_LASER):
+				if(self.AX > i.AX and self.AY < i.AY):
+					self.AX += self.velocidad
+					self.AY -= self.velocidad
+
+				if(self.AX < i.AX and self.AY < i.AY):
+					self.AX -= self.velocidad
+					self.AY -= self.velocidad
+				
+				if(self.AX == i.AX and self.AY > i.AY):
+					self.AY += self.velocidad
+				
+				if(self.AX > i.AX and self.AY == i.AY):
+					self.AX -= self.velocidad
+				
+				if(self.AX == i.AX and self.AY < i.AY):
+					self.AY -= self.velocidad
+				
+				if(self.AX < i.AX and self.AY == i.AY):
+					self.AX += self.velocidad
+				
+				self.ACentro = (self.AX + (self.imagen.get_width()/2),self.AY + (self.imagen.get_height()/2))
+				self.RX = self.AX - nave.getAX()
+				self.RY = self.AY - nave.getAY()
+				self.RCentro = (self.RX + (self.imagen.get_width()/2),self.RY + (self.imagen.get_height()/2))
+		
+		return cerca
+
+	def imprimir(self, pantalla, nave, VELOCIDAD_LASER, lenemigo):
 		if(self.explotando == False):
-			self.mover(nave)
+			if(not self.cercaDeOtroEnemigo(lenemigo, nave)):
+				self.mover(nave)
 			pantalla.display.blit(self.imagen, (self.RX,self.RY))
 			self.vida.imprimir(pantalla, self.RX + 10, self.RY -10)
 			

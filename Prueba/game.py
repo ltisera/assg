@@ -248,7 +248,7 @@ while intro:
 	pasolaser = recargaLaser.sumarValor(10) 
 	
 	for i in lenemigo:	
-		i.imprimir(pantalla, nave, VELOCIDAD_LASER_ENEMIGO)
+		i.imprimir(pantalla, nave, VELOCIDAD_LASER_ENEMIGO, lenemigo)
 		if(i.fueDestruidoPorCompleto()):
 			dificultad += 1
 			lenemigo.remove(i) #Destruye al enemigo muerto
@@ -289,7 +289,7 @@ while intro:
 			if(boss.fueDestruidoPorCompleto()):
 				print("Ganaste!!")
 			else:
-				boss.imprimir(pantalla, nave, VELOCIDAD_LASER_ENEMIGO)	
+				boss.imprimir(pantalla, nave, VELOCIDAD_LASER_ENEMIGO, lenemigo)	
 	else:
 		if (time.clock()-timeEnemigo >= 1):
 			if(len(lenemigo) <= dificultad and len(lenemigo) <= MAXIMO_ENEMIGOS_ACTIVOS):
