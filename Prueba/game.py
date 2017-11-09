@@ -67,6 +67,7 @@ DAÑO_ENEMIGO = 10
 VIDA_ENEMIGO = 100 
 PUNTOS_ENEMIGO = 100
 VELOCIDAD_LASER_ENEMIGO = VELOCIDAD_LASER-7
+MAXIMO_ENEMIGOS_ACTIVOS = 15
 
 """
 Funciones
@@ -280,10 +281,12 @@ while intro:
 		for i in lenemigo:
 			i.setDisparar()
 
-
-	if (time.clock()-timeEnemigo >= 3):
-		timeEnemigo = time.clock()
-		lenemigo.append(Enemigo("Recursos/Enemigo.png", "Recursos/laser2.png", random.randint(int(nave.getACentroX()-300), int(nave.getACentroX()+300)), random.randint(int(nave.getACentroY()-400), int(nave.getACentroY()+400)), VELOCIDAD_ENEMIGO, DAÑO_ENEMIGO, VIDA_ENEMIGO, PUNTOS_ENEMIGO))
+	#Clock de generacion de enemigos
+	if (time.clock()-timeEnemigo >= 1):
+		
+		if(len(lenemigo) <= dificultad and len(lenemigo) <= MAXIMO_ENEMIGOS_ACTIVOS):
+			timeEnemigo = time.clock()
+			lenemigo.append(Enemigo("Recursos/Enemigo.png", "Recursos/laser2.png", random.randint(int(nave.getACentroX()-300), int(nave.getACentroX()+300)), random.randint(int(nave.getACentroY()-400), int(nave.getACentroY()+400)), VELOCIDAD_ENEMIGO, DAÑO_ENEMIGO, VIDA_ENEMIGO, PUNTOS_ENEMIGO))
 
 	clock.tick(60)
 
