@@ -99,7 +99,7 @@ class Enemigo:
 				self.AY -= self.velocidad
 			elif self.getRCentroY() > nave.getRCentroY()-(self.imagen.get_height()/2):
 				self.AY += self.velocidad
-		self.ACentro = (self.RX + (self.imagen.get_width()/2),self.RY + (self.imagen.get_height()/2))
+		self.ACentro = (self.AX + (self.imagen.get_width()/2),self.AY + (self.imagen.get_height()/2))
 		self.RX = self.AX - nave.getAX()
 		self.RY = self.AY - nave.getAY()
 		self.RCentro = (self.RX + (self.imagen.get_width()/2),self.RY + (self.imagen.get_height()/2))
@@ -122,23 +122,30 @@ class Enemigo:
 		self.laser.setDaño(daño)
 		self.puntos = puntos
 
+	def setDisparar(self):
+		self.disparar = True
+
 	def imprimir(self, pantalla, nave, VELOCIDAD_LASER):
 		if(self.explotando == False):
-			
 			self.mover(nave)
 			pantalla.display.blit(self.imagen, (self.RX,self.RY))
 			self.vida.imprimir(pantalla, self.RX + 10, self.RY -10)
+			
 			if self.laser.getLibre() == False:
 				self.laser.imprimir(pantalla, nave)
-				if Funciones.hayColision(nave, self.laser) == True:
+				if Funciones.hayColisionA(self.laser, nave) == True:
 					nave.reduceVida(self.laser.getDaño())
 					self.laser.setLibre(True)
+		
 			else:
-				self.laser.setLaser(VELOCIDAD_LASER+self.velocidad, Funciones.calcularAnguloEntrePuntos(self.getACentroX(), self.getACentroY(), nave.getACentroX(), nave.getACentroY()), self, False)
-	
+				if(self.disparar == True):
+					self.disparar = False
+					self.laser.setLaser(VELOCIDAD_LASER+self.velocidad, Funciones.calcularAnguloEntrePuntos(self.getACentroX(), self.getACentroY(), nave.getACentroX(), nave.getACentroY()), self, False)
+		
 		else:
 			#Efecto de explosion
-			if(self.explotaEnemigo.imprimir(pantalla,self.getRX(), self.getRY()) == 0):
+			self.laser.setLibre(True)
+			if(self.explotaEnemigo.imprimir(pantalla,self.AX - nave.getAX(), self.AY - nave.getAY()) == 0):
 				self.explotando = False
 				self.exploto = True
 				nave.sumarPuntos(self.puntos)
@@ -160,4 +167,6 @@ class Enemigo:
 		self.vida = Barra(((255,0,0),(255,255,0),(0,255,0)), 0, vida, vida, 3, 30)
 		self.laser = Laser(directorio2, self, 0, 0, True, daño)
 		self.puntos = puntos
+		self.disparar = False
+
 

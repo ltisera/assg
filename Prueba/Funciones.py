@@ -27,8 +27,7 @@ def sumarAngulo(angulo, anguloSumar):
 	return angulo
 
 def calcularAnguloEntrePuntos(XO, YO, X, Y):
-	#implementar
-	return  1
+	return math.degrees(math.atan2(-Y+YO,X-XO))
 
 """
 posicionValida(x, minX, maxX, y, minY, maxY):
@@ -84,5 +83,11 @@ def colisonVieja(objeto1, objeto2):
 def hayColision (objeto1, objeto2):
 	#deberiamos testear si son objetos validos
 	if (distancia(objeto1.getRCentroX(), objeto2.getRX() ,objeto1.getRCentroY(), objeto2.getRY()) <= (objeto1.imagen.get_width()/2)):
+		return True
+	return False
+
+def hayColisionA (objeto1, objeto2):
+	#deberiamos testear si son objetos validos
+	if (distancia(objeto1.getRCentroX(), objeto2.getRCentroX() ,objeto1.getRCentroY(), objeto2.getRCentroY()) <= (objeto2.imagen.get_width()-100)):
 		return True
 	return False
