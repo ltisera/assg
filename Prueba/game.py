@@ -29,7 +29,7 @@ por que ya voy mareado con este tema de lo que se mueve y lo que no
 """
 
 import pygame, sys, math, random, time
-import Funciones
+import Funciones, Menu
 from Explosion import Explosion
 
 from Estrella import Estrella
@@ -52,12 +52,15 @@ VELOCIDAD_MINIMA = 0.1
 VELOCIDAD_MAXIMA = 200
 VELOCIDAD_LASER = 10
 
+VIDAS = 3
+
 OBJETOS_MAXIMOS = 200
 DISTANCIA_MINIMA = 550
 ESTRELLA_MAXIMO = 75
 LASER_MAXIMO = 10
 
 BLANCO = (255,255,255)
+COLOR_TEXTO = (0,255,0)
 
 PASO_LASER = 100
 DAÑO_LASER = 10
@@ -73,80 +76,75 @@ MAXIMO_ENEMIGOS_ACTIVOS = 15
 Funciones
 """
 	
-def generarLaser(LASER_MAXIMO, DAÑO_LASER):
+def generarLaser(LASER_MAXIMO, DAÑO_LASER, nave):
 	listaLaser = []
 	for i in range(LASER_MAXIMO):			
 		listaLaser.append(Laser("Recursos/laser.png", nave, 0, 0, True, DAÑO_LASER, VELOCIDAD_LASER))
 	return listaLaser
 	
 """
-Inicializacion de variables
+Juego
 """
 
 pygame.init()
 
 pantalla = Pantalla()
 
-mapa = Mapa(20000, 5, OBJETOS_MAXIMOS, DISTANCIA_MINIMA)
-
-lobjtmp = mapa.getListaObjetos()
-
-nave = Nave("Recursos/Nave", 0, 0.1, VELOCIDAD_MINIMA, VELOCIDAD_MAXIMA, (0,0), pantalla, 8, 161, (183, 509), (183, 535), (383, 509))
-
-boss = Enemigo("Recursos/boss.png", "Recursos/laser2.png", random.randint(int(nave.getACentroX()-300), int(nave.getACentroX()+300)), random.randint(int(nave.getACentroY()-400), int(nave.getACentroY()+400)), VELOCIDAD_ENEMIGO, DAÑO_ENEMIGO, 1000, PUNTOS_ENEMIGO)
-
-lenemigo = []
-
-dificultad = 0
-
-#explosion = Explosion("Recursos/Explosion1.png")
-
-lestrella = []
-for i in range(ESTRELLA_MAXIMO):
-	lestrella.append(Estrella())
-	
-llaser = generarLaser(LASER_MAXIMO, DAÑO_LASER)	
-
-intro = True
-cheats = False
-peleaBoss = False
-
-recargaLaser = Barra(((255,0,0),(255,0,0)), 0, PASO_LASER, PASO_LASER, 8, 161, 383, 535) 
-
-pasolaser = 0
-
-clock = pygame.time.Clock()
-clockLaser = pygame.time.Clock()
-cadencia = time.clock()
-timeEnemigo = time.clock() #Timer de generacion de enemigo
-
-"""
-Texto 
-"""
 fsize = 12
 fuente = pygame.font.Font("Recursos/arial.ttf", fsize)
-text21 = Texto("Recursos/arial.ttf",12)
-text21.setTexto("PUTOOO")
-text22 = Texto("Recursos/arial.ttf",12)
-text22.setTexto("PE:")
-text23 = Texto("Recursos/arial.ttf",12)
-text23.setTexto("PN:")
-text24 = Texto("Recursos/arial.ttf", 12)
-text24.setTexto("PUNTOS: ")
 
+intro, reset = Menu.main(pantalla)
 
 """
 Bucle Principal 
 """
-
 while intro:
+
+	"""
+	Inicializacion de variables
+	"""
+	if reset:
+		mapa = Mapa(20000, 5, OBJETOS_MAXIMOS, DISTANCIA_MINIMA)
+
+		lobjtmp = mapa.getListaObjetos()
+
+		nave = Nave("Recursos/Nave", 0, 0.1, VELOCIDAD_MINIMA, VELOCIDAD_MAXIMA, (0,0), pantalla, 8, 161, (183, 509), (183, 535), (383, 509), VIDAS)
+
+		boss = Enemigo("Recursos/boss.png", "Recursos/laser2.png", random.randint(int(nave.getACentroX()-300), int(nave.getACentroX()+300)), random.randint(int(nave.getACentroY()-400), int(nave.getACentroY()+400)), VELOCIDAD_ENEMIGO, DAÑO_ENEMIGO, 1000, PUNTOS_ENEMIGO)
+
+		lenemigo = []
+
+		dificultad = 0
+
+		lestrella = []
+		for i in range(ESTRELLA_MAXIMO):
+			lestrella.append(Estrella())
+			
+		llaser = generarLaser(LASER_MAXIMO, DAÑO_LASER, nave)	
+
+		intro = True
+		cheats = False
+		peleaBoss = False
+
+		recargaLaser = Barra(((255,0,0),(255,0,0)), 0, PASO_LASER, PASO_LASER, 8, 161, 383, 535) 
+
+		pasolaser = 0
+
+		clock = pygame.time.Clock()
+		clockLaser = pygame.time.Clock()
+		cadencia = time.clock()
+		timeEnemigo = time.clock() #Timer de generacion de enemigo
+
+		reset = False
 
 	pantalla.display.fill((29,21,13))
 	
 	for event in pygame.event.get():
+
 		if event.type == pygame.KEYDOWN:
+
 			if event.key == K_ESCAPE:
-				intro = False
+				Menu.pausa(pantalla)
 
 			if cheats == True:
 			
@@ -253,32 +251,39 @@ while intro:
 			dificultad += 1
 			lenemigo.remove(i) #Destruye al enemigo muerto
 
-	nave.imprimir(pantalla)
+	if nave.gameOver():
+		intro = False
+		if Menu.gameOver(pantalla) == true: #Si no continua vuelve a la pantalla original
+			intro, reset = Menu.main(pantalla)
+	else:
+		nave.imprimir(pantalla)
 	#explosion.imprimir(pantalla)
 	pantalla.display.blit(pantalla.fondo1, (625,0))
 	pantalla.display.blit(pantalla.fondo2, (0,475))
 	nave.imprimirBarras(pantalla)
 	recargaLaser.imprimir(pantalla)
 	pantalla.display.blit(pantalla.fondo3, (0,475))
-	texto1 = fuente.render("X: " + str(int(nave.getACentroX())), True, (0,255,0))
-	texto2 = fuente.render("Y: " + str(int(nave.getACentroY())), True, (0,255,0))
-	texto3 = fuente.render("Tamaño: " + str(fsize), True, (0,255,0))
-	texto4 = fuente.render("FPS: " + str(int(clock.get_fps())), True, (0,255,0))
-	texto5 = fuente.render("Velocidad: " + str(nave.velocidad), True, (0,255,0))
-	texto6 = fuente.render("PUNTOS: " + str(nave.getPuntos()), True, (0, 0, 0))
-	#lock 125
+
+	texto1 = fuente.render("X: " + str(int(nave.getACentroX())), True, COLOR_TEXTO)
+	texto2 = fuente.render("Y: " + str(int(nave.getACentroY())), True, COLOR_TEXTO)
+	texto3 = fuente.render("Tamaño: " + str(fsize), True ,COLOR_TEXTO)
+	texto4 = fuente.render("FPS: " + str(int(clock.get_fps())), True, COLOR_TEXTO)
+	texto5 = fuente.render("Velocidad: " + str(nave.velocidad), True, COLOR_TEXTO)
+	texto6 = fuente.render("Nave: " + str(nave.getAPos()), True, COLOR_TEXTO)
+	texto7 = fuente.render("Laser[0]: " + str(llaser[0].getCoordenadas()), True, COLOR_TEXTO)
+	texto8 = fuente.render("PUNTOS: " + str(nave.getPuntos()), True, COLOR_TEXTO)
+
 	pantalla.display.blit(texto1, (645,45))
 	pantalla.display.blit(texto2, (645,60))
 	pantalla.display.blit(texto3, (645,75))
 	pantalla.display.blit(texto4, (645,90))
 	pantalla.display.blit(texto5, (645,105))
-	pantalla.display.blit(texto6, (645,500))
-	text21.imprimir(pantalla,645,130)
-	text22.setTexto("Nave: " + str(nave.getAPos()), )
-	text22.imprimir(pantalla,645,145)
-	text23.setTexto("Laser[0]: " + str(llaser[0].getCoordenadas()) )
-	text23.imprimir(pantalla,645,160)
+	pantalla.display.blit(texto6, (645,130))
+	pantalla.display.blit(texto7, (645,145))
+	pantalla.display.blit(texto8, (645,500))
 
+	#Clock de generacion de enemigos y boss
+	
 	if (dificultad >= 20):
 		if(peleaBoss == False):
 			for i in lenemigo:
@@ -287,7 +292,8 @@ while intro:
 			peleaBoss = True
 		else:
 			if(boss.fueDestruidoPorCompleto()):
-				print("Ganaste!!")
+				Menu.ganaste(pantalla)
+				intro, reset = Menu.main(pantalla)
 			else:
 				boss.imprimir(pantalla, nave, VELOCIDAD_LASER_ENEMIGO, lenemigo)	
 	else:
@@ -296,24 +302,13 @@ while intro:
 				timeEnemigo = time.clock()
 				lenemigo.append(Enemigo("Recursos/Enemigo.png", "Recursos/laser2.png", random.randint(int(nave.getACentroX()-300), int(nave.getACentroX()+300)), random.randint(int(nave.getACentroY()-400), int(nave.getACentroY()+400)), VELOCIDAD_ENEMIGO, DAÑO_ENEMIGO, VIDA_ENEMIGO, PUNTOS_ENEMIGO))
 
-			
-	pygame.display.update()
-
 	if (time.clock()-cadencia >= 1.1):
 		cadencia = time.clock()
 		for i in lenemigo:
 			i.setDisparar()
-
-	#Clock de generacion de enemigos
 	
-		clock.tick(60)
+	pygame.display.update()
+	clock.tick(60)
 
-
-"""
-Prueba merge 1... Finalizado el test
-"""
-"""
-Finalizacion
-"""
 
 pygame.quit()

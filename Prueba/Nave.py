@@ -88,7 +88,10 @@ class Nave:
 		self.contador += 1
 		if self.contador > 7*FRAMES:
 			self.contador = 0	
-		
+
+	def gameOver(self):
+		return (self.vidas == 0)
+
 	def boom(self):
 		self.colision = True
 
@@ -102,6 +105,7 @@ class Nave:
 				self.explotando = False
 				self.exploto = True
 				self.vida.setValor(100)
+				self.vidas -= 1
 		
 	def mover(self, mapa):
 		self.AX += math.cos(math.radians(self.angulo))*self.velocidad
@@ -156,7 +160,7 @@ class Nave:
 	def getPuntos(self):
 		return self.puntos
 
-	def __init__(self, directorio, anguloOrigen, velocidad, minVelocidad, maxVelocidad, origen, pantalla, barraHeight, barraWidth, vida, escudo, turbo):
+	def __init__(self, directorio, anguloOrigen, velocidad, minVelocidad, maxVelocidad, origen, pantalla, barraHeight, barraWidth, vida, escudo, turbo, vidas):
 		self.puntos = 0
 		self.imagen = pygame.image.load(directorio+'/Nave.png').convert_alpha()
 		self.lento = []
@@ -200,3 +204,4 @@ class Nave:
 		self.explotando = False
 		self.ultimoGolpe = 0
 		self.turboActivo = False
+		self.vidas = vidas
