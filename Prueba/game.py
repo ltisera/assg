@@ -282,11 +282,16 @@ while intro:
 			i.setDisparar()
 
 	#Clock de generacion de enemigos
-	if (time.clock()-timeEnemigo >= 1):
-		
-		if(len(lenemigo) <= dificultad and len(lenemigo) <= MAXIMO_ENEMIGOS_ACTIVOS):
-			timeEnemigo = time.clock()
-			lenemigo.append(Enemigo("Recursos/Enemigo.png", "Recursos/laser2.png", random.randint(int(nave.getACentroX()-300), int(nave.getACentroX()+300)), random.randint(int(nave.getACentroY()-400), int(nave.getACentroY()+400)), VELOCIDAD_ENEMIGO, DAÑO_ENEMIGO, VIDA_ENEMIGO, PUNTOS_ENEMIGO))
+	if (dificultad >= 20):
+		for i in lenemigo:
+			i.destruirEnemigo()
+		lenemigo.append(Enemigo("Recursos/boss.jpg", "Recursos/laser2.png", random.randint(int(nave.getACentroX()-300), int(nave.getACentroX()+300)), random.randint(int(nave.getACentroY()-400), int(nave.getACentroY()+400)), VELOCIDAD_ENEMIGO, DAÑO_ENEMIGO, VIDA_ENEMIGO, PUNTOS_ENEMIGO))
+	else:
+		if (time.clock()-timeEnemigo >= 1):
+			
+			if(len(lenemigo) <= dificultad and len(lenemigo) <= MAXIMO_ENEMIGOS_ACTIVOS):
+				timeEnemigo = time.clock()
+				lenemigo.append(Enemigo("Recursos/Enemigo.png", "Recursos/laser2.png", random.randint(int(nave.getACentroX()-300), int(nave.getACentroX()+300)), random.randint(int(nave.getACentroY()-400), int(nave.getACentroY()+400)), VELOCIDAD_ENEMIGO, DAÑO_ENEMIGO, VIDA_ENEMIGO, PUNTOS_ENEMIGO))
 
 	clock.tick(60)
 
