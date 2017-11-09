@@ -48,8 +48,8 @@ from pygame.locals import *
 Constantes de configuracion
 """
 
-VELOCIDAD_MINIMA = 0.1
-VELOCIDAD_MAXIMA = 200
+VELOCIDAD_MINIMA = 0.2
+VELOCIDAD_MAXIMA = 50
 VELOCIDAD_LASER = 10
 
 VIDAS = 3
@@ -269,10 +269,11 @@ while intro:
 	texto2 = fuente.render("Y: " + str(int(nave.getACentroY())), True, COLOR_TEXTO)
 	texto3 = fuente.render("Tamaño: " + str(fsize), True ,COLOR_TEXTO)
 	texto4 = fuente.render("FPS: " + str(int(clock.get_fps())), True, COLOR_TEXTO)
-	texto5 = fuente.render("Velocidad: " + str(nave.velocidad), True, COLOR_TEXTO)
+	texto5 = fuente.render("Velocidad: " + str(int(nave.velocidad)), True, COLOR_TEXTO)
 	texto6 = fuente.render("Nave: " + str(nave.getAPos()), True, COLOR_TEXTO)
 	texto7 = fuente.render("Laser[0]: " + str(llaser[0].getCoordenadas()), True, COLOR_TEXTO)
 	texto8 = fuente.render("PUNTOS: " + str(nave.getPuntos()), True, COLOR_TEXTO)
+	texto9 = fuente.render("VIDAS: " + str(nave.vidas), True, COLOR_TEXTO)
 
 	pantalla.display.blit(texto1, (645,45))
 	pantalla.display.blit(texto2, (645,60))
@@ -282,6 +283,7 @@ while intro:
 	pantalla.display.blit(texto6, (645,130))
 	pantalla.display.blit(texto7, (645,145))
 	pantalla.display.blit(texto8, (645,500))
+	pantalla.display.blit(texto9, (645,520))
 
 	#Clock de generacion de enemigos y boss
 	
