@@ -266,7 +266,28 @@ while intro:
 	if nave.gameOver() == False:
 		nave.imprimir(pantalla)
 
-	#explosion.imprimir(pantalla)
+	#Clock de generacion de enemigos y boss
+	
+	if (dificultad >= 20):
+		if(peleaBoss == False):
+			for i in lenemigo:
+				i.destruirEnemigo()
+			boss.reset(random.randint(int(nave.getACentroX()-300), int(nave.getACentroX()+300)), random.randint(int(nave.getACentroY()-400), int(nave.getACentroY()+400)), VELOCIDAD_ENEMIGO, DAÑO_ENEMIGO, 1000, PUNTOS_ENEMIGO)
+			peleaBoss = True
+		else:
+			if(boss.fueDestruidoPorCompleto()):
+				intro = Menu.ganaste(pantalla, nave.getPuntos())
+				if intro:
+					intro, reset = Menu.main(pantalla)
+			else:
+				boss.imprimir(pantalla, nave, VELOCIDAD_LASER_ENEMIGO, lenemigo)
+	else:
+		if (time.clock()-timeEnemigo >= 1):
+			if(len(lenemigo) <= dificultad and len(lenemigo) <= MAXIMO_ENEMIGOS_ACTIVOS):
+				timeEnemigo = time.clock()
+				lenemigo.append(Enemigo("Recursos/Enemigo.png", "Recursos/laser2.png", random.randint(int(nave.getACentroX()-300), int(nave.getACentroX()+300)), random.randint(int(nave.getACentroY()-400), int(nave.getACentroY()+400)), VELOCIDAD_ENEMIGO, DAÑO_ENEMIGO, VIDA_ENEMIGO, PUNTOS_ENEMIGO))
+
+
 	pantalla.display.blit(pantalla.fondo1, (625,0))
 	pantalla.display.blit(pantalla.fondo2, (0,475))
 	nave.imprimirBarras(pantalla)
@@ -300,27 +321,6 @@ while intro:
 		pantalla.display.blit(texto20, (645,280))
 		pantalla.display.blit(texto21, (645,295))
 		pantalla.display.blit(texto22, (645,310))
-
-	#Clock de generacion de enemigos y boss
-	
-	if (dificultad >= 20):
-		if(peleaBoss == False):
-			for i in lenemigo:
-				i.destruirEnemigo()
-			boss.reset(random.randint(int(nave.getACentroX()-300), int(nave.getACentroX()+300)), random.randint(int(nave.getACentroY()-400), int(nave.getACentroY()+400)), VELOCIDAD_ENEMIGO, DAÑO_ENEMIGO, 1000, PUNTOS_ENEMIGO)
-			peleaBoss = True
-		else:
-			if(boss.fueDestruidoPorCompleto()):
-				intro = Menu.ganaste(pantalla, nave.getPuntos())
-				if intro:
-					intro, reset = Menu.main(pantalla)
-			else:
-				boss.imprimir(pantalla, nave, VELOCIDAD_LASER_ENEMIGO, lenemigo)
-	else:
-		if (time.clock()-timeEnemigo >= 1):
-			if(len(lenemigo) <= dificultad and len(lenemigo) <= MAXIMO_ENEMIGOS_ACTIVOS):
-				timeEnemigo = time.clock()
-				lenemigo.append(Enemigo("Recursos/Enemigo.png", "Recursos/laser2.png", random.randint(int(nave.getACentroX()-300), int(nave.getACentroX()+300)), random.randint(int(nave.getACentroY()-400), int(nave.getACentroY()+400)), VELOCIDAD_ENEMIGO, DAÑO_ENEMIGO, VIDA_ENEMIGO, PUNTOS_ENEMIGO))
 
 	if (time.clock()-cadencia >= 1.1):
 		cadencia = time.clock()

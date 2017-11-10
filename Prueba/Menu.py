@@ -37,7 +37,11 @@ def creditos(pantalla):
 			elif evento.type == pygame.KEYDOWN:
 				if evento.key == pygame.K_RETURN:
 					pause = False
-
+			if(pygame.mouse.get_pressed() == (1,0,0)):
+				mpos = pygame.mouse.get_pos()
+				print(mpos)
+				if((mpos[0] > 560 and mpos[0] < 790) and (mpos[1] > 541 and mpos[1] < 587)):
+					pause = False
 		pantalla.display.blit(fondoc,(0,0))
 		pygame.display.update()
 	return intro
