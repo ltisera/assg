@@ -75,6 +75,9 @@ class Nave:
 	def getVelocidad(self):
 		return self.velocidad
 
+	def retroceso(self):
+		self.velocidad = -(self.velocidad/2)
+
 	def sumarVelocidad(self, sumar):
 		self.velocidad = self.velocidad + sumar
 		if self.velocidad <= (self.minVelocidad):
@@ -160,7 +163,7 @@ class Nave:
 				self.exploto = False
 			if(self.tiempoChoque==0): 
 				self.reduceVida(math.fabs((self.velocidad*100)/15))
-				self.velocidad = -(self.velocidad/2)
+				self.retroceso
 			self.tiempoChoque += 1
 			if(self.tiempoChoque >=40):
 				self.tiempoChoque =0

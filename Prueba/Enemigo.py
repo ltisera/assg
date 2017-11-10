@@ -187,7 +187,10 @@ class Enemigo:
 				if Funciones.hayColisionA(self.laser, nave) == True:
 					nave.reduceVida(self.laser.getDaño())
 					self.laser.setLibre(True)
-		
+				if Funciones.hayColision(self, nave) == True:
+					nave.reduceVida(math.fabs((nave.getVelocidad()*100)/15))
+					nave.retroceso()
+					self.reduceVida(math.fabs((nave.getVelocidad()*100)/15))
 			else:
 				if(self.disparar == True):
 					self.disparar = False

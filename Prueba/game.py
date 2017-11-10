@@ -148,6 +148,9 @@ while intro:
 
 		while pause:
 			for evento in pygame.event.get():
+				if evento.type == pygame.QUIT:
+					pause = False
+					intro = False
 				if evento.type == pygame.KEYDOWN:
 					if evento.key == pygame.K_RETURN:
 						pause = False
@@ -272,23 +275,31 @@ while intro:
 
 	texto1 = fuente.render("X: " + str(int(nave.getACentroX())), True, COLOR_TEXTO)
 	texto2 = fuente.render("Y: " + str(int(nave.getACentroY())), True, COLOR_TEXTO)
-	texto3 = fuente.render("Tamaño: " + str(fsize), True ,COLOR_TEXTO)
-	texto4 = fuente.render("FPS: " + str(int(clock.get_fps())), True, COLOR_TEXTO)
-	texto5 = fuente.render("Velocidad: " + str(nave.velocidad), True, COLOR_TEXTO)
-	texto6 = fuente.render("Nave: " + str(nave.getAPos()), True, COLOR_TEXTO)
-	texto7 = fuente.render("Laser[0]: " + str(llaser[0].getCoordenadas()), True, COLOR_TEXTO)
-	texto8 = fuente.render("PUNTOS: " + str(nave.getPuntos()), True, (0,0,0))
-	texto9 = fuente.render("VIDAS: " + str(nave.getVidas()), True, (0,0,0))
-
+	texto3 = fuente.render("FPS: " + str(int(clock.get_fps())), True, COLOR_TEXTO)
+	texto4 = fuente.render("Velocidad: " + str("{0:.2f}".format(nave.velocidad)), True, COLOR_TEXTO)
+	texto5 = fuente.render("PUNTOS: " + str(nave.getPuntos()), True, (0,0,0))
+	texto6 = fuente.render("VIDAS: " + str(nave.getVidas()), True, (0,0,0))
+	texto7 = fuente.render("¡Mata a esos aliens!", True, COLOR_TEXTO)
+	texto8 = fuente.render("Disparales con la K", True, COLOR_TEXTO)
+	
 	pantalla.display.blit(texto1, (645,45))
 	pantalla.display.blit(texto2, (645,60))
-	pantalla.display.blit(texto3, (645,75))
-	pantalla.display.blit(texto4, (645,90))
-	pantalla.display.blit(texto5, (645,105))
-	pantalla.display.blit(texto6, (645,130))
-	pantalla.display.blit(texto7, (645,145))
-	pantalla.display.blit(texto8, (645,505))
-	pantalla.display.blit(texto9, (645,530))
+	pantalla.display.blit(texto3, (645,90))
+	pantalla.display.blit(texto4, (645,105))
+	pantalla.display.blit(texto7, (645,130))
+	pantalla.display.blit(texto8, (645,145))
+
+	pantalla.display.blit(texto5, (645,505))
+	pantalla.display.blit(texto6, (645,530))
+	
+
+	if peleaBoss:
+		texto20 = fuente.render("Mensaje entrante", True, COLOR_TEXTO)
+		texto21 = fuente.render("de la nave nodriza:", True, COLOR_TEXTO)
+		texto22 = fuente.render("$#%@k$#ad&@h?%", True, COLOR_TEXTO)
+		pantalla.display.blit(texto20, (645,280))
+		pantalla.display.blit(texto21, (645,295))
+		pantalla.display.blit(texto22, (645,310))
 
 	#Clock de generacion de enemigos y boss
 	
@@ -300,10 +311,11 @@ while intro:
 			peleaBoss = True
 		else:
 			if(boss.fueDestruidoPorCompleto()):
-				Menu.ganaste(pantalla, nave.getPuntos())
-				intro, reset = Menu.main(pantalla)
+				intro = Menu.ganaste(pantalla, nave.getPuntos())
+				if intro:
+					intro, reset = Menu.main(pantalla)
 			else:
-				boss.imprimir(pantalla, nave, VELOCIDAD_LASER_ENEMIGO, lenemigo)	
+				boss.imprimir(pantalla, nave, VELOCIDAD_LASER_ENEMIGO, lenemigo)
 	else:
 		if (time.clock()-timeEnemigo >= 1):
 			if(len(lenemigo) <= dificultad and len(lenemigo) <= MAXIMO_ENEMIGOS_ACTIVOS):
@@ -312,17 +324,21 @@ while intro:
 
 	if (time.clock()-cadencia >= 1.1):
 		cadencia = time.clock()
-		for i in lenemigo:
-			i.setDisparar()
+		if peleaBoss:
+			boss.setDisparar()
+		else:
+			for i in lenemigo:
+				i.setDisparar()
 	
 	pygame.display.update()
 
 	if nave.gameOver():
-		Menu.gameOver(pantalla, nave.getPuntos())
-		intro, reset = Menu.main(pantalla)
+		intro = Menu.gameOver(pantalla, nave.getPuntos())
+		if intro:
+			intro, reset = Menu.main(pantalla)
 
 	if irPausa:
-		Menu.pausa(pantalla)
+		intro = Menu.pausa(pantalla)
 		irPausa = False
 
 	clock.tick(60)
