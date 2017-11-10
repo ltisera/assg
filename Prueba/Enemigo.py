@@ -91,6 +91,9 @@ class Enemigo:
 	def getRCentroY(self):
 		return self.RCentro[1]
 
+	def getPuntos(self):
+		return self.puntos
+
 	def boom(self):
 		return
 		
@@ -196,7 +199,6 @@ class Enemigo:
 			if(self.explotaEnemigo.imprimir(pantalla,self.AX - nave.getAX(), self.AY - nave.getAY()) == 0):
 				self.explotando = False
 				self.exploto = True
-				nave.sumarPuntos(self.puntos)
 
 	def __init__(self, directorio, directorio2, X, Y, velocidad, daño, vida, puntos):
 		self.explotaEnemigo = Explosion("Recursos/Explosion1.png")

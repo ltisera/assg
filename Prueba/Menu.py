@@ -28,9 +28,9 @@ def creditos(pantalla):
 		pygame.display.update()
 
 def mostrarPuntos(pantalla, puntos):
-	fuente = pygame.font.Font("Recursos/arial.ttf", 48)
+	fuente = pygame.font.Font("Recursos/arial.ttf", 20)
 	puntajeFinal = fuente.render("PUNTAJE FINAL: " + str(int(puntos)), True, COLOR)
-	pantalla.display.blit(puntajeFinal, (50,300))
+	pantalla.display.blit(puntajeFinal, (50,350))
 
 def pantallaFinal(pantalla, puntos, mensaje, posicionDeMensaje):
 	fondoFinal = pygame.image.load("Recursos/Menu/fondotransparente.png")
@@ -41,7 +41,7 @@ def pantallaFinal(pantalla, puntos, mensaje, posicionDeMensaje):
 	continuar = False
 	pantalla.display.blit(fondoFinal,(0,0))
 	pantalla.display.blit(textoFinal, (posicionDeMensaje,50))
-	pantalla.display.blit(textoContinuar, (50,500))
+	pantalla.display.blit(textoContinuar, (50,400))
 	mostrarPuntos(pantalla, puntos)
 	pygame.display.update()
 
@@ -49,63 +49,68 @@ def pantallaFinal(pantalla, puntos, mensaje, posicionDeMensaje):
 		for event in pygame.event.get():
 			if event.type == pygame.KEYDOWN:
 				if event.key == pygame.K_RETURN:
-					continuar = True	
-		
-	creditos(pantalla)
+					continuar = True
 
 def ganaste(pantalla, puntos):
-	pantallaFinal(pantalla, puntos, "¡GANASTE!", 250)
+	pantallaFinal(pantalla, puntos, "¡GANASTE!", 200)
+	#Agregar historia
+	creditos(pantalla)
 
 def gameOver(pantalla, puntos):
-	pantallaFinal(pantalla, puntos, "¡GAME OVER!", 200)
+	pantallaFinal(pantalla, puntos, "¡GAME OVER!", 150)
+	creditos(pantalla)
 	
 def main(pantalla):
-    ancho = 800
-    alto = 600
-    navex = 300
-    navey = 328
+	ancho = 800
+	alto = 600
+	navex = 300
+	navey = 328
 
-    intro = False
-    reset = False
+	intro = False
+	reset = False
     
-    nave = pygame.image.load("Recursos/Menu/nave.png")
-    fondo = pygame.image.load("Recursos/Menu/fondonombre.png")
-    boton = [pygame.image.load("Recursos/Menu/botonjugar.png"), pygame.image.load("Recursos/Menu/botoncreditos.png"), pygame.image.load("Recursos/Menu/botonsalir.png")]
+	nave = pygame.image.load("Recursos/Menu/nave.png")
+	fondo = pygame.image.load("Recursos/Menu/fondonombre.png")
+	boton = [pygame.image.load("Recursos/Menu/botonjugar.png"), pygame.image.load("Recursos/Menu/botoncreditos.png"), pygame.image.load("Recursos/Menu/botonsalir.png")]
 
-    salir = False
-    while not salir:
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                salir = True
-                intro = False
-            elif event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_UP:
-                    if navey == 328:
-                        pass
-                    else:
-                        navey -= 70            
-                elif event.key == pygame.K_DOWN:
-                    if navey == 468:
-                        pass
-                    else:
-                        navey += 70
-                elif event.key == pygame.K_RETURN:
-                    if navey == 328: #Juego
-                    	salir = True
-                    	reset = True
-                    	intro = True
-                    if navey == 398: #Creditos
-                    	creditos(pantalla)
-                    if navey == 468: #Salir del Juego
-                    	intro = False
-                    	salir = True                    	
+	salir = False
+	while not salir:
+		for event in pygame.event.get():
+			if event.type == pygame.QUIT:
+				salir = True
+				intro = False
+			elif event.type == pygame.KEYDOWN:
+				if event.key == pygame.K_q:
+					ganaste(pantalla,10)
+				if event.key == pygame.K_a:
+					gameOver(pantalla,10)
+				if event.key == pygame.K_UP:
+					if navey == 328:
+						pass
+					else:
+						navey -= 70            
+				elif event.key == pygame.K_DOWN:
+					if navey == 468:
+						pass
+					else:
+						navey += 70
+				elif event.key == pygame.K_RETURN:
+					if navey == 328: #Juego
+						salir = True
+						reset = True
+						intro = True
+					if navey == 398: #Creditos
+						creditos(pantalla)
+					if navey == 468: #Salir del Juego
+						intro = False
+						salir = True                    	
                         
-        pantalla.display.blit(fondo,(0,0))
-        pantalla.display.blit(boton[0],(ancho/2-118, 320))
-        pantalla.display.blit(boton[1],(ancho/2-118, 390))
-        pantalla.display.blit(boton[2],(ancho/2-118, 460))
+		pantalla.display.blit(fondo,(0,0))
+		pantalla.display.blit(boton[0],(ancho/2-118, 320))
+		pantalla.display.blit(boton[1],(ancho/2-118, 390))
+		pantalla.display.blit(boton[2],(ancho/2-118, 460))
         
-        pantalla.display.blit(nave,(navex,navey))
-        pygame.display.update()
+		pantalla.display.blit(nave,(navex,navey))
+		pygame.display.update()
         
-    return (intro, reset)
+	return (intro, reset)

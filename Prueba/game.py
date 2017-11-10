@@ -144,6 +144,13 @@ while intro:
 		timeEnemigo = time.clock() #Timer de generacion de enemigo
 
 		reset = False
+		pause = True
+
+		while pause:
+			for evento in pygame.event.get():
+				if evento.type == pygame.KEYDOWN:
+					if evento.key == pygame.K_RETURN:
+						pause = False
 
 	pantalla.display.fill((29,21,13))
 	
@@ -248,6 +255,8 @@ while intro:
 	for i in lenemigo:	
 		i.imprimir(pantalla, nave, VELOCIDAD_LASER_ENEMIGO, lenemigo)
 		if(i.fueDestruidoPorCompleto()):
+			if peleaBoss == False
+				nave.sumarPuntos(i.getPuntos())
 			dificultad += 1
 			lenemigo.remove(i) #Destruye al enemigo muerto
 
