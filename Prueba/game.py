@@ -106,6 +106,10 @@ while intro:
 	Inicializacion de variables
 	"""
 	if reset:
+		cargando = pygame.image.load("Recursos/Menu/fondocargando.png")
+		pantalla.display.blit(cargando,(0,0))
+		pygame.display.update()
+
 		mapa = Mapa(AREA_MAXIMA, 5, OBJETOS_MAXIMOS, DISTANCIA_MINIMA)
 
 		lobjtmp = mapa.getListaObjetos()
@@ -128,6 +132,8 @@ while intro:
 		cheats = False
 		peleaBoss = False
 
+		irPausa = False
+
 		recargaLaser = Barra(((255,0,0),(255,0,0)), 0, PASO_LASER, PASO_LASER, 8, 161, 383, 535) 
 
 		pasolaser = 0
@@ -146,7 +152,7 @@ while intro:
 		if event.type == pygame.KEYDOWN:
 
 			if event.key == K_ESCAPE:
-				Menu.pausa(pantalla)
+				irPausa = True
 
 			if cheats == True:
 
@@ -303,6 +309,11 @@ while intro:
 			i.setDisparar()
 	
 	pygame.display.update()
+
+	if irPausa:
+		Menu.pausa(pantalla)
+		irPausa = False
+
 	clock.tick(60)
 
 

@@ -1,19 +1,22 @@
 import pygame
 
+COLOR = (255,255,255)
+
 def pausa(pantalla):
 	pygame.mixer.music.pause()
-	fondoPausa = pygame.image.load("Recursos/Menu/fondopausa.jpg")
+	fondoPausa = pygame.image.load("Recursos/Menu/fondopausa.png")
 	pause = True
+	pantalla.display.blit(fondoPausa,(0,0))
+	pygame.display.update()
 	while pause:
 		for evento in pygame.event.get():
 			if evento.type == pygame.KEYDOWN:
 				if evento.key == pygame.K_RETURN:
 					pause = False
-		pantalla.display.blit(fondoPausa,(0,0))
-		pygame.display.update()
+		
 
 def creditos(pantalla):
-	fondoc = pygame.image.load("Recursos/Menu/fondocreditos.jpg")
+	fondoc = pygame.image.load("Recursos/Menu/fondocreditos.png")
 	pause = True
 	while pause:
 		for evento in pygame.event.get():
@@ -25,18 +28,17 @@ def creditos(pantalla):
 		pygame.display.update()
 
 def mostrarPuntos(pantalla, puntos):
-	COLOR_TEXTO = (0,255,0)
+	COLOR = (0,255,0)
 	fuente = pygame.font.Font("Recursos/arial.ttf", 48)
-	puntajeFinal = fuente.render("PUNTAJE FINAL: " + str(int(puntos)), True, COLOR_TEXTO)
+	puntajeFinal = fuente.render("PUNTAJE FINAL: " + str(int(puntos)), True, COLOR)
 	pantalla.display.blit(puntajeFinal, (50,300))
 
 def pantallaFinal(pantalla, puntos, mensaje, posicionDeMensaje):
-	fondoFinal = pygame.image.load("Recursos/Menu/fondoFinal.jpg")
-	COLOR_TEXTO = (0,255,0)
+	fondoFinal = pygame.image.load("Recursos/Menu/fondofinal.png")
 	fuente = pygame.font.Font("Recursos/arial.ttf", 48)
 	fuente2 = pygame.font.Font("Recursos/arial.ttf", 20)
-	textoFinal = fuente.render(mensaje, True, COLOR_TEXTO)
-	textoContinuar = fuente2.render("Presione la tecla ENTER...", True, COLOR_TEXTO)
+	textoFinal = fuente.render(mensaje, True, COLOR)
+	textoContinuar = fuente2.render("Presione la tecla ENTER...", True, COLOR)
 	continuar = False
 	while not continuar:
 		for event in pygame.event.get():
@@ -59,16 +61,16 @@ def gameOver(pantalla, puntos):
 def main(pantalla):
     ancho = 800
     alto = 600
-    navex = 285
-    navey = 325
+    navex = 300
+    navey = 328
 
     intro = False
     reset = False
     
     nave = pygame.image.load("Recursos/Menu/nave.png")
-    fondo = pygame.image.load("Recursos/Menu/fondonombre.jpg")
-    boton = [pygame.image.load("Recursos/Menu/botonjugar.png"), pygame.image.load("Recursos/Menu/botoncreditos.png"), pygame.image.load("Recursos/Menu/salir.png")]
-    
+    fondo = pygame.image.load("Recursos/Menu/fondonombre.png")
+    boton = [pygame.image.load("Recursos/Menu/botonjugar.png"), pygame.image.load("Recursos/Menu/botoncreditos.png"), pygame.image.load("Recursos/Menu/botonsalir.png")]
+
     salir = False
     while not salir:
         for event in pygame.event.get():
@@ -77,23 +79,23 @@ def main(pantalla):
                 intro = False
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_UP:
-                    if navey == 325:
+                    if navey == 328:
                         pass
                     else:
                         navey -= 70            
                 elif event.key == pygame.K_DOWN:
-                    if navey == 465:
+                    if navey == 468:
                         pass
                     else:
                         navey += 70
                 elif event.key == pygame.K_RETURN:
-                    if navey == 325: #Juego
+                    if navey == 328: #Juego
                     	salir = True
                     	reset = True
                     	intro = True
-                    if navey == 395: #Creditos
+                    if navey == 398: #Creditos
                     	creditos(pantalla)
-                    if navey == 465: #Salir del Juego
+                    if navey == 468: #Salir del Juego
                     	intro = False
                     	salir = True                    	
                         
