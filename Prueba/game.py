@@ -251,11 +251,9 @@ while intro:
 			dificultad += 1
 			lenemigo.remove(i) #Destruye al enemigo muerto
 
-	if nave.gameOver():
-		Menu.gameOver(pantalla, nave.getPuntos())
-		intro, reset = Menu.main(pantalla)
-	else:
+	if nave.gameOver() == False:
 		nave.imprimir(pantalla)
+
 	#explosion.imprimir(pantalla)
 	pantalla.display.blit(pantalla.fondo1, (625,0))
 	pantalla.display.blit(pantalla.fondo2, (0,475))
@@ -309,6 +307,10 @@ while intro:
 			i.setDisparar()
 	
 	pygame.display.update()
+
+	if nave.gameOver():
+		Menu.gameOver(pantalla, nave.getPuntos())
+		intro, reset = Menu.main(pantalla)
 
 	if irPausa:
 		Menu.pausa(pantalla)

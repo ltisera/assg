@@ -28,28 +28,29 @@ def creditos(pantalla):
 		pygame.display.update()
 
 def mostrarPuntos(pantalla, puntos):
-	COLOR = (0,255,0)
 	fuente = pygame.font.Font("Recursos/arial.ttf", 48)
 	puntajeFinal = fuente.render("PUNTAJE FINAL: " + str(int(puntos)), True, COLOR)
 	pantalla.display.blit(puntajeFinal, (50,300))
 
 def pantallaFinal(pantalla, puntos, mensaje, posicionDeMensaje):
-	fondoFinal = pygame.image.load("Recursos/Menu/fondofinal.png")
+	fondoFinal = pygame.image.load("Recursos/Menu/fondotransparente.png")
 	fuente = pygame.font.Font("Recursos/arial.ttf", 48)
 	fuente2 = pygame.font.Font("Recursos/arial.ttf", 20)
 	textoFinal = fuente.render(mensaje, True, COLOR)
 	textoContinuar = fuente2.render("Presione la tecla ENTER...", True, COLOR)
 	continuar = False
+	pantalla.display.blit(fondoFinal,(0,0))
+	pantalla.display.blit(textoFinal, (posicionDeMensaje,50))
+	pantalla.display.blit(textoContinuar, (50,500))
+	mostrarPuntos(pantalla, puntos)
+	pygame.display.update()
+
 	while not continuar:
 		for event in pygame.event.get():
 			if event.type == pygame.KEYDOWN:
 				if event.key == pygame.K_RETURN:
-					continuar = True
-		pantalla.display.blit(fondoFinal,(0,0))
-		pantalla.display.blit(textoFinal, (posicionDeMensaje,50))
-		pantalla.display.blit(textoContinuar, (50,500))
-		mostrarPuntos(pantalla, puntos)
-		pygame.display.update()
+					continuar = True	
+		
 	creditos(pantalla)
 
 def ganaste(pantalla, puntos):
