@@ -255,7 +255,7 @@ while intro:
 	for i in lenemigo:	
 		i.imprimir(pantalla, nave, VELOCIDAD_LASER_ENEMIGO, lenemigo)
 		if(i.fueDestruidoPorCompleto()):
-			if peleaBoss == False
+			if peleaBoss == False:
 				nave.sumarPuntos(i.getPuntos())
 			dificultad += 1
 			lenemigo.remove(i) #Destruye al enemigo muerto

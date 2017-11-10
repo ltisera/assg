@@ -103,8 +103,20 @@ def main(pantalla):
 						creditos(pantalla)
 					if navey == 468: #Salir del Juego
 						intro = False
-						salir = True                    	
-                        
+						salir = True 
+			
+			if(pygame.mouse.get_pressed() == (1,0,0)):
+				mpos = pygame.mouse.get_pos()
+				if((mpos[0] > 292 and mpos[0] < 491) and (mpos[1] > 330 and mpos[1] < 368)):
+					salir = True
+					reset = True
+					intro = True
+				if((mpos[0] > 292 and mpos[0] < 491) and (mpos[1] > 401 and mpos[1] < 433)):
+					creditos(pantalla)
+				if((mpos[0] > 292 and mpos[0] < 491) and (mpos[1] > 471 and mpos[1] < 507)):
+					intro = False
+					salir = True
+                      
 		pantalla.display.blit(fondo,(0,0))
 		pantalla.display.blit(boton[0],(ancho/2-118, 320))
 		pantalla.display.blit(boton[1],(ancho/2-118, 390))
